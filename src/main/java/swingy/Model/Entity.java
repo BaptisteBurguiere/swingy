@@ -6,8 +6,8 @@ import java.util.Map;
 
 public abstract class Entity
 {
-	protected String								_name;
-	protected int									_level;
+	protected String									_name;
+	protected int										_level;
 	protected Map<StatisticTemplate.Type, Statistic>	_statistics;
 
 	public Entity(String name, int level, Map<StatisticTemplate.Type, Statistic> statistics)

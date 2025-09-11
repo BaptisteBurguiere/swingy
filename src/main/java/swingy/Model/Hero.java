@@ -1,5 +1,6 @@
 package swingy.Model;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -25,6 +26,11 @@ public class Hero extends Entity
 		this._items = new EnumMap<>(items);
 	}
 
+	public Class				GetClass() {return this._class;}
+	public int					GetExperience() {return this._experience;}
+	public double				GetCurrentHealth() {return this._current_health;}
+	public Map<Item.Type, Item>	GetItems() {return Collections.unmodifiableMap(this._items);}
+
 	public void EquipItem(Item item)
 	{
 		Item.Type type = item.GetType();
@@ -32,11 +38,11 @@ public class Hero extends Entity
 
 		if (current_item != null)
 		{
-			for (Map.Entry<StatisticTemplate.Type, Double> entry : current_item.GetStatistics().entrySet())
+			for (Map.Entry<StatisticTemplate.Type, Statistic> entry : current_item.GetStatistics().entrySet())
 			{
 				StatisticTemplate.Type stat_type = entry.getKey();
 				Statistic stat = this._statistics.get(stat_type);
-				stat.Decrease(entry.getValue());
+				stat.Decrease(entry.getValue().GetValue());
 
 				if (stat_type == StatisticTemplate.Type.HEALTH && this._current_health > stat.GetValue())
 					this._current_health = stat.GetValue();
@@ -45,14 +51,14 @@ public class Hero extends Entity
 
 		this._items.put(type, item);
 
-		for (Map.Entry<StatisticTemplate.Type, Double> entry : item.GetStatistics().entrySet())
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : item.GetStatistics().entrySet())
 		{
 			StatisticTemplate.Type stat_type = entry.getKey();
 			Statistic stat = this._statistics.get(stat_type);
-			stat.Increase(entry.getValue());
+			stat.Increase(entry.getValue().GetValue());
 
 			if (stat_type == StatisticTemplate.Type.HEALTH)
-				this._current_health += entry.getValue();
+				this._current_health += entry.getValue().GetValue();
 		}
 	}
 }
