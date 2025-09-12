@@ -59,6 +59,13 @@ public class Hero extends Entity
 	public Map<Item.Type, Item>	GetItems() {return Collections.unmodifiableMap(this._items);}
 	public Item					GetItem(Item.Type type) {return this._items.get(type);}
 
+	public void TakeDamage(double damage)
+	{
+		this._current_health -= damage;
+		if (this._current_health < 0)
+			this._current_health = 0;
+	}
+
 	public void EquipItem(Item item)
 	{
 		Item.Type type = item.GetType();

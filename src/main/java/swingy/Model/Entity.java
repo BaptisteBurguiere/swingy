@@ -22,6 +22,5 @@ public abstract class Entity
 	public Map<StatisticTemplate.Type, Statistic>	GetStatistics() {return Collections.unmodifiableMap(this._statistics);}
 	public Statistic								GetStatistic(StatisticTemplate.Type type) {return this._statistics.get(type);}
 
-	public void	TakeDamage(double damage) {};
-	public void	DealDamage(Entity entity, double damage) {};
+	public abstract void	TakeDamage(double damage);
 }
