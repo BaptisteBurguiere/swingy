@@ -38,7 +38,47 @@ public class Item
 	}
 
 	public Type										GetType() {return this._type;}
+	public String									GetTypeStr()
+	{
+		switch (this._type)
+		{
+			case WEAPON:
+				return "Weapon";
+
+			case ARMOR:
+				return "Armor";
+
+			case HELMET:
+				return "Helmet";
+
+			case RELIC:
+				return "Relic";
+
+			default:
+				return "Undefined";
+		}
+	}
 	public Rarity									GetRarity() {return this._rarity;}
+	public String									GetRarityStr()
+	{
+		switch (this._rarity)
+		{
+			case COMMON:
+				return "Common";
+
+			case RARE:
+				return "Rare";
+
+			case EPIC:
+				return "Epic";
+
+			case LEGENDARY:
+				return "Legendary";
+
+			default:
+				return "Undefined";
+		}
+	}
 	public String									GetName() {return this._name;}
 	public String									GetDescription() {return this._description;}
 	public Map<StatisticTemplate.Type, Statistic>	GetStatistics() {return Collections.unmodifiableMap(this._statistics);}

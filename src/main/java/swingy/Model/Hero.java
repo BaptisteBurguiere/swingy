@@ -27,7 +27,10 @@ public class Hero extends Entity
 		this._class = Class;
 		this._experience = experience;
 		this._current_health = current_health;
-		this._items = new EnumMap<>(items);
+		this._items = new EnumMap<>(Item.Type.class);
+
+		for (Map.Entry<Item.Type, Item> entry : items.entrySet())
+			this.EquipItem(entry.getValue());
 	}
 
 	public Class				GetClass() {return this._class;}
