@@ -8,8 +8,12 @@ public class Hero extends Entity
 {
 	public enum Class
 	{
-		KNIGHT,
-
+		KNIGHT,		// balanced
+		GUARDIAN,	// health defense
+		JUGGERNAUT,	// health attack
+		ASSASSIN,	// speed evasion crit
+		BERSERKER,	// attack crit chance
+		GAMBLER		// evasion luck crit dmg
 	}
 
 	private Class					_class;
@@ -27,9 +31,30 @@ public class Hero extends Entity
 	}
 
 	public Class				GetClass() {return this._class;}
+	public String				GetClassStr()
+	{
+		switch (this._class)
+		{
+			case KNIGHT:
+				return "Knight";
+			case GUARDIAN:
+				return "Guardian";
+			case JUGGERNAUT:
+				return "Juggernaut";
+			case ASSASSIN:
+				return "Assassin";
+			case BERSERKER:
+				return "Berserker";
+			case GAMBLER:
+				return "Gambler";
+			default:
+				return "Undefined";
+		}
+	}
 	public int					GetExperience() {return this._experience;}
 	public double				GetCurrentHealth() {return this._current_health;}
 	public Map<Item.Type, Item>	GetItems() {return Collections.unmodifiableMap(this._items);}
+	public Item					GetItem(Item.Type type) {return this._items.get(type);}
 
 	public void EquipItem(Item item)
 	{

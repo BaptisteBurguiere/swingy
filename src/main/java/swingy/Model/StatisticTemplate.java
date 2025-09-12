@@ -48,5 +48,5 @@ public class StatisticTemplate
 		_templates.put(Type.LUCK, new StatisticTemplate(Type.LUCK, "Luck", "Affects drops, crits, evades, parries"));
 	}
 
-	public StatisticTemplate Get(Type type) {return _templates.get(type);}
+	public static StatisticTemplate Get(Type type) {return _templates.get(type);}
 }

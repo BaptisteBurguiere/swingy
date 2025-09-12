@@ -11,6 +11,12 @@ public class Statistic
 		this._value = value;
 	}
 
+	public Statistic(StatisticTemplate.Type type, double value)
+	{
+		this._template = StatisticTemplate.Get(type);
+		this._value = value;
+	}
+
 	public StatisticTemplate.Type	GetType() {return this._template.GetType();}
 	public String					GetName() {return this._template.GetName();}
 	public String					GetDescription() {return this._template.GetDescription();}

@@ -20,6 +20,7 @@ public abstract class Entity
 	public String 									GetName() {return this._name;}
 	public int										GetLevel() {return this._level;}
 	public Map<StatisticTemplate.Type, Statistic>	GetStatistics() {return Collections.unmodifiableMap(this._statistics);}
+	public Statistic								GetStatistic(StatisticTemplate.Type type) {return this._statistics.get(type);}
 
 	public void	TakeDamage(double damage) {};
 	public void	DealDamage(Entity entity, double damage) {};
