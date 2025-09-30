@@ -1,5 +1,6 @@
 package swingy.Controller;
 
+import swingy.Model.CombatResult;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Entity;
 import swingy.Model.Hero;
@@ -18,7 +19,9 @@ public class Combat
 	private final double LUCK_EVASION_CHANCE = 0.005;
 	private final double LUCK_HIT_CHANCE = 0.005;
 	private final double LUCK_CRITICAL_CHANCE = 0.008;
-	private final double DEFENSE_SCALING = 0.5;
+	private final double DEFENSE_SCALING = 0.2;
+	private final double DAMAGE_SPREAD = 0.2;
+	private final double LUCK_DAMAGE_SPREAD = 0.005;
 
 	private double _hero_tp;
 	private double _villain_tp;
@@ -66,7 +69,7 @@ public class Combat
 		double hit_chance = Math.max(MIN_HIT_CHANCE, (accuracy + attacker_luck * LUCK_HIT_CHANCE) - (evasion + defender_luck * LUCK_EVASION_CHANCE));
 		double hit_roll = Math.random();
 
-		return hit_roll < hit_chance;
+		return hit_roll > hit_chance;
 	}
 
 	private boolean IsCritical(Entity attacker)
@@ -83,8 +86,11 @@ public class Combat
 	{
 		double attack = attacker.GetStatistic(StatisticTemplate.Type.ATTACK).GetValue();
 		double defense = defender.GetStatistic(StatisticTemplate.Type.DEFENSE).GetValue();
+		double luck = attacker.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
 
 		double damage = attack - (defense * DEFENSE_SCALING);
+		double spread_roll = Math.min(1., Math.random() * (1 + luck * LUCK_DAMAGE_SPREAD));
+		damage *= 1. + (((DAMAGE_SPREAD * 2) * spread_roll) - DAMAGE_SPREAD);
 		damage = Math.max(damage, 1);
 
 		if (IsCritical(attacker))
@@ -108,6 +114,7 @@ public class Combat
 
 		double damage = CalculateDamage(this._hero, this._villain, result);
 		this._villain.TakeDamage(damage);
+		result.damage = damage;
 
 		return result;
 	}
@@ -128,15 +135,33 @@ public class Combat
 		return result;
 	}
 
-	public void Start()
+	public CombatResult Start()
 	{
+		Game game_controller = Game.GetInstance();
+		CombatResult result = new CombatResult();
+
 		while (true)
 		{
-			CombatTurnResult result;
+			CombatTurnResult turn_result;
 			if (IsHeroTurn())
-				result = HeroTurn();
+				turn_result = HeroTurn();
 			else
-				result = VillainTurn();
+				turn_result = VillainTurn();
+
+			game_controller.DisplayCombatTurnResult(turn_result);
+
+			if (this._hero.GetCurrentHealth() <= 0)
+			{
+				result.hero_win = false;
+				break;
+			}
+			if (this._villain.GetCurrentHealth() <= 0)
+			{
+				result.hero_win = true;
+				break;
+			}
 		}
+
+		return result;
 	}
 }

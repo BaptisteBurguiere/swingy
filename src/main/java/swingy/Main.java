@@ -4,7 +4,7 @@ import swingy.Controller.Game;
 
 public class Main {
     public static void main(String[] args) {
-		Game game = new Game();
+		Game game = Game.GetInstance();
 		game.Start();
     }
 }

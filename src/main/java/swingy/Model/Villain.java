@@ -12,6 +12,8 @@ public class Villain extends Entity
 		this._current_health = this.GetStatistic(StatisticTemplate.Type.HEALTH).GetValue();
 	}
 
+	public double GetCurrentHealth() {return this._current_health;}
+
 	public void TakeDamage(double damage)
 	{
 		this._current_health -= damage;

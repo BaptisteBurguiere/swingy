@@ -2,11 +2,13 @@ package swingy.View.Console;
 
 import java.util.Map;
 
+import swingy.Model.CombatTurnResult;
 import swingy.Model.Hero;
 import swingy.Model.Item;
 import swingy.Model.Statistic;
 import swingy.Model.StatisticTemplate;
 import swingy.View.View;
+import swingy.Model.Entity;
 
 public class ConsoleView extends View
 {
@@ -94,5 +96,34 @@ public class ConsoleView extends View
 	public void DisplayItem(Item item)
 	{
 		System.out.println("[" + item.GetRarityStr() + "]");
+	}
+
+	public void DisplayCombatTurnResult(CombatTurnResult result)
+	{
+		String to_display = String.format("%s attacks %s!", result.attacker.GetName(), result.defender.GetName());
+		System.out.println(to_display);
+
+		if (result.missed)
+		{
+			System.out.println("Missed!");
+			return;
+		}
+
+		if (result.critical)
+			System.out.println("Critical Hit!");
+		
+		to_display = String.format("%.0f damages dealt!", result.damage);
+		System.out.println(to_display);
+	}
+
+	public void DisplayYouDied()
+	{
+		System.out.println("You died...");
+	}
+
+	public void DisplayVillainDied(Entity entity)
+	{
+		String to_display = String.format("Ennemy %s died!", entity.GetName());
+		System.out.println(to_display);
 	}
 }
