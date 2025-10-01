@@ -11,7 +11,6 @@ import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
 import swingy.View.View;
 import swingy.View.Console.ConsoleView;
-import swingy.Model.Entity;
 import swingy.Model.CombatResult;
 
 public class Game
@@ -20,6 +19,13 @@ public class Game
 
 	private Hero		_hero;
 	private View		_view;
+
+	private final double XP_BASE = 4;
+	private final double XP_GROWTH = 0.6;
+	private final double XP_DIFF_SCALE = 10;
+	private final double XP_MIN_MULT = 0.2;
+	private final double XP_MAX_MULT = 2;
+	private final double XP_SPREAD = 0.1;
 
 	private Game(Hero.Class Class, String name)
 	{
@@ -58,13 +64,25 @@ public class Game
 		stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 1.5));
 		stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 5));
 
-		Villain villain = new Villain("Godrick Soldier", 1, stats);
+		Villain villain = new Villain("Godrick Soldier", 10, stats);
 
 		Combat combat = new Combat(_hero, villain);
 		CombatResult result = combat.Start();
 
 		if (result.hero_win)
+		{
 			this._view.DisplayVillainDied(villain);
+
+			int xp_gained = CalculateXpGained(villain);
+			this._hero.GainExperience(xp_gained);
+			this._view.DisplayXpGained(xp_gained);
+			
+			if (this._hero.GetExperience() >= this._hero.GetExperienceNeeded())
+			{
+				this._hero.LevelUp();
+				this._view.DisplayLevelUp(_hero);
+			}
+		}
 		else
 			this._view.DisplayYouDied();
 
@@ -74,5 +92,22 @@ public class Game
 	public void DisplayCombatTurnResult(CombatTurnResult result)
 	{
 		this._view.DisplayCombatTurnResult(result);
+	}
+
+	public int CalculateXpGained(Villain villain)
+	{
+		double k = XP_BASE + XP_GROWTH * (double)villain.GetLevel();
+
+		double mult = 1. + ((double)villain.GetLevel() - (double)this._hero.GetLevel()) / XP_DIFF_SCALE;
+		mult = Math.max(XP_MIN_MULT, Math.min(XP_MAX_MULT, mult));
+
+		double villain_xp_needed = villain.GetExperienceNeeded();
+
+		double xp_gained = villain_xp_needed / k * mult;
+
+		double spread_roll = Math.min(1., Math.random());
+		xp_gained *= 1. + (((XP_SPREAD * 2) * spread_roll) - XP_SPREAD);
+
+		return (int) xp_gained;
 	}
 }

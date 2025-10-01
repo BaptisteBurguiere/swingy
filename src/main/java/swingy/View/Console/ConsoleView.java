@@ -16,7 +16,7 @@ public class ConsoleView extends View
 
 	public void DisplayHero(Hero hero)
 	{
-		String to_display = String.format("%s lvl. %d - %s", hero.GetClassStr(), hero.GetLevel(), hero.GetName());
+		String to_display = String.format("%s lvl. %d (XP: %d / %d) - %s", hero.GetClassStr(), hero.GetLevel(), hero.GetExperience(), hero.GetExperienceNeeded(), hero.GetName());
 		System.out.println(to_display);
 
 		Statistic stat = hero.GetStatistic(StatisticTemplate.Type.HEALTH);
@@ -124,6 +124,24 @@ public class ConsoleView extends View
 	public void DisplayVillainDied(Entity entity)
 	{
 		String to_display = String.format("Ennemy %s died!", entity.GetName());
+		System.out.println(to_display);
+	}
+
+	public void Clear()
+	{
+		System.out.print("\u001b[2J");
+		System.out.print("\u001b[H");
+	}
+
+	public void DisplayLevelUp(Hero hero)
+	{
+		String to_display = String.format("%s levels up to level %d!", hero.GetName(), hero.GetLevel());
+		System.out.println(to_display);
+	}
+
+	public void DisplayXpGained(int xp)
+	{
+		String to_display = String.format("%d XP gained!", xp);
 		System.out.println(to_display);
 	}
 }

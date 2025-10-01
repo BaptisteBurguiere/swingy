@@ -96,4 +96,18 @@ public class Hero extends Entity
 				this._current_health += entry.getValue().GetValue();
 		}
 	}
+
+	public void GainExperience(int xp)
+	{
+		this._experience += xp;
+	}
+
+	public void LevelUp()
+	{
+		while (this._experience >= this.GetExperienceNeeded())
+		{
+			this._experience -= this.GetExperienceNeeded();
+			this._level++;
+		}
+	}
 }

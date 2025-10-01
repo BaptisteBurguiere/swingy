@@ -14,4 +14,6 @@ public abstract class View
 	public abstract void DisplayCombatTurnResult(CombatTurnResult result);
 	public abstract void DisplayYouDied();
 	public abstract void DisplayVillainDied(Entity entity);
+	public abstract void DisplayLevelUp(Hero hero);
+	public abstract void DisplayXpGained(int xp);
 }

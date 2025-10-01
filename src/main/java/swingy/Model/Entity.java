@@ -21,6 +21,7 @@ public abstract class Entity
 	public int										GetLevel() {return this._level;}
 	public Map<StatisticTemplate.Type, Statistic>	GetStatistics() {return Collections.unmodifiableMap(this._statistics);}
 	public Statistic								GetStatistic(StatisticTemplate.Type type) {return this._statistics.get(type);}
+	public int										GetExperienceNeeded() {return (this._level * 1000 + (int)Math.pow(this._level - 1, 2) * 450);}
 
 	public abstract void	TakeDamage(double damage);
 }
