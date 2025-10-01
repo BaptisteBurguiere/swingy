@@ -133,14 +133,14 @@ public class Hero extends Entity
 				case ASSASSIN:
 					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(8);
 					this._statistics.get(StatisticTemplate.Type.SPEED).Increase(3);
-					this._statistics.get(StatisticTemplate.Type.CRIT_CHANCE).Increase(0.02);
-					this._statistics.get(StatisticTemplate.Type.EVASION).Increase(0.01);
+					this._statistics.get(StatisticTemplate.Type.CRIT_CHANCE).Increase(0.01);
+					this._statistics.get(StatisticTemplate.Type.EVASION).Increase(0.005);
 					break;
 	
 				case BERSERKER:
 					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(10);
 					this._statistics.get(StatisticTemplate.Type.ATTACK).Increase(6);
-					this._statistics.get(StatisticTemplate.Type.CRIT_CHANCE).Increase(0.03);
+					this._statistics.get(StatisticTemplate.Type.CRIT_CHANCE).Increase(0.02);
 					break;
 	
 				case GAMBLER:
@@ -151,7 +151,7 @@ public class Hero extends Entity
 					if (Math.random() < 0.5)
 						this._statistics.get(StatisticTemplate.Type.LUCK).Increase(2);
 					else
-						this._statistics.get(StatisticTemplate.Type.CRIT_DAMAGE).Increase(0.1);
+						this._statistics.get(StatisticTemplate.Type.CRIT_DAMAGE).Increase(0.02);
 					break;
 			}
 

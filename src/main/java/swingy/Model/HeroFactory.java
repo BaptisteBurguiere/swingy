@@ -90,9 +90,9 @@ public final class HeroFactory
 				attack = 10;
 				defense = 6;
 				speed = 15;
-				evasion = 0.25;
+				evasion = 0.2;
 				accuracy = 0.95;
-				crit_chance = 0.3;
+				crit_chance = 0.2;
 				crit_damage = 1.7;
 				luck = 6;
 				weapon_stat.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 10));
@@ -110,7 +110,7 @@ public final class HeroFactory
 				speed = 12;
 				evasion = 0.1;
 				accuracy = 0.88;
-				crit_chance = 0.35;
+				crit_chance = 0.25;
 				crit_damage = 1.8;
 				luck = 6;
 				weapon_stat.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 14));
@@ -126,9 +126,9 @@ public final class HeroFactory
 				attack = 9;
 				defense = 7;
 				speed = 11;
-				evasion = 0.22;
+				evasion = 0.17;
 				accuracy = 0.75;
-				crit_chance = 0.25;
+				crit_chance = 0.15;
 				crit_damage = 2;
 				luck = 10;
 				weapon_stat.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 9));
