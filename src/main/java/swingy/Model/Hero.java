@@ -108,6 +108,54 @@ public class Hero extends Entity
 		{
 			this._experience -= this.GetExperienceNeeded();
 			this._level++;
+
+			switch (this._class) {
+				case KNIGHT:
+					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(12);
+					this._statistics.get(StatisticTemplate.Type.ATTACK).Increase(3);
+					this._statistics.get(StatisticTemplate.Type.DEFENSE).Increase(3);
+					this._statistics.get(StatisticTemplate.Type.SPEED).Increase(1);
+					break;
+	
+				case GUARDIAN:
+					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(18);
+					this._statistics.get(StatisticTemplate.Type.DEFENSE).Increase(4);
+					this._statistics.get(StatisticTemplate.Type.ATTACK).Increase(1);
+					this._statistics.get(StatisticTemplate.Type.SPEED).Increase(1);
+					break;
+	
+				case JUGGERNAUT:
+					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(15);
+					this._statistics.get(StatisticTemplate.Type.ATTACK).Increase(5);
+					this._statistics.get(StatisticTemplate.Type.DEFENSE).Increase(2);
+					break;
+	
+				case ASSASSIN:
+					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(8);
+					this._statistics.get(StatisticTemplate.Type.SPEED).Increase(3);
+					this._statistics.get(StatisticTemplate.Type.CRIT_CHANCE).Increase(0.02);
+					this._statistics.get(StatisticTemplate.Type.EVASION).Increase(0.01);
+					break;
+	
+				case BERSERKER:
+					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(10);
+					this._statistics.get(StatisticTemplate.Type.ATTACK).Increase(6);
+					this._statistics.get(StatisticTemplate.Type.CRIT_CHANCE).Increase(0.03);
+					break;
+	
+				case GAMBLER:
+					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(10);
+					this._statistics.get(StatisticTemplate.Type.ATTACK).Increase(3);
+					this._statistics.get(StatisticTemplate.Type.DEFENSE).Increase(2);
+
+					if (Math.random() < 0.5)
+						this._statistics.get(StatisticTemplate.Type.LUCK).Increase(2);
+					else
+						this._statistics.get(StatisticTemplate.Type.CRIT_DAMAGE).Increase(0.1);
+					break;
+			}
+
+			this._current_health = this._statistics.get(StatisticTemplate.Type.HEALTH).GetValue();
 		}
 	}
 }
