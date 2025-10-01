@@ -37,6 +37,15 @@ public class Item
 		this._statistics = new EnumMap<>(statistics);
 	}
 
+	public Item(Type type, Rarity rarity, String name, String description)
+	{
+		this._type = type;
+		this._rarity = rarity;
+		this._name = name;
+		this._description = description;
+		this._statistics = null;
+	}
+
 	public Type										GetType() {return this._type;}
 	public String									GetTypeStr()
 	{
