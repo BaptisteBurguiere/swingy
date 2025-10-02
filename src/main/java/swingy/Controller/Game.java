@@ -6,12 +6,14 @@ import java.util.Map;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Hero;
 import swingy.Model.HeroFactory;
+import swingy.Model.ItemFactory;
 import swingy.Model.Statistic;
 import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
 import swingy.View.View;
 import swingy.View.Console.ConsoleView;
 import swingy.Model.CombatResult;
+import swingy.Model.Item;
 
 public class Game
 {
@@ -81,6 +83,12 @@ public class Game
 			{
 				this._hero.LevelUp();
 				this._view.DisplayLevelUp(_hero);
+			}
+
+			Item drop = ItemFactory.GenerateItem(_hero);
+			if (drop != null)
+			{
+				this._view.DisplayItem(drop);
 			}
 		}
 		else

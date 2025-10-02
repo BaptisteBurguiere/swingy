@@ -28,12 +28,12 @@ public final class ItemFactory
 		double luck = hero.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
 		double drop_chance = BASE_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * DROP_CHANCE_SHIFT) + luck * LUCK_DROP_CHANCE;
 
-		if (rand.nextDouble() > drop_chance)
+		if (rand.nextDouble() < drop_chance)
 			return null;
 
 		double legendary_drop_chance = BASE_LEGENDARY_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * LEGENDARY_DROP_CHANCE_SHIFT) + luck * LUCK_RARITY_SHIFT;
-		double epic_drop_chance = BASE_EPIC_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * EPIC_DROP_CHANCE_SHIFT) + luck + LUCK_RARITY_SHIFT;
-		double rare_drop_chance = BASE_RARE_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * RARE_DROP_CHANCE_SHIFT) + luck + LUCK_RARITY_SHIFT;
+		double epic_drop_chance = BASE_EPIC_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * EPIC_DROP_CHANCE_SHIFT) + luck * LUCK_RARITY_SHIFT;
+		double rare_drop_chance = BASE_RARE_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * RARE_DROP_CHANCE_SHIFT) + luck * LUCK_RARITY_SHIFT;
 		
 		double rarity_roll = rand.nextDouble();
 		if (rarity_roll < legendary_drop_chance)
@@ -173,7 +173,7 @@ public final class ItemFactory
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
-		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : stats.entrySet()) {
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet()) {
 			StatisticTemplate.Type type = entry.getKey();
 			double value = 0;
 
@@ -277,7 +277,7 @@ public final class ItemFactory
 		new Item(Item.Type.WEAPON, Item.Rarity.EPIC, "Stormcaller Axe", "An axe that hums with storm energy, swings faster than ordinary weapons", Map.of(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0))),
 		new Item(Item.Type.ARMOR, Item.Rarity.EPIC, "Runebound Chainmail", "Etched runes enhance the wearer's ability to retaliate critically", Map.of(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0))),
 		new Item(Item.Type.HELMET, Item.Rarity.EPIC, "Stormguard Helm", "Helm that allows faster reactions in combat", Map.of(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0))),
-		new Item(Item.Type.RELIC, Item.Rarity.EPIC, "Shadowdancer's Charm", "A charm blessed by thieves' guild masters, letting the bearer slip past blows with uncanny grace", Map.of(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0), StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0))),
+		new Item(Item.Type.RELIC, Item.Rarity.EPIC, "Shadowdancer's Charm", "A charm blessed by thieves guild masters, letting the bearer slip past blows with uncanny grace", Map.of(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0), StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0))),
 		new Item(Item.Type.WEAPON, Item.Rarity.EPIC, "Dragonfang Spear", "A spear tipped with dragon fang, sometimes strikes with uncanny fortune", Map.of(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0))),
 		new Item(Item.Type.ARMOR, Item.Rarity.EPIC, "Stormplate Armor", "Plates designed for swift movement in battle", Map.of(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0))),
 		new Item(Item.Type.HELMET, Item.Rarity.EPIC, "Dragoncrest Helm", "Adorned with a dragon motif, brings occasional fortunate outcomes", Map.of(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0))),
@@ -329,7 +329,8 @@ public final class ItemFactory
 		int attack = EPIC_MIN_ATTACK + rand.nextInt(EPIC_MAX_ATTACK - EPIC_MIN_ATTACK + 1);
 		stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, attack));
 
-		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : stats.entrySet()) {
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
+		{
 			StatisticTemplate.Type type = entry.getKey();
 			double value = 0;
 
@@ -375,7 +376,8 @@ public final class ItemFactory
 		int defense = EPIC_MIN_DEFENSE + rand.nextInt(EPIC_MAX_DEFENSE - EPIC_MIN_DEFENSE + 1);
 		stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, defense));
 
-		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : stats.entrySet()) {
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
+		{
 			StatisticTemplate.Type type = entry.getKey();
 			double value = 0;
 
@@ -421,7 +423,8 @@ public final class ItemFactory
 		int health = EPIC_MIN_HEALTH + rand.nextInt(EPIC_MAX_HEALTH - EPIC_MIN_HEALTH + 1);
 		stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, health));
 
-		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : stats.entrySet()) {
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
+		{
 			StatisticTemplate.Type type = entry.getKey();
 			double value = 0;
 
@@ -464,7 +467,8 @@ public final class ItemFactory
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
-		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : stats.entrySet()) {
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
+		{
 			StatisticTemplate.Type type = entry.getKey();
 			double value = 0;
 
@@ -596,7 +600,8 @@ public final class ItemFactory
 		int attack = LEGENDARY_MIN_ATTACK + rand.nextInt(LEGENDARY_MAX_ATTACK - LEGENDARY_MIN_ATTACK + 1);
 		stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, attack));
 
-		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : stats.entrySet()) {
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
+		{
 			StatisticTemplate.Type type = entry.getKey();
 			double value = 0;
 
@@ -654,7 +659,8 @@ public final class ItemFactory
 		int defense = LEGENDARY_MIN_DEFENSE + rand.nextInt(LEGENDARY_MAX_DEFENSE - LEGENDARY_MIN_DEFENSE + 1);
 		stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, defense));
 
-		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : stats.entrySet()) {
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
+		{
 			StatisticTemplate.Type type = entry.getKey();
 			double value = 0;
 
@@ -712,7 +718,8 @@ public final class ItemFactory
 		int health = LEGENDARY_MIN_HEALTH + rand.nextInt(LEGENDARY_MAX_HEALTH - LEGENDARY_MIN_HEALTH + 1);
 		stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, health));
 
-		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : stats.entrySet()) {
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
+		{
 			StatisticTemplate.Type type = entry.getKey();
 			double value = 0;
 
@@ -767,7 +774,8 @@ public final class ItemFactory
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
-		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : stats.entrySet()) {
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
+		{
 			StatisticTemplate.Type type = entry.getKey();
 			double value = 0;
 

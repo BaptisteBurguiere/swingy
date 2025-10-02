@@ -95,7 +95,60 @@ public class ConsoleView extends View
 
 	public void DisplayItem(Item item)
 	{
-		System.out.println("[" + item.GetRarityStr() + "]");
+		String to_display = String.format("[%s] %s (%s)", item.GetTypeStr(), item.GetName(), item.GetRarityStr());
+		System.out.println(to_display);
+
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : item.GetStatistics().entrySet())
+		{
+			Statistic stat = entry.getValue();
+			switch (stat.GetType())
+			{
+				case HEALTH:
+					to_display = String.format("  +%.0f %s", stat.GetValue(), stat.GetName());
+					break;
+
+				case ATTACK:
+					to_display = String.format("  +%.0f %s", stat.GetValue(), stat.GetName());
+					break;
+
+				case DEFENSE:
+					to_display = String.format("  +%.0f %s", stat.GetValue(), stat.GetName());
+					break;
+
+				case SPEED:
+					to_display = String.format("  +%.0f %s", stat.GetValue(), stat.GetName());
+					break;
+
+				case EVASION:
+					to_display = String.format("  +%.2f %s", stat.GetValue(), stat.GetName());
+					break;
+
+				case ACCURACY:
+					to_display = String.format("  +%.2f %s", stat.GetValue(), stat.GetName());
+					break;
+
+				case CRIT_CHANCE:
+					to_display = String.format("  +%.2f %s", stat.GetValue(), stat.GetName());
+					break;
+
+				case CRIT_DAMAGE:
+					to_display = String.format("  +%.2f %s", stat.GetValue(), stat.GetName());
+					break;
+
+				case LUCK:
+					to_display = String.format("  +%.0f %s", stat.GetValue(), stat.GetName());
+					break;
+			
+				default:
+					break;
+			}
+			
+			System.out.println(to_display);
+			
+		}
+		
+		to_display = String.format("Description: %s", item.GetDescription());
+		System.out.println(to_display);
 	}
 
 	public void DisplayCombatTurnResult(CombatTurnResult result)
