@@ -3,6 +3,7 @@ package swingy.Model;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Random;
 
 public class Hero extends Entity
 {
@@ -144,14 +145,53 @@ public class Hero extends Entity
 					break;
 	
 				case GAMBLER:
-					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(10);
-					this._statistics.get(StatisticTemplate.Type.ATTACK).Increase(3);
-					this._statistics.get(StatisticTemplate.Type.DEFENSE).Increase(2);
+					this._statistics.get(StatisticTemplate.Type.LUCK).Increase(2);
+					for (int i = 0; i < 2; i++)
+					{
+						Random rand = new Random();
+						int roll = rand.nextInt(StatisticTemplate.GetNbStats());
 
-					if (Math.random() < 0.5)
-						this._statistics.get(StatisticTemplate.Type.LUCK).Increase(2);
-					else
-						this._statistics.get(StatisticTemplate.Type.CRIT_DAMAGE).Increase(0.02);
+						switch (roll) {
+							case 0:
+								this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(15);
+								break;
+
+							case 1:
+								this._statistics.get(StatisticTemplate.Type.ATTACK).Increase(5);
+								break;
+
+							case 2:
+								this._statistics.get(StatisticTemplate.Type.DEFENSE).Increase(3);
+								break;
+
+							case 3:
+								this._statistics.get(StatisticTemplate.Type.SPEED).Increase(1);
+								break;
+
+							case 4:
+								this._statistics.get(StatisticTemplate.Type.EVASION).Increase(0.005);
+								break;
+
+							case 5:
+								this._statistics.get(StatisticTemplate.Type.ACCURACY).Increase(0.005);
+								break;
+
+							case 6:
+								this._statistics.get(StatisticTemplate.Type.CRIT_CHANCE).Increase(0.01);
+								break;
+
+							case 7:
+								this._statistics.get(StatisticTemplate.Type.CRIT_DAMAGE).Increase(0.05);
+								break;
+
+							case 8:
+								this._statistics.get(StatisticTemplate.Type.LUCK).Increase(2);
+								break;
+						
+							default:
+								break;
+						}
+					}
 					break;
 			}
 

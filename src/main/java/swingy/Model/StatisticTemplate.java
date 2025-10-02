@@ -29,9 +29,10 @@ public class StatisticTemplate
 		this._description = description;
 	}
 
-	public	Type	GetType() {return this._type;}
-	public	String	GetName() {return this._name;}
-	public	String	GetDescription() {return this._description;}
+	public Type				GetType() {return this._type;}
+	public String			GetName() {return this._name;}
+	public String			GetDescription() {return this._description;}
+	public static int		GetNbStats() {return _templates.size();}
 
 	private static final Map<Type, StatisticTemplate> _templates = new EnumMap<>(Type.class);
 
