@@ -14,6 +14,7 @@ import swingy.View.View;
 import swingy.View.Console.ConsoleView;
 import swingy.Model.CombatResult;
 import swingy.Model.Item;
+import swingy.Model.VillainFactory;
 
 public class Game
 {
@@ -55,18 +56,7 @@ public class Game
 	{
 		this._view.DisplayHero(this._hero);
 
-		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
-		stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 100));
-		stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 10));
-		stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 10));
-		stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 10));
-		stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.1));
-		stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.9));
-		stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.1));
-		stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 1.5));
-		stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 5));
-
-		Villain villain = new Villain("Godrick Soldier", 10, stats);
+		Villain villain = VillainFactory.GenerateVillain(this._hero);
 
 		Combat combat = new Combat(_hero, villain);
 		CombatResult result = combat.Start();
