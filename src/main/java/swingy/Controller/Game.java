@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import swingy.Model.CombatTurnResult;
+import swingy.Model.GameMap;
 import swingy.Model.Hero;
 import swingy.Model.HeroFactory;
 import swingy.Model.ItemFactory;
@@ -20,6 +21,7 @@ public class Game
 {
 	private static Game	_instance = null;
 
+	private GameMap		_map;
 	private Hero		_hero;
 	private View		_view;
 
@@ -34,6 +36,7 @@ public class Game
 	{
 		this._view = new ConsoleView();
 		this._hero = HeroFactory.NewHero(Class, name);
+		this._map = new GameMap(this._hero.GetLevel());
 	}
 
 	public static Game GetInstance()
@@ -54,37 +57,39 @@ public class Game
 
 	public void Start()
 	{
-		this._view.DisplayHero(this._hero);
+		this._view.DisplayMainView(this._map, this._hero);
+		// this._view.DisplayHero(this._hero);
+		// this._view.DisplayEquipment(this._hero);
 
-		Villain villain = VillainFactory.GenerateVillain(this._hero);
+		// Villain villain = VillainFactory.GenerateVillain(this._hero);
 
-		Combat combat = new Combat(_hero, villain);
-		CombatResult result = combat.Start();
+		// Combat combat = new Combat(_hero, villain);
+		// CombatResult result = combat.Start();
 
-		if (result.hero_win)
-		{
-			this._view.DisplayVillainDied(villain);
+		// if (result.hero_win)
+		// {
+		// 	this._view.DisplayVillainDied(villain);
 
-			int xp_gained = CalculateXpGained(villain);
-			this._hero.GainExperience(xp_gained);
-			this._view.DisplayXpGained(xp_gained);
+		// 	int xp_gained = CalculateXpGained(villain);
+		// 	this._hero.GainExperience(xp_gained);
+		// 	this._view.DisplayXpGained(xp_gained);
 			
-			if (this._hero.GetExperience() >= this._hero.GetExperienceNeeded())
-			{
-				this._hero.LevelUp();
-				this._view.DisplayLevelUp(_hero);
-			}
+		// 	if (this._hero.GetExperience() >= this._hero.GetExperienceNeeded())
+		// 	{
+		// 		this._hero.LevelUp();
+		// 		this._view.DisplayLevelUp(_hero);
+		// 	}
 
-			Item drop = ItemFactory.GenerateItem(_hero);
-			if (drop != null)
-			{
-				this._view.DisplayItem(drop);
-			}
-		}
-		else
-			this._view.DisplayYouDied();
+		// 	Item drop = ItemFactory.GenerateItem(_hero);
+		// 	if (drop != null)
+		// 	{
+		// 		this._view.DisplayItem(drop);
+		// 	}
+		// }
+		// else
+		// 	this._view.DisplayYouDied();
 
-		this._view.DisplayHero(_hero);
+		// this._view.DisplayHero(_hero);
 	}
 
 	public void DisplayCombatTurnResult(CombatTurnResult result)
