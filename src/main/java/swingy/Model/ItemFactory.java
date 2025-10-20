@@ -382,6 +382,18 @@ public final class ItemFactory
 			double value = 0;
 
 			switch (type) {
+				case HEALTH:
+					value = RARE_MIN_HEALTH + rand.nextInt(RARE_MAX_HEALTH - RARE_MIN_HEALTH + 1);
+					break;
+
+				case ATTACK:
+					value = RARE_MIN_ATTACK + rand.nextInt(RARE_MAX_ATTACK - RARE_MIN_ATTACK + 1);
+					break;
+
+				case DEFENSE:
+					value = RARE_MIN_DEFENSE + rand.nextInt(RARE_MAX_DEFENSE - RARE_MIN_DEFENSE + 1);
+					break;
+					
 				case SPEED:
 					value = RARE_MIN_SPEED + rand.nextInt(RARE_MAX_SPEED - RARE_MIN_SPEED + 1);
 					break;
@@ -429,6 +441,18 @@ public final class ItemFactory
 			double value = 0;
 
 			switch (type) {
+				case HEALTH:
+					value = RARE_MIN_HEALTH + rand.nextInt(RARE_MAX_HEALTH - RARE_MIN_HEALTH + 1);
+					break;
+
+				case ATTACK:
+					value = RARE_MIN_ATTACK + rand.nextInt(RARE_MAX_ATTACK - RARE_MIN_ATTACK + 1);
+					break;
+
+				case DEFENSE:
+					value = RARE_MIN_DEFENSE + rand.nextInt(RARE_MAX_DEFENSE - RARE_MIN_DEFENSE + 1);
+					break;
+
 				case SPEED:
 					value = RARE_MIN_SPEED + rand.nextInt(RARE_MAX_SPEED - RARE_MIN_SPEED + 1);
 					break;

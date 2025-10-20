@@ -44,7 +44,7 @@ public class GameMap
 
 	public GameMap(int hero_level)
 	{
-		this._size = (hero_level - 1) * 5 + 10 - (hero_level % 2);
+		this._size = Math.min((hero_level - 1) * 5 + 10 - (hero_level % 2), 30);
 		this._grid = new Element[this._size][this._size];
 		this._hero_x = this._size / 2;
 		this._hero_y = this._size / 2;

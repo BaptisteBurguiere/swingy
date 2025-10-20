@@ -5,7 +5,7 @@ import swingy.Model.Hero;
 
 public class Main {
     public static void main(String[] args) {
-		Game game = Game.GetInstance(Hero.Class.ASSASSIN, "Phen'X");
+		Game game = Game.GetInstance(Hero.Class.GAMBLER, "Phen'X");
 		game.Start();
     }
 }
