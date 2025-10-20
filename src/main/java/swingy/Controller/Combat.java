@@ -160,6 +160,8 @@ public class Combat
 				result.hero_win = true;
 				break;
 			}
+
+			game_controller.GetUserInput();
 		}
 
 		return result;

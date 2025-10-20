@@ -15,12 +15,12 @@ public final class ItemFactory
 	private static final int LEVEL_CHUNK = 10;
 	private static final double DROP_CHANCE_SHIFT = 0.05;
 	private static final double LUCK_DROP_CHANCE = 0.005;
-	private static final double BASE_RARE_DROP_CHANCE = 0.25;
-	private static final double BASE_EPIC_DROP_CHANCE = 0.05;
+	private static final double BASE_RARE_DROP_CHANCE = 0.15;
+	private static final double BASE_EPIC_DROP_CHANCE = 0.03;
 	private static final double BASE_LEGENDARY_DROP_CHANCE = 0;
-	private static final double RARE_DROP_CHANCE_SHIFT = 0.05;
-	private static final double EPIC_DROP_CHANCE_SHIFT = 0.04;
-	private static final double LEGENDARY_DROP_CHANCE_SHIFT = 0.03;
+	private static final double RARE_DROP_CHANCE_SHIFT = 0.03;
+	private static final double EPIC_DROP_CHANCE_SHIFT = 0.01;
+	private static final double LEGENDARY_DROP_CHANCE_SHIFT = 0.005;
 	private static final double LUCK_RARITY_SHIFT = 0.002;
 
 	public static Item GenerateItem(Hero hero)

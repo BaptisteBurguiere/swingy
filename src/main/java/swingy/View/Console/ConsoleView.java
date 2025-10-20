@@ -8,6 +8,7 @@ import swingy.Model.Hero;
 import swingy.Model.Item;
 import swingy.Model.Statistic;
 import swingy.Model.StatisticTemplate;
+import swingy.Model.Villain;
 import swingy.View.View;
 import swingy.Model.Entity;
 import swingy.Model.GameMap;
@@ -208,6 +209,15 @@ public class ConsoleView extends View
 		System.out.println("  h: Display help");
 	}
 
+	public void DiplayInputHelpEquipItem()
+	{
+		System.out.println("Controls:");
+		System.out.println("  y: Equip item");
+		System.out.println("  n: Leave item");
+		System.out.println("  e: Display equipment");
+		System.out.println("  c: Display hero statistics");
+	}
+
 	public void DisplayPrompt()
 	{
 		System.out.print("> ");
@@ -361,13 +371,13 @@ public class ConsoleView extends View
 		System.out.println();
 	}
 
-	public void DisplayMainView(GameMap map, Hero hero)
+	public Action DisplayMainView(GameMap map, Hero hero)
 	{
 		while (true)
-		{
+		{			
 			Clear();
 			DisplayMap(map);
-
+	
 			System.out.println();
 			
 			DisplayInputHelp();
@@ -377,17 +387,62 @@ public class ConsoleView extends View
 			String input = GetUserInput().toUpperCase();
 			
 			if (input.equals("E"))
-			{
-				DisplayEquipment(hero);
-			}
+				return Action.DISPLAY_EQUIPMENT;
+	
 			if (input.equals("C"))
-			{
-				DisplayHero(hero);
-			}
+				return Action.DISPLAY_STATISTICS;
+	
 			if (input.equals("Q"))
-			{
-				break;
-			}
+				return Action.QUIT;
+	
+			if (input.equals("W"))
+				return Action.MOVE_UP;
+	
+			if (input.equals("A"))
+				return Action.MOVE_LEFT;
+	
+			if (input.equals("S"))
+				return Action.MOVE_DOWN;
+			
+			if (input.equals("D"))
+				return Action.MOVE_RIGHT;
+		}
+	}
+
+	public void DisplayStartCombat(Hero hero, Villain villain)
+	{
+		Clear();
+		
+		String to_display = String.format("%s starts a fight against %s lvl. %d!", hero.GetName(), villain.GetName(), villain.GetLevel());
+		System.out.println(to_display);
+	}
+
+	public Action DiplayEquipItem(Item item)
+	{
+		while (true)
+		{
+			Clear();
+			System.out.println("The ennemy dropped an item!");
+			System.out.println();
+			DisplayItem(item);
+			System.out.println();
+			DiplayInputHelpEquipItem();
+			System.out.println();
+			DisplayPrompt();
+
+			String input = GetUserInput().toUpperCase();
+
+			if (input.equals("Y"))
+				return Action.EQUIP_ITEM;
+			
+			if (input.equals("N"))
+				return Action.LEAVE_ITEM;
+
+			if (input.equals("E"))
+				return Action.DISPLAY_EQUIPMENT;
+			
+			if (input.equals("C"))
+				return Action.DISPLAY_STATISTICS;
 		}
 	}
 }

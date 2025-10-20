@@ -16,10 +16,13 @@ import swingy.View.Console.ConsoleView;
 import swingy.Model.CombatResult;
 import swingy.Model.Item;
 import swingy.Model.VillainFactory;
+import swingy.Model.GameMap.Direction;
+import swingy.Model.GameMap.MoveResult;
 
 public class Game
 {
 	private static Game	_instance = null;
+	private boolean		_is_running = true;
 
 	private GameMap		_map;
 	private Hero		_hero;
@@ -57,39 +60,45 @@ public class Game
 
 	public void Start()
 	{
-		this._view.DisplayMainView(this._map, this._hero);
-		// this._view.DisplayHero(this._hero);
-		// this._view.DisplayEquipment(this._hero);
+		while (this._is_running)
+		{
+			switch (this._view.DisplayMainView(this._map, this._hero))
+			{
+				case DISPLAY_EQUIPMENT:
+					this._view.DisplayEquipment(this._hero);
+					break;
 
-		// Villain villain = VillainFactory.GenerateVillain(this._hero);
+				case DISPLAY_STATISTICS:
+					this._view.DisplayHero(this._hero);
+					break;
 
-		// Combat combat = new Combat(_hero, villain);
-		// CombatResult result = combat.Start();
+				case DISPLAY_HELP:
+					break;
+				
+				case MOVE_LEFT:
+					this.MoveHero(Direction.LEFT);
+					break;
 
-		// if (result.hero_win)
-		// {
-		// 	this._view.DisplayVillainDied(villain);
+				case MOVE_RIGHT:
+					this.MoveHero(Direction.RIGHT);
+					break;
 
-		// 	int xp_gained = CalculateXpGained(villain);
-		// 	this._hero.GainExperience(xp_gained);
-		// 	this._view.DisplayXpGained(xp_gained);
-			
-		// 	if (this._hero.GetExperience() >= this._hero.GetExperienceNeeded())
-		// 	{
-		// 		this._hero.LevelUp();
-		// 		this._view.DisplayLevelUp(_hero);
-		// 	}
+				case MOVE_UP:
+					this.MoveHero(Direction.UP);
+					break;
 
-		// 	Item drop = ItemFactory.GenerateItem(_hero);
-		// 	if (drop != null)
-		// 	{
-		// 		this._view.DisplayItem(drop);
-		// 	}
-		// }
-		// else
-		// 	this._view.DisplayYouDied();
+				case MOVE_DOWN:
+					this.MoveHero(Direction.DOWN);
+					break;
 
-		// this._view.DisplayHero(_hero);
+				case QUIT:
+					this._is_running = false;
+					break;
+
+				default:
+					break;
+			}
+		}
 	}
 
 	public void DisplayCombatTurnResult(CombatTurnResult result)
@@ -112,5 +121,90 @@ public class Game
 		xp_gained *= 1. + (((XP_SPREAD * 2) * spread_roll) - XP_SPREAD);
 
 		return (int) xp_gained;
+	}
+
+	public void MoveHero(Direction direction)
+	{
+		switch (this._map.MoveHero(direction)) {
+			case EXIT:
+				this._map = new GameMap(this._hero.GetLevel());
+				break;
+
+			case FIGHT:
+				this.StartCombat();
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	public void StartCombat()
+	{
+		Villain villain = VillainFactory.GenerateVillain(this._hero);
+
+		Combat combat = new Combat(this._hero, villain);
+		this._view.DisplayStartCombat(this._hero, villain);
+		CombatResult result = combat.Start();
+
+		if (result.hero_win)
+		{
+			this._view.DisplayVillainDied(villain);
+			this._view.GetUserInput();
+
+			int xp_gained = CalculateXpGained(villain);
+			this._hero.GainExperience(xp_gained);
+			this._view.DisplayXpGained(xp_gained);
+			this._view.GetUserInput();
+			
+			if (this._hero.GetExperience() >= this._hero.GetExperienceNeeded())
+			{
+				this._hero.LevelUp();
+				this._view.DisplayLevelUp(this._hero);
+				this._view.GetUserInput();
+			}
+
+			Item drop = ItemFactory.GenerateItem(this._hero);
+			if (drop != null)
+			{
+				boolean is_equip = false;
+				while (!is_equip)
+				{
+					switch (this._view.DiplayEquipItem(drop))
+					{
+						case EQUIP_ITEM:
+							this._hero.EquipItem(drop);	
+							is_equip = true;					
+							break;
+						
+						case LEAVE_ITEM:
+							is_equip = true;
+							break;
+	
+						case DISPLAY_EQUIPMENT:
+							this._view.DisplayEquipment(this._hero);
+							break;
+	
+						case DISPLAY_STATISTICS:
+							this._view.DisplayHero(this._hero);
+							break;
+					
+						default:
+							break;
+					}
+				}
+			}
+		}
+		else
+		{
+			this._is_running = false;
+			this._view.DisplayYouDied();
+			this._view.GetUserInput();
+		}
+	}
+
+	public void GetUserInput()
+	{
+		this._view.GetUserInput();
 	}
 }

@@ -14,6 +14,21 @@ public class GameMap
 		VILLAIN
 	}
 
+	public enum Direction
+	{
+		LEFT,
+		RIGHT,
+		UP,
+		DOWN
+	}
+
+	public enum MoveResult
+	{
+		MOVE,
+		FIGHT,
+		EXIT,
+	}
+
 	private static final Random rand = new Random();
 
 	private int			_size;
@@ -78,4 +93,51 @@ public class GameMap
             }
         }
     }
+
+	public MoveResult MoveHero(Direction direction)
+	{
+		int new_hero_x = this._hero_x;
+		int new_hero_y = this._hero_y;
+
+		switch (direction) {
+			case LEFT:
+				new_hero_x--;
+				break;
+
+			case RIGHT:
+				new_hero_x++;
+				break;
+
+			case UP:
+				new_hero_y--;
+				break;
+
+			case DOWN:
+				new_hero_y++;
+		}
+
+		if (	new_hero_x < 0 || new_hero_x >= this._size
+			||	new_hero_y < 0 || new_hero_y >= this._size)
+			return MoveResult.EXIT;
+
+		if (this._grid[new_hero_y][new_hero_x] == Element.WALL)
+			return MoveResult.MOVE;
+
+		if (this._grid[new_hero_y][new_hero_x] == Element.VILLAIN)
+		{
+			this._grid[this._hero_y][this._hero_x] = Element.EMPTY;
+			this._hero_x = new_hero_x;
+			this._hero_y = new_hero_y;
+			this._grid[new_hero_y][new_hero_x] = Element.HERO;
+
+			return MoveResult.FIGHT;
+		}
+
+		this._grid[this._hero_y][this._hero_x] = Element.EMPTY;
+		this._hero_x = new_hero_x;
+		this._hero_y = new_hero_y;
+		this._grid[new_hero_y][new_hero_x] = Element.HERO;
+
+		return MoveResult.MOVE;
+	}
 }
