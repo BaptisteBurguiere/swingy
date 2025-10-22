@@ -74,16 +74,28 @@ public class Item
 		{
 			case COMMON:
 				return "Common";
-
 			case RARE:
 				return "Rare";
-
 			case EPIC:
 				return "Epic";
-
 			case LEGENDARY:
 				return "Legendary";
-
+			default:
+				return "Undefined";
+		}
+	}
+	public static String							GetRarityStr(Rarity rarity)
+	{
+		switch (rarity)
+		{
+			case COMMON:
+				return "Common";
+			case RARE:
+				return "Rare";
+			case EPIC:
+				return "Epic";
+			case LEGENDARY:
+				return "Legendary";
 			default:
 				return "Undefined";
 		}

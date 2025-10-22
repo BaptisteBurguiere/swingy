@@ -21,7 +21,7 @@ public final class ItemFactory
 	private static final double RARE_DROP_CHANCE_SHIFT = 0.03;
 	private static final double EPIC_DROP_CHANCE_SHIFT = 0.01;
 	private static final double LEGENDARY_DROP_CHANCE_SHIFT = 0.005;
-	private static final double LUCK_RARITY_SHIFT = 0.002;
+	private static final double LUCK_RARITY_SHIFT = 0.0005;
 
 	public static Item GenerateItem(Hero hero)
 	{

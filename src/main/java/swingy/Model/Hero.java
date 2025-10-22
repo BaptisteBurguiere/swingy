@@ -28,16 +28,33 @@ public class Hero extends Entity
 		this._class = Class;
 		this._experience = experience;
 		this._current_health = current_health;
-		this._items = new EnumMap<>(Item.Type.class);
-
-		for (Map.Entry<Item.Type, Item> entry : items.entrySet())
-			this.EquipItem(entry.getValue());
+		this._items = new EnumMap<>(items);
 	}
 
 	public Class				GetClass() {return this._class;}
 	public String				GetClassStr()
 	{
 		switch (this._class)
+		{
+			case KNIGHT:
+				return "Knight";
+			case GUARDIAN:
+				return "Guardian";
+			case JUGGERNAUT:
+				return "Juggernaut";
+			case ASSASSIN:
+				return "Assassin";
+			case BERSERKER:
+				return "Berserker";
+			case GAMBLER:
+				return "Gambler";
+			default:
+				return "Undefined";
+		}
+	}
+	public static String		GetClassStr(Class Class)
+	{
+		switch (Class)
 		{
 			case KNIGHT:
 				return "Knight";

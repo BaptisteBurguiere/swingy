@@ -18,7 +18,7 @@ public class Combat
 	private final double MIN_HIT_CHANCE = 0.1;
 	private final double LUCK_EVASION_CHANCE = 0.005;
 	private final double LUCK_HIT_CHANCE = 0.005;
-	private final double LUCK_CRITICAL_CHANCE = 0.008;
+	private final double LUCK_CRITICAL_CHANCE = 0.005;
 	private final double DEFENSE_SCALING = 0.2;
 	private final double DAMAGE_SPREAD = 0.2;
 	private final double LUCK_DAMAGE_SPREAD = 0.005;
@@ -135,7 +135,7 @@ public class Combat
 		return result;
 	}
 
-	public CombatResult Start()
+	public CombatResult Start() throws Exception
 	{
 		Game game_controller = Game.GetInstance();
 		CombatResult result = new CombatResult();

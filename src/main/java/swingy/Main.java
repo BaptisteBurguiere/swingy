@@ -1,11 +1,20 @@
 package swingy;
 
 import swingy.Controller.Game;
-import swingy.Model.Hero;
 
 public class Main {
-    public static void main(String[] args) {
-		Game game = Game.GetInstance(Hero.Class.GAMBLER, "Phen'X");
-		game.Start();
+    public static void main(String[] args)
+	{
+		try
+		{
+			Game game = Game.GetInstance();
+	
+			game.ChooseSave();
+			game.Start();
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+		}
     }
 }

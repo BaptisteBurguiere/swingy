@@ -3,6 +3,7 @@ package swingy.View;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Hero;
 import swingy.Model.Item;
+import swingy.Model.SaveFile;
 import swingy.Model.Statistic;
 import swingy.Model.Villain;
 import swingy.Model.Entity;
@@ -36,4 +37,7 @@ public abstract class View
 	public abstract String GetUserInput();
 	public abstract void DisplayStartCombat(Hero hero, Villain villain);
 	public abstract Action DiplayEquipItem(Item item);
+	public abstract int DisplayChooseSave(SaveFile save_file);
+	public abstract Hero.Class DisplayCreateHeroClass();
+	public abstract String DisplayCreateHeroName();
 }

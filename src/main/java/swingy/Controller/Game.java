@@ -16,11 +16,12 @@ import swingy.Model.GameMap.Direction;
 public class Game
 {
 	private static Game	_instance = null;
-	private boolean		_is_running = true;
+	private boolean		_is_running = false;
 
 	private GameMap		_map;
 	private Hero		_hero;
 	private View		_view;
+	private SaveManager	_save_manager;
 
 	private final double XP_BASE = 4;
 	private final double XP_GROWTH = 0.6;
@@ -29,30 +30,45 @@ public class Game
 	private final double XP_MAX_MULT = 2;
 	private final double XP_SPREAD = 0.1;
 
-	private Game(Hero.Class Class, String name)
+	private Game() throws Exception
 	{
+		this._save_manager = SaveManager.GetInstance();
 		this._view = new ConsoleView();
-		this._hero = HeroFactory.NewHero(Class, name);
+	}
+
+	public static Game GetInstance() throws Exception
+	{
+		if (_instance == null)
+			_instance = new Game();
+
+		return _instance;
+	}
+
+	public void ChooseSave()
+	{
+		int save_slot = this._view.DisplayChooseSave(this._save_manager.GetSaveFile());
+
+		Hero hero = this._save_manager.GetSave(save_slot);
+
+		if (hero != null)
+			this._hero = hero;
+		else
+		{
+			Hero.Class Class = this._view.DisplayCreateHeroClass();
+			String name = this._view.DisplayCreateHeroName();
+
+			hero = HeroFactory.NewHero(Class, name);
+			this._hero = hero;
+			this._save_manager.SetSave(save_slot, hero);
+			this._save_manager.Save();
+		}
+
 		this._map = new GameMap(this._hero.GetLevel());
+
+		this._is_running = true;
 	}
 
-	public static Game GetInstance()
-	{
-		if (_instance == null)
-			_instance = new Game(Hero.Class.KNIGHT, "Hero");
-
-		return _instance;
-	}
-
-	public static Game GetInstance(Hero.Class Class, String name)
-	{
-		if (_instance == null)
-			_instance = new Game(Class, name);
-
-		return _instance;
-	}
-
-	public void Start()
+	public void Start() throws Exception
 	{
 		while (this._is_running)
 		{
@@ -117,7 +133,7 @@ public class Game
 		return (int) xp_gained;
 	}
 
-	public void MoveHero(Direction direction)
+	public void MoveHero(Direction direction) throws Exception
 	{
 		switch (this._map.MoveHero(direction)) {
 			case EXIT:
@@ -133,7 +149,7 @@ public class Game
 		}
 	}
 
-	public void StartCombat()
+	public void StartCombat() throws Exception
 	{
 		Villain villain = VillainFactory.GenerateVillain(this._hero);
 
@@ -188,9 +204,12 @@ public class Game
 					}
 				}
 			}
+
+			this._save_manager.Save();
 		}
 		else
 		{
+			this._save_manager.DeleteHero(this._hero);
 			this._is_running = false;
 			this._view.DisplayYouDied();
 			this._view.GetUserInput();

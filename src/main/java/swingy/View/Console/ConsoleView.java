@@ -1,11 +1,15 @@
 package swingy.View.Console;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Hero;
 import swingy.Model.Item;
+import swingy.Model.SaveFile;
 import swingy.Model.Statistic;
 import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
@@ -443,6 +447,101 @@ public class ConsoleView extends View
 			
 			if (input.equals("C"))
 				return Action.DISPLAY_STATISTICS;
+		}
+	}
+
+	public int DisplayChooseSave(SaveFile save_file)
+	{
+		while (true)
+		{
+			Clear();
+
+			System.out.println("Choose a save slot:");
+			System.out.println();
+
+			for (int i = 0; i < SaveFile.NB_SAVES; i++)
+			{
+				Hero hero = save_file.heroes[i];
+				String to_display = "";
+
+				if (hero == null)
+					to_display = String.format("%d: Empty", i + 1);
+				else
+					to_display = String.format("%d: %s lvl. %d - %s", i + 1, hero.GetClassStr(), hero.GetLevel(), hero.GetName());
+
+				System.out.println(to_display);
+			}
+
+			System.out.println();
+			DisplayPrompt();
+
+			String input = GetUserInput();
+
+			try
+			{
+				int int_input = Integer.parseInt(input);
+
+				if (int_input > 0 && int_input <= SaveFile.NB_SAVES)
+					return int_input - 1;
+			}
+			catch (Exception e) {}
+
+		}
+	}
+
+	public Hero.Class DisplayCreateHeroClass()
+	{
+		EnumSet<Hero.Class> all_classes = EnumSet.allOf(Hero.Class.class);
+		List<Hero.Class> all_classes_lst = new ArrayList<>(all_classes);
+		List<String> all_classes_str = new ArrayList<String>();
+
+		for (Hero.Class Class : all_classes)
+			all_classes_str.add(Hero.GetClassStr(Class));
+		
+		while (true)
+		{
+			Clear();
+
+			System.out.println("Choose a class:");
+			System.out.println();
+			
+			for (int i = 0; i < all_classes.size(); i++)
+			{
+				String to_display = String.format("%d: %s", i + 1, all_classes_str.get(i));
+				System.out.println(to_display);
+			}
+
+			System.out.println();
+			DisplayPrompt();
+
+			String input = GetUserInput();
+
+			try
+			{
+				int int_input = Integer.parseInt(input);
+
+				if (int_input > 0 && int_input <= SaveFile.NB_SAVES)
+					return all_classes_lst.get(int_input - 1);
+			}
+			catch (Exception e) {}
+		}
+	}
+
+	public String DisplayCreateHeroName()
+	{
+		while (true)
+		{
+			Clear();
+	
+			System.out.println("Choose a name:");
+			System.out.println();
+			DisplayPrompt();
+	
+			String input = GetUserInput();
+			input = input.trim();
+
+			if (input.length() > 0)
+				return input;
 		}
 	}
 }
