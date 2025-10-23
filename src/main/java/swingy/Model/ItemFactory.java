@@ -335,6 +335,14 @@ public final class ItemFactory
 			double value = 0;
 
 			switch (type) {
+				case HEALTH:
+					value = RARE_MIN_HEALTH + rand.nextInt(RARE_MAX_HEALTH - RARE_MIN_HEALTH + 1);
+					break;
+
+				case DEFENSE:
+					value = RARE_MIN_DEFENSE + rand.nextInt(RARE_MAX_DEFENSE - RARE_MIN_DEFENSE + 1);
+					break;
+					
 				case SPEED:
 					value = RARE_MIN_SPEED + rand.nextInt(RARE_MAX_SPEED - RARE_MIN_SPEED + 1);
 					break;
@@ -389,10 +397,6 @@ public final class ItemFactory
 				case ATTACK:
 					value = RARE_MIN_ATTACK + rand.nextInt(RARE_MAX_ATTACK - RARE_MIN_ATTACK + 1);
 					break;
-
-				case DEFENSE:
-					value = RARE_MIN_DEFENSE + rand.nextInt(RARE_MAX_DEFENSE - RARE_MIN_DEFENSE + 1);
-					break;
 					
 				case SPEED:
 					value = RARE_MIN_SPEED + rand.nextInt(RARE_MAX_SPEED - RARE_MIN_SPEED + 1);
@@ -441,10 +445,6 @@ public final class ItemFactory
 			double value = 0;
 
 			switch (type) {
-				case HEALTH:
-					value = RARE_MIN_HEALTH + rand.nextInt(RARE_MAX_HEALTH - RARE_MIN_HEALTH + 1);
-					break;
-
 				case ATTACK:
 					value = RARE_MIN_ATTACK + rand.nextInt(RARE_MAX_ATTACK - RARE_MIN_ATTACK + 1);
 					break;
@@ -631,15 +631,11 @@ public final class ItemFactory
 
 			switch (type) {
 				case HEALTH:
-					value = LEGENDARY_MIN_HEALTH + rand.nextInt(LEGENDARY_MAX_HEALTH - LEGENDARY_MIN_HEALTH + 1);
-					break;
-
-				case ATTACK:
-					value = LEGENDARY_MIN_ATTACK + rand.nextInt(LEGENDARY_MAX_ATTACK - LEGENDARY_MIN_ATTACK + 1);
+					value = EPIC_MIN_HEALTH + rand.nextInt(EPIC_MAX_HEALTH - EPIC_MIN_HEALTH + 1);
 					break;
 
 				case DEFENSE:
-					value = LEGENDARY_MIN_DEFENSE + rand.nextInt(LEGENDARY_MAX_DEFENSE - LEGENDARY_MIN_DEFENSE + 1);
+					value = EPIC_MIN_DEFENSE + rand.nextInt(EPIC_MAX_DEFENSE - EPIC_MIN_DEFENSE + 1);
 					break;
 
 				case SPEED:
@@ -690,15 +686,11 @@ public final class ItemFactory
 
 			switch (type) {
 				case HEALTH:
-					value = LEGENDARY_MIN_HEALTH + rand.nextInt(LEGENDARY_MAX_HEALTH - LEGENDARY_MIN_HEALTH + 1);
+					value = EPIC_MIN_HEALTH + rand.nextInt(EPIC_MAX_HEALTH - EPIC_MIN_HEALTH + 1);
 					break;
 
 				case ATTACK:
-					value = LEGENDARY_MIN_ATTACK + rand.nextInt(LEGENDARY_MAX_ATTACK - LEGENDARY_MIN_ATTACK + 1);
-					break;
-
-				case DEFENSE:
-					value = LEGENDARY_MIN_DEFENSE + rand.nextInt(LEGENDARY_MAX_DEFENSE - LEGENDARY_MIN_DEFENSE + 1);
+					value = EPIC_MIN_ATTACK + rand.nextInt(EPIC_MAX_ATTACK - EPIC_MIN_ATTACK + 1);
 					break;
 
 				case SPEED:
@@ -748,16 +740,12 @@ public final class ItemFactory
 			double value = 0;
 
 			switch (type) {
-				case HEALTH:
-					value = LEGENDARY_MIN_HEALTH + rand.nextInt(LEGENDARY_MAX_HEALTH - LEGENDARY_MIN_HEALTH + 1);
-					break;
-
 				case ATTACK:
-					value = LEGENDARY_MIN_ATTACK + rand.nextInt(LEGENDARY_MAX_ATTACK - LEGENDARY_MIN_ATTACK + 1);
+					value = EPIC_MIN_ATTACK + rand.nextInt(EPIC_MAX_ATTACK - EPIC_MIN_ATTACK + 1);
 					break;
 
 				case DEFENSE:
-					value = LEGENDARY_MIN_DEFENSE + rand.nextInt(LEGENDARY_MAX_DEFENSE - LEGENDARY_MIN_DEFENSE + 1);
+					value = EPIC_MIN_DEFENSE + rand.nextInt(EPIC_MAX_DEFENSE - EPIC_MIN_DEFENSE + 1);
 					break;
 
 				case SPEED:

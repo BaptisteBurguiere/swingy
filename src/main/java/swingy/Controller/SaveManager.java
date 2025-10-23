@@ -303,35 +303,35 @@ public class SaveManager
 						break;
 
 					case "Attack":
-						stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.ATTACK, Double.parseDouble(value)));
+						stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, Double.parseDouble(value)));
 						break;
 
 					case "Defense":
-						stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.DEFENSE, Double.parseDouble(value)));
+						stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, Double.parseDouble(value)));
 						break;
 
 					case "Speed":
-						stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.SPEED, Double.parseDouble(value)));
+						stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, Double.parseDouble(value)));
 						break;
 
 					case "Evasion":
-						stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.EVASION, Double.parseDouble(value)));
+						stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, Double.parseDouble(value)));
 						break;
 
 					case "Accuracy":
-						stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.ACCURACY, Double.parseDouble(value)));
+						stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, Double.parseDouble(value)));
 						break;
 
 					case "Critical Chance":
-						stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, Double.parseDouble(value)));
+						stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, Double.parseDouble(value)));
 						break;
 
 					case "Critical Damage":
-						stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, Double.parseDouble(value)));
+						stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, Double.parseDouble(value)));
 						break;
 
 					case "Luck":
-						stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.LUCK, Double.parseDouble(value)));
+						stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, Double.parseDouble(value)));
 						break;
 
 					case "END":
