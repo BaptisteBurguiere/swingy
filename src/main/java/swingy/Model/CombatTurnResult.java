@@ -8,6 +8,8 @@ public class CombatTurnResult
 	public boolean critical;
 	public boolean parried;
 	public double damage;
+	public boolean defense_stance;
+	public boolean hero_turn;
 
 	public CombatTurnResult(Entity attacker, Entity defender)
 	{
@@ -17,5 +19,7 @@ public class CombatTurnResult
 		this.critical = false;
 		this.parried = false;
 		this.damage = 0;
+		this.defense_stance = false;
+		this.hero_turn = false;
 	}
 }

@@ -19,6 +19,15 @@ import swingy.Model.GameMap;
 
 public class ConsoleView extends View
 {
+	public static final String RESET = "\u001B[0m";
+	public static final String RED = "\u001B[31m";
+	public static final String GREEN = "\u001B[32m";
+	public static final String YELLOW = "\u001B[33m";
+	public static final String BLUE = "\u001B[34m";
+	public static final String MAGENTA = "\u001B[35m";
+	public static final String CYAN = "\u001B[36m";
+	public static final String WHITE = "\u001B[37m";
+
 	private Scanner _scanner = new Scanner(System.in);
 
 	public ConsoleView() {}
@@ -72,25 +81,97 @@ public class ConsoleView extends View
 		Item item = hero.GetItem(Item.Type.WEAPON);
 		to_display = "  Weapon: ";
 		if (item != null)
-			to_display += String.format("%s (%s)", item.GetName(), item.GetRarityStr());
+		{
+			String color = RESET;
+			switch (item.GetRarity())
+			{
+				case COMMON:
+					color = WHITE;
+					break;
+				case RARE:
+					color = BLUE;
+					break;
+				case EPIC:
+					color = MAGENTA;
+					break;
+				case LEGENDARY:
+					color = YELLOW;
+					break;
+			}
+			to_display += String.format("%s (%s%s%s)", item.GetName(), color, item.GetRarityStr(), RESET);
+		}
 		System.out.println(to_display);
 
 		item = hero.GetItem(Item.Type.ARMOR);
 		to_display = "  Armor: ";
 		if (item != null)
-			to_display += String.format("%s (%s)", item.GetName(), item.GetRarityStr());
+		{
+			String color = RESET;
+			switch (item.GetRarity())
+			{
+				case COMMON:
+					color = WHITE;
+					break;
+				case RARE:
+					color = BLUE;
+					break;
+				case EPIC:
+					color = MAGENTA;
+					break;
+				case LEGENDARY:
+					color = YELLOW;
+					break;
+			}
+			to_display += String.format("%s (%s%s%s)", item.GetName(), color, item.GetRarityStr(), RESET);
+		}
 		System.out.println(to_display);
 
 		item = hero.GetItem(Item.Type.HELMET);
 		to_display = "  Helmet: ";
 		if (item != null)
-			to_display += String.format("%s (%s)", item.GetName(), item.GetRarityStr());
+		{
+			String color = RESET;
+			switch (item.GetRarity())
+			{
+				case COMMON:
+					color = WHITE;
+					break;
+				case RARE:
+					color = BLUE;
+					break;
+				case EPIC:
+					color = MAGENTA;
+					break;
+				case LEGENDARY:
+					color = YELLOW;
+					break;
+			}
+			to_display += String.format("%s (%s%s%s)", item.GetName(), color, item.GetRarityStr(), RESET);
+		}
 		System.out.println(to_display);
 
 		item = hero.GetItem(Item.Type.RELIC);
 		to_display = "  Relic: ";
 		if (item != null)
-			to_display += String.format("%s (%s)", item.GetName(), item.GetRarityStr());
+		{
+			String color = RESET;
+			switch (item.GetRarity())
+			{
+				case COMMON:
+					color = WHITE;
+					break;
+				case RARE:
+					color = BLUE;
+					break;
+				case EPIC:
+					color = MAGENTA;
+					break;
+				case LEGENDARY:
+					color = YELLOW;
+					break;
+			}
+			to_display += String.format("%s (%s%s%s)", item.GetName(), color, item.GetRarityStr(), RESET);
+		}
 		System.out.println(to_display);
 
 		System.out.println();
@@ -101,7 +182,23 @@ public class ConsoleView extends View
 
 	public void DisplayItem(Item item)
 	{
-		String to_display = String.format("[%s] %s (%s)", item.GetTypeStr(), item.GetName(), item.GetRarityStr());
+		String color = RESET;
+		switch (item.GetRarity())
+		{
+			case COMMON:
+				color = WHITE;
+				break;
+			case RARE:
+				color = BLUE;
+				break;
+			case EPIC:
+				color = MAGENTA;
+				break;
+			case LEGENDARY:
+				color = YELLOW;
+				break;
+		}
+		String to_display = String.format("[%s] %s (%s%s%s)", item.GetTypeStr(), item.GetName(), color, item.GetRarityStr(), RESET);
 		System.out.println(to_display);
 
 		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : item.GetStatistics().entrySet())
@@ -158,8 +255,29 @@ public class ConsoleView extends View
 
 	public void DisplayCombatTurnResult(CombatTurnResult result)
 	{
-		String to_display = String.format("%s attacks %s!", result.attacker.GetName(), result.defender.GetName());
+		Clear();
+
+		String to_display;
+		String attacker_color = result.hero_turn ? CYAN : RED;
+		String defender_color = result.hero_turn ? RED : CYAN;
+
+		if (result.defense_stance)
+		{
+			to_display = String.format("%s%s%s adopts a defensive stance!", attacker_color, result.attacker.GetName(), RESET);
+			System.out.println(to_display);
+			return;
+		}
+
+		to_display = String.format("%s%s%s attacks %s%s%s!", attacker_color, result.attacker.GetName(), RESET, defender_color, result.defender.GetName(), RESET);
 		System.out.println(to_display);
+
+		if (result.parried)
+		{
+			to_display = String.format("%s%s%s parries the attack!", defender_color, result.defender.GetName(), RESET);
+			System.out.println(to_display);
+
+
+		}
 
 		if (result.missed)
 		{
@@ -229,7 +347,23 @@ public class ConsoleView extends View
 
 	public void DisplayEquipmentItem(Item item)
 	{
-		String to_display = String.format("%s (%s)", item.GetName(), item.GetRarityStr());
+		String color = RESET;
+		switch (item.GetRarity())
+		{
+			case COMMON:
+				color = WHITE;
+				break;
+			case RARE:
+				color = BLUE;
+				break;
+			case EPIC:
+				color = MAGENTA;
+				break;
+			case LEGENDARY:
+				color = YELLOW;
+				break;
+		}
+		String to_display = String.format("%s (%s%s%s)", item.GetName(), color, item.GetRarityStr(), RESET);
 		System.out.println(to_display);
 
 		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : item.GetStatistics().entrySet())
@@ -543,5 +677,73 @@ public class ConsoleView extends View
 			if (input.length() > 0)
 				return input;
 		}
+	}
+
+	public Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns)
+	{
+		while (true)
+		{
+			Clear();
+
+			double current_health = villain.GetCurrentHealth();
+			double health = villain.GetStatistic(StatisticTemplate.Type.HEALTH).GetValue();
+			String health_color = current_health / health <= 0.2 ? RED : RESET;
+
+			String to_display = String.format("Ennemy %s%s%s lvl. %d (%s%d%s/%d)",
+				RED, villain.GetName(), RESET, villain.GetLevel(), health_color, (int)villain.GetCurrentHealth(), RESET, (int)health);
+			System.out.println(to_display);
+
+			System.out.println();
+
+			current_health = hero.GetCurrentHealth();
+			health = hero.GetStatistic(StatisticTemplate.Type.HEALTH).GetValue();
+			health_color = current_health / health <= 0.2 ? RED : RESET;
+
+			to_display = String.format("%s%s%s lvl. %d (%s%d%s/%d)",
+				CYAN, hero.GetName(), RESET, hero.GetLevel(), health_color, (int)hero.GetCurrentHealth(), RESET, (int)health);
+			System.out.println(to_display);
+
+			System.out.println();
+
+			System.out.print("Next turns: ");
+
+			to_display = String.format("%s%s%s > ", GREEN, next_turns.get(0).GetName(), RESET);
+			System.out.print(to_display);
+			for (int i = 1; i < next_turns.size() - 1; i++)
+			{
+				Entity entity = next_turns.get(i);
+				to_display = String.format("%s > ", entity.GetName());
+				System.out.print(to_display);
+			}
+			to_display = String.format("%s", next_turns.get(next_turns.size() - 1).GetName());
+			System.out.println(to_display);
+
+			System.out.println();
+
+			System.out.println();
+			DisplayHelpCombat();
+			System.out.println();
+
+			DisplayPrompt();
+
+			String input = GetUserInput().toUpperCase();
+
+			if (input.equals("A"))
+				return Action.ATTACK;
+
+			if (input.equals("D"))
+				return Action.DEFEND;
+
+			if (input.equals("F"))
+				return Action.FLEE;
+		}
+	}
+
+	public void DisplayHelpCombat()
+	{
+		System.out.println("Controls:");
+		System.out.println("  a: Attack");
+		System.out.println("  d: Defend");
+		System.out.println("  f: Flee");
 	}
 }

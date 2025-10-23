@@ -6,8 +6,12 @@ import swingy.Model.Hero;
 import swingy.Model.HeroFactory;
 import swingy.Model.ItemFactory;
 import swingy.Model.Villain;
+import swingy.Model.Entity;
 import swingy.View.View;
 import swingy.View.Console.ConsoleView;
+
+import java.util.List;
+
 import swingy.Model.CombatResult;
 import swingy.Model.Item;
 import swingy.Model.VillainFactory;
@@ -219,5 +223,10 @@ public class Game
 	public void GetUserInput()
 	{
 		this._view.GetUserInput();
+	}
+
+	public View.Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns)
+	{
+		return this._view.DisplayHeroCombatChoice(hero, villain, next_turns);
 	}
 }

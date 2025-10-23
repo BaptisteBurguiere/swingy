@@ -1,5 +1,7 @@
 package swingy.View;
 
+import java.util.List;
+
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Hero;
 import swingy.Model.Item;
@@ -22,7 +24,10 @@ public abstract class View
 		DISPLAY_HELP,
 		QUIT,
 		EQUIP_ITEM,
-		LEAVE_ITEM
+		LEAVE_ITEM,
+		ATTACK,
+		DEFEND,
+		FLEE
 	}
 
 	public abstract void DisplayHero(Hero hero);
@@ -40,4 +45,5 @@ public abstract class View
 	public abstract int DisplayChooseSave(SaveFile save_file);
 	public abstract Hero.Class DisplayCreateHeroClass();
 	public abstract String DisplayCreateHeroName();
+	public abstract Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns);
 }
