@@ -837,4 +837,112 @@ public final class ItemFactory
 
 		return new Item(template.GetType(), template.GetRarity(), template.GetName(), template.GetDescription(), stats);
 	}
+
+
+
+	private static final double BASE_ESSENCE_EPIC_DROP_CHANCE = 0.15;
+	private static final double BASE_ESSENCE_LEGENDARY_DROP_CHANCE = 0.03;
+	private static final double EPIC_ESSENCE_DROP_CHANCE_SHIFT = 0.03;
+	private static final double LEGENDARY_ESSENCE_DROP_CHANCE_SHIFT = 0.01;
+	private static final double LUCK_ESSENCE_RARITY_SHIFT = 0.0005;
+
+
+	private static final List<Item> RARE_ESSENCE = List.of(
+		new Item(Item.Type.ESSENCE, Item.Rarity.RARE, "Heartbloom Nectar", "The essence of a flower that only blooms where heroes fall", Map.of(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 15))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.RARE, "Flamecore Crystal", "The condensed anger of a slain beast, still hungry for violence", Map.of(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 5))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.RARE, "Ironbark Resin", "Thick sap used by ancient guardians to mend their barkskin armor", Map.of(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 5))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.RARE, "Zephyr Dust", "Light as a whisper, it swirls away if you breathe too hard", Map.of(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 3))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.RARE, "Ghostvine Extract", "Those who drink it claim the air forgets to notice them", Map.of(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.05))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.RARE, "Markseer Crystal", "Glows faintly when danger is near", Map.of(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.05))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.RARE, "Edge of Intent", "Even in stillness, it hungers for a strike", Map.of(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.05))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.RARE, "Wrath Coil", "The coiled rage of a fallen hero", Map.of(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.15))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.RARE, "Coin of Fate", "Flip it - it always lands the way you want, unless watched", Map.of(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 3)))
+	);
+
+	private static final List<Item> EPIC_ESSENCE = List.of(
+		new Item(Item.Type.ESSENCE, Item.Rarity.EPIC, "Elixir of Undying Veins", "Its warmth spreads through your body, mending unseen wounds and forgotten scars", Map.of(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 40))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.EPIC, "Wrathstone", "Each strike burns hotter, as if your weapon remembers past kills", Map.of(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 15))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.EPIC, "Bulwark Gem", "Pulses with a low hum - the resonance of unbroken shields", Map.of(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 15))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.EPIC, "Tempest Stone", "The wind itself swirls within, eager to be unleashed", Map.of(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 8))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.EPIC, "Veil of Mist", "Wraps your body in flickering unreality", Map.of(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.1))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.EPIC, "Lens of Clarity", "Through it, even lies become visible", Map.of(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.1))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.EPIC, "Razor Soul", "Its whisper guides your hand toward the weak spot", Map.of(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.1))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.EPIC, "Overkill Stone", "Pulses faster the more blood you spill", Map.of(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.25))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.EPIC, "Clover Sigil", "A symbol of chance blessed by the trickster spirits", Map.of(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 8)))
+	);
+
+	private static final List<Item> LEGENDARY_ESSENCE = List.of(
+		new Item(Item.Type.ESSENCE, Item.Rarity.LEGENDARY, "Soulroot Serum", "Roots of an ancient tree that once fed on the fallen gods. Now it feeds you", Map.of(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 80))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.LEGENDARY, "Molten Heart of the Colossus", "A relic torn from a molten giant - still beating in your hand", Map.of(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 30))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.LEGENDARY, "Aegis Core", "A fragment of the first shield ever raised against the stars", Map.of(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 30))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.LEGENDARY, "Stormheart", "A thunderstorm frozen mid-beat - a gift from the sky", Map.of(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 15))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.LEGENDARY, "Specter's Whisper", "It hums softly, promising safety between the beats of a heart", Map.of(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.15))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.LEGENDARY, "Gaze of the Hawk God", "Blesses your strikes with divine precision", Map.of(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.15))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.LEGENDARY, "Heartpiercer Relic", "It once ended a war in a single blow", Map.of(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.15))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.LEGENDARY, "Breaker Core", "It vibrates with the memory of shattered worlds", Map.of(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.5))),
+		new Item(Item.Type.ESSENCE, Item.Rarity.LEGENDARY, "Destiny's Favor", "Fortune itself bends to your will", Map.of(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 15)))
+	);
+
+	public static Item GenerateEssence(Hero hero)
+	{
+		double luck = hero.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
+
+		double legendary_drop_chance = BASE_ESSENCE_LEGENDARY_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * LEGENDARY_ESSENCE_DROP_CHANCE_SHIFT) + luck * LUCK_ESSENCE_RARITY_SHIFT;
+		double epic_drop_chance = BASE_ESSENCE_EPIC_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * EPIC_ESSENCE_DROP_CHANCE_SHIFT) + luck * LUCK_ESSENCE_RARITY_SHIFT;
+		
+		double rarity_roll = rand.nextDouble();
+		if (rarity_roll < legendary_drop_chance)
+			return GenerateLegendaryEssence();
+		if (rarity_roll < legendary_drop_chance + epic_drop_chance)
+			return GenerateEpicEssence();
+		else
+			return GenerateRareEssence();
+	}
+
+	private static Item GenerateRareEssence()
+	{
+		int index = rand.nextInt(RARE_ESSENCE.size());
+		Item essence = RARE_ESSENCE.get(index);
+
+		return essence;
+	}
+
+	private static Item GenerateEpicEssence()
+	{
+		int index = rand.nextInt(EPIC_ESSENCE.size());
+		Item essence = EPIC_ESSENCE.get(index);
+
+		return essence;
+	}
+
+	private static Item GenerateLegendaryEssence()
+	{
+		int index = rand.nextInt(LEGENDARY_ESSENCE.size());
+		Item essence = LEGENDARY_ESSENCE.get(index);
+
+		return essence;
+	}
+
+
+	private static final double BASE_HEALING_EPIC_DROP_CHANCE = 0.25;
+	private static final double BASE_HEALING_LEGENDARY_DROP_CHANCE = 0.1;
+	private static final double EPIC_HEALING_DROP_CHANCE_SHIFT = 0.1;
+	private static final double LEGENDARY_HEALING_DROP_CHANCE_SHIFT = 0.05;
+	private static final double LUCK_HEALING_RARITY_SHIFT = 0.0005;
+
+	public static Item GenerateHealingItem(Hero hero)
+	{
+		double luck = hero.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
+
+		double legendary_drop_chance = BASE_HEALING_LEGENDARY_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * LEGENDARY_HEALING_DROP_CHANCE_SHIFT) + luck * LUCK_HEALING_RARITY_SHIFT;
+		double epic_drop_chance = BASE_HEALING_EPIC_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * EPIC_HEALING_DROP_CHANCE_SHIFT) + luck * LUCK_HEALING_RARITY_SHIFT;
+		
+		double rarity_roll = rand.nextDouble();
+		if (rarity_roll < legendary_drop_chance)
+			return new Item(Item.Type.HEALING, Item.Rarity.LEGENDARY, "Phoenix Draught", "Fire and life swirl together in impossible harmony", Map.of(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 100)));
+		if (rarity_roll < legendary_drop_chance + epic_drop_chance)
+			return new Item(Item.Type.HEALING, Item.Rarity.EPIC, "Elixir of Renewal", "Said to be brewed under moonlight by forgotten healers", Map.of(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 80)));
+		else
+			return new Item(Item.Type.HEALING, Item.Rarity.RARE, "Greater Healing Flask", "The taste is awful, but the relief divine", Map.of(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 50)));
+	}
 }

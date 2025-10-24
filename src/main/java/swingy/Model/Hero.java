@@ -87,31 +87,59 @@ public class Hero extends Entity
 	public void EquipItem(Item item)
 	{
 		Item.Type type = item.GetType();
-		Item current_item = this._items.get(type);
 
-		if (current_item != null)
+		switch (type)
 		{
-			for (Map.Entry<StatisticTemplate.Type, Statistic> entry : current_item.GetStatistics().entrySet())
-			{
-				StatisticTemplate.Type stat_type = entry.getKey();
-				Statistic stat = this._statistics.get(stat_type);
-				stat.Decrease(entry.getValue().GetValue());
+			case ESSENCE:
+				for (Map.Entry<StatisticTemplate.Type, Statistic> entry : item.GetStatistics().entrySet())
+				{
+					StatisticTemplate.Type stat_type = entry.getKey();
+					Statistic stat = this._statistics.get(stat_type);
+					stat.Increase(entry.getValue().GetValue());
 
-				if (stat_type == StatisticTemplate.Type.HEALTH && this._current_health > stat.GetValue())
-					this._current_health = stat.GetValue();
-			}
-		}
+					if (stat_type == StatisticTemplate.Type.HEALTH)
+						this._current_health += entry.getValue().GetValue();
+				}
+				break;
 
-		this._items.put(type, item);
+			case HEALING:
+				Map<StatisticTemplate.Type, Statistic> stats = item.GetStatistics();
+				double healing = stats.get(StatisticTemplate.Type.HEALTH).GetValue() / 100.;
+				double health = this._statistics.get(StatisticTemplate.Type.HEALTH).GetValue();
+				this._current_health += health * healing;
 
-		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : item.GetStatistics().entrySet())
-		{
-			StatisticTemplate.Type stat_type = entry.getKey();
-			Statistic stat = this._statistics.get(stat_type);
-			stat.Increase(entry.getValue().GetValue());
+				if (this._current_health > health)
+					this._current_health = health;
+				break;
+		
+			default:
+				Item current_item = this._items.get(type);
 
-			if (stat_type == StatisticTemplate.Type.HEALTH)
-				this._current_health += entry.getValue().GetValue();
+				if (current_item != null)
+				{
+					for (Map.Entry<StatisticTemplate.Type, Statistic> entry : current_item.GetStatistics().entrySet())
+					{
+						StatisticTemplate.Type stat_type = entry.getKey();
+						Statistic stat = this._statistics.get(stat_type);
+						stat.Decrease(entry.getValue().GetValue());
+
+						if (stat_type == StatisticTemplate.Type.HEALTH && this._current_health > stat.GetValue())
+							this._current_health = stat.GetValue();
+					}
+				}
+
+				this._items.put(type, item);
+
+				for (Map.Entry<StatisticTemplate.Type, Statistic> entry : item.GetStatistics().entrySet())
+				{
+					StatisticTemplate.Type stat_type = entry.getKey();
+					Statistic stat = this._statistics.get(stat_type);
+					stat.Increase(entry.getValue().GetValue());
+
+					if (stat_type == StatisticTemplate.Type.HEALTH)
+						this._current_health += entry.getValue().GetValue();
+				}
+				break;
 		}
 	}
 

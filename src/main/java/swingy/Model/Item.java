@@ -12,6 +12,8 @@ public class Item
 		ARMOR,
 		HELMET,
 		RELIC,
+		ESSENCE,
+		HEALING
 	}
 
 	public enum Rarity
@@ -62,6 +64,12 @@ public class Item
 
 			case RELIC:
 				return "Relic";
+
+			case ESSENCE:
+				return "Essence";
+
+			case HEALING:
+				return "Healing";
 
 			default:
 				return "Undefined";

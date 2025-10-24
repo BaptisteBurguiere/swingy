@@ -207,7 +207,10 @@ public class ConsoleView extends View
 			switch (stat.GetType())
 			{
 				case HEALTH:
-					to_display = String.format("  +%.0f %s", stat.GetValue(), stat.GetName());
+					if (item.GetType() == Item.Type.HEALING)
+						to_display = String.format("  +%.0f%% %s", stat.GetValue(), stat.GetName());
+					else
+						to_display = String.format("  +%.0f %s", stat.GetValue(), stat.GetName());
 					break;
 
 				case ATTACK:
@@ -509,6 +512,9 @@ public class ConsoleView extends View
 						System.out.print("V");
 						break;
 
+					case CHEST:
+						System.out.print("C");
+
 					default:
 						break;
 				}
@@ -631,7 +637,6 @@ public class ConsoleView extends View
 					return int_input - 1;
 			}
 			catch (Exception e) {}
-
 		}
 	}
 
@@ -757,5 +762,49 @@ public class ConsoleView extends View
 		System.out.println("  a: Attack");
 		System.out.println("  d: Defend");
 		System.out.println("  f: Flee");
+	}
+
+	public int DisplayChooseChestContent(Hero hero, List<Item> chest_content)
+	{
+		while (true)
+		{
+			Clear();
+
+			String to_display = String.format("%s%s%s %d/%d", CYAN, hero.GetName(), RESET, (int)hero.GetCurrentHealth(), hero.GetStatistic(StatisticTemplate.Type.HEALTH).GetValue());
+			System.out.println(to_display);
+
+			System.out.println("Pick and item:");
+			System.out.println();
+
+			for (int i = 0; i < chest_content.size(); i++)
+			{
+				Item item = chest_content.get(i);
+
+				System.out.print(String.format("%d: ", i + 1));
+				DisplayItem(item);
+				System.out.println();
+			}
+
+			System.out.println();
+			DisplayPrompt();
+
+			String input = GetUserInput();
+
+			try
+			{
+				int int_input = Integer.parseInt(input);
+
+				if (int_input > 0 && int_input <= chest_content.size())
+					return int_input - 1;
+			}
+			catch (Exception e) {}
+		}
+	}
+
+	public void DisplayChestSpawn()
+	{
+		Clear();
+
+		System.out.println("As all ennemies in the room are defeated,\nyou can hear a mechanism revealing a chest in the center of the room.");
 	}
 }

@@ -10,6 +10,7 @@ import swingy.Model.Entity;
 import swingy.View.View;
 import swingy.View.Console.ConsoleView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import swingy.Model.CombatResult;
@@ -148,6 +149,10 @@ public class Game
 				this.StartCombat();
 				break;
 
+			case CHEST:
+				this.OpenChest();
+				break;
+
 			default:
 				break;
 		}
@@ -210,6 +215,13 @@ public class Game
 			}
 
 			this._save_manager.Save();
+
+			if (this._map.IsRoomEmpty())
+			{
+				this._map.SpawnChest();
+				this._view.DisplayChestSpawn();
+				this._view.GetUserInput();
+			}
 		}
 		else if (result.flee)
 		{
@@ -236,8 +248,23 @@ public class Game
 		return this._view.DisplayHeroCombatChoice(hero, villain, next_turns);
 	}
 
-	public void GoToLastPosition()
+	public void OpenChest()
 	{
-		this._map.GoToLastPosition();
+		List<Item> chest_content = GenerateChestContent();
+
+		int index = this._view.DisplayChooseChestContent(this._hero, chest_content);
+		this._hero.EquipItem(chest_content.get(index));
+		this._save_manager.Save();
+	}
+
+	public List<Item> GenerateChestContent()
+	{
+		List<Item> chest_content = new ArrayList<>();
+
+		chest_content.add(ItemFactory.GenerateHealingItem(this._hero));
+		chest_content.add(ItemFactory.GenerateEssence(this._hero));
+		chest_content.add(ItemFactory.GenerateEssence(this._hero));
+
+		return chest_content;
 	}
 }

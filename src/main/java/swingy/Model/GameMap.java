@@ -11,7 +11,8 @@ public class GameMap
 		EMPTY,
 		HERO,
 		WALL,
-		VILLAIN
+		VILLAIN,
+		CHEST
 	}
 
 	public enum Direction
@@ -27,6 +28,7 @@ public class GameMap
 		MOVE,
 		FIGHT,
 		EXIT,
+		CHEST
 	}
 
 	private static final Random rand = new Random();
@@ -135,6 +137,17 @@ public class GameMap
 
 			return MoveResult.FIGHT;
 		}
+		if (this._grid[new_hero_y][new_hero_x] == Element.CHEST)
+		{
+			this._grid[this._hero_y][this._hero_x] = Element.EMPTY;
+			this._previous_hero_x = this._hero_x;
+			this._previous_hero_y = this._hero_y;
+			this._hero_x = new_hero_x;
+			this._hero_y = new_hero_y;
+			this._grid[new_hero_y][new_hero_x] = Element.HERO;
+
+			return MoveResult.CHEST;
+		}
 
 		this._grid[this._hero_y][this._hero_x] = Element.EMPTY;
 		this._previous_hero_x = this._hero_x;
@@ -152,5 +165,24 @@ public class GameMap
 		this._hero_x = this._previous_hero_x;
 		this._hero_y = this._previous_hero_y;
 		this._grid[this._hero_y][this._hero_x] = Element.HERO;
+	}
+
+	public void SpawnChest()
+	{
+		this._grid[this._size / 2][this._size / 2] = Element.CHEST;
+	}
+
+	public boolean IsRoomEmpty()
+	{
+		for (int i = 0; i < this._size; i++)
+		{
+			for (int j = 0; j < this._size; j++)
+			{
+				if (this._grid[i][j] == Element.VILLAIN)
+					return false;
+			}
+		}
+
+		return true;
 	}
 }
