@@ -30,6 +30,7 @@ public class Combat
 	private final double LUCK_PARRY_CHANCE = 0.001;
 	private final double PARRY_DAMAGE_MULTIPLIER = 0.8;
 	private final int SIMULATE_NEXT_TURNS = 5;
+	private final double LUCK_FLEE_CHANCE = 0.003;
 
 	private double	_hero_tp;
 	private double	_villain_tp;
@@ -175,6 +176,24 @@ public class Combat
 		return damage;
 	}
 
+	private boolean IsFlee()
+	{
+		double hero_speed = this._hero.GetStatistic(StatisticTemplate.Type.SPEED).GetValue();
+		double hero_evasion = this._hero.GetStatistic(StatisticTemplate.Type.EVASION).GetValue();
+		double hero_luck = this._hero.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
+		double villain_speed = this._villain.GetStatistic(StatisticTemplate.Type.SPEED).GetValue();
+		double villain_evasion = this._hero.GetStatistic(StatisticTemplate.Type.EVASION).GetValue();
+
+		double hero_agility = hero_speed * hero_evasion;
+		double villain_agility = villain_speed * villain_evasion;
+
+		double flee_chance = (hero_agility / (hero_agility + villain_agility)) + hero_luck * LUCK_FLEE_CHANCE;
+
+		double flee_roll = Math.random();
+
+		return flee_chance < flee_roll;
+	}
+
 	private CombatTurnResult HeroTurn() throws Exception
 	{
 		Game game_controller = Game.GetInstance();
@@ -187,7 +206,11 @@ public class Combat
 
 		switch (game_controller.DisplayHeroCombatChoice(_hero, _villain, next_turns)) {
 			case FLEE:
-				// TODO
+				result.try_flee = true;
+				if (IsFlee())
+					result.flee_successful = true;
+				break;
+
 			case ATTACK:
 				if (IsMissed(this._hero, this._villain))
 				{
@@ -263,6 +286,11 @@ public class Combat
 			if (this._villain.GetCurrentHealth() <= 0)
 			{
 				result.hero_win = true;
+				break;
+			}
+			if (turn_result.flee_successful)
+			{
+				result.flee = true;
 				break;
 			}
 

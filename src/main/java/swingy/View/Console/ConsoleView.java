@@ -268,6 +268,20 @@ public class ConsoleView extends View
 			return;
 		}
 
+		if (result.try_flee)
+		{
+			to_display = String.format("%s%s%s tries to fly away!", attacker_color, result.attacker.GetName(), RESET);
+			System.out.println(to_display);
+
+			if (result.flee_successful)
+				to_display = String.format("%s%s%s escaped successfully!", attacker_color, result.attacker.GetName(), RESET);
+			else
+				to_display = String.format("%s%s%s flew in spirit, but his legs disagreed.", attacker_color, result.attacker.GetName(), RESET);
+
+			System.out.println(to_display);
+			return;
+		}
+
 		to_display = String.format("%s%s%s attacks %s%s%s!", attacker_color, result.attacker.GetName(), RESET, defender_color, result.defender.GetName(), RESET);
 		System.out.println(to_display);
 
@@ -275,8 +289,6 @@ public class ConsoleView extends View
 		{
 			to_display = String.format("%s%s%s parries the attack!", defender_color, result.defender.GetName(), RESET);
 			System.out.println(to_display);
-
-
 		}
 
 		if (result.missed)

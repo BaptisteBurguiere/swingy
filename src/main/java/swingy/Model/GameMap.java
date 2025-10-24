@@ -35,12 +35,13 @@ public class GameMap
 	private Element[][] _grid;
 	private int 		_hero_x;
 	private int			_hero_y;
+	private int			_previous_hero_x;
+	private int			_previous_hero_y;
 
 	public int 			GetSize() {return this._size;}
 	public Element[][]	GetGrid() {return this._grid;}
 	public int			GetHeroX() {return this._hero_x;}
 	public int			GetHeroY() {return this._hero_y;}
-
 
 	public GameMap(int hero_level)
 	{
@@ -126,6 +127,8 @@ public class GameMap
 		if (this._grid[new_hero_y][new_hero_x] == Element.VILLAIN)
 		{
 			this._grid[this._hero_y][this._hero_x] = Element.EMPTY;
+			this._previous_hero_x = this._hero_x;
+			this._previous_hero_y = this._hero_y;
 			this._hero_x = new_hero_x;
 			this._hero_y = new_hero_y;
 			this._grid[new_hero_y][new_hero_x] = Element.HERO;
@@ -134,10 +137,20 @@ public class GameMap
 		}
 
 		this._grid[this._hero_y][this._hero_x] = Element.EMPTY;
+		this._previous_hero_x = this._hero_x;
+		this._previous_hero_y = this._hero_y;
 		this._hero_x = new_hero_x;
 		this._hero_y = new_hero_y;
 		this._grid[new_hero_y][new_hero_x] = Element.HERO;
 
 		return MoveResult.MOVE;
+	}
+
+	public void GoToLastPosition()
+	{
+		this._grid[this._hero_y][this._hero_x] = Element.VILLAIN;
+		this._hero_x = this._previous_hero_x;
+		this._hero_y = this._previous_hero_y;
+		this._grid[this._hero_y][this._hero_x] = Element.HERO;
 	}
 }

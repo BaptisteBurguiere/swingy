@@ -211,6 +211,12 @@ public class Game
 
 			this._save_manager.Save();
 		}
+		else if (result.flee)
+		{
+			this._save_manager.Save();
+			this._map.GoToLastPosition();
+			this._view.GetUserInput();
+		}
 		else
 		{
 			this._save_manager.DeleteHero(this._hero);
@@ -228,5 +234,10 @@ public class Game
 	public View.Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns)
 	{
 		return this._view.DisplayHeroCombatChoice(hero, villain, next_turns);
+	}
+
+	public void GoToLastPosition()
+	{
+		this._map.GoToLastPosition();
 	}
 }
