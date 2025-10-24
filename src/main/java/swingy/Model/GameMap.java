@@ -35,20 +35,23 @@ public class GameMap
 
 	private int			_size;
 	private Element[][] _grid;
+	private Villain[][] _villains_grid;
 	private int 		_hero_x;
 	private int			_hero_y;
 	private int			_previous_hero_x;
 	private int			_previous_hero_y;
+	private Villain		_boss;
 
 	public int 			GetSize() {return this._size;}
 	public Element[][]	GetGrid() {return this._grid;}
 	public int			GetHeroX() {return this._hero_x;}
 	public int			GetHeroY() {return this._hero_y;}
 
-	public GameMap(int hero_level)
+	public GameMap(Hero hero)
 	{
-		this._size = Math.min((hero_level - 1) * 5 + 10 - (hero_level % 2), 30);
+		this._size = Math.min((hero.GetLevel() - 1) * 5 + 10 - (hero.GetLevel() % 2), 30);
 		this._grid = new Element[this._size][this._size];
+		this._villains_grid = new Villain[this._size][this._size];
 		this._hero_x = this._size / 2;
 		this._hero_y = this._size / 2;
 
@@ -62,7 +65,8 @@ public class GameMap
         this._grid[this._hero_y][this._hero_x] = Element.HERO;
 
         // Add villains
-        placeVillains(hero_level);
+        placeVillains(hero);
+		this._boss = VillainFactory.GenerateBoss(hero);
 	}
 
 	private void carveMaze(int x, int y) {
@@ -82,7 +86,7 @@ public class GameMap
         }
     }
 
-    private void placeVillains(int heroLevel) {
+    private void placeVillains(Hero hero) {
         int villainCount = (this._size * this._size) / 20; // adjust density
         int placed = 0;
 
@@ -92,6 +96,7 @@ public class GameMap
 
             if (this._grid[x][y] == Element.EMPTY && this._grid[x][y] != Element.HERO) {
                 this._grid[x][y] = Element.VILLAIN;
+				this._villains_grid[x][y] = VillainFactory.GenerateVillain(hero);
                 placed++;
             }
         }
@@ -184,5 +189,15 @@ public class GameMap
 		}
 
 		return true;
+	}
+
+	public Villain GetCurrentVillain()
+	{
+		return this._villains_grid[this._hero_y][this._hero_x];
+	}
+
+	public Villain GetBoss()
+	{
+		return this._boss;
 	}
 }

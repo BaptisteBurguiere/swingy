@@ -15,7 +15,6 @@ import java.util.List;
 
 import swingy.Model.CombatResult;
 import swingy.Model.Item;
-import swingy.Model.VillainFactory;
 import swingy.Model.GameMap.Direction;
 
 public class Game
@@ -68,7 +67,7 @@ public class Game
 			this._save_manager.Save();
 		}
 
-		this._map = new GameMap(this._hero.GetLevel());
+		this._map = new GameMap(this._hero);
 
 		this._is_running = true;
 	}
@@ -130,7 +129,7 @@ public class Game
 
 		double villain_xp_needed = villain.GetExperienceNeeded();
 
-		double xp_gained = villain_xp_needed / k * mult;
+		double xp_gained = villain_xp_needed / k * mult * villain.GetExpMultiplier();
 
 		double spread_roll = Math.min(1., Math.random());
 		xp_gained *= 1. + (((XP_SPREAD * 2) * spread_roll) - XP_SPREAD);
@@ -142,11 +141,15 @@ public class Game
 	{
 		switch (this._map.MoveHero(direction)) {
 			case EXIT:
-				this._map = new GameMap(this._hero.GetLevel());
+				Villain boss = this._map.GetBoss();
+				this.StartCombat(boss);
+				if (this._is_running)
+					this._map = new GameMap(this._hero);
 				break;
 
 			case FIGHT:
-				this.StartCombat();
+				Villain villain = this._map.GetCurrentVillain();
+				this.StartCombat(villain);
 				break;
 
 			case CHEST:
@@ -158,10 +161,8 @@ public class Game
 		}
 	}
 
-	public void StartCombat() throws Exception
+	public void StartCombat(Villain villain) throws Exception
 	{
-		Villain villain = VillainFactory.GenerateVillain(this._hero);
-
 		Combat combat = new Combat(this._hero, villain);
 		this._view.DisplayStartCombat(this._hero, villain);
 		CombatResult result = combat.Start();

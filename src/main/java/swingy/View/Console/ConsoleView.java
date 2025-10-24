@@ -770,7 +770,7 @@ public class ConsoleView extends View
 		{
 			Clear();
 
-			String to_display = String.format("%s%s%s %d/%d", CYAN, hero.GetName(), RESET, (int)hero.GetCurrentHealth(), hero.GetStatistic(StatisticTemplate.Type.HEALTH).GetValue());
+			String to_display = String.format("%s%s%s %d/%d", CYAN, hero.GetName(), RESET, (int)hero.GetCurrentHealth(), (int)hero.GetStatistic(StatisticTemplate.Type.HEALTH).GetValue());
 			System.out.println(to_display);
 
 			System.out.println("Pick and item:");
