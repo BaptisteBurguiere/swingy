@@ -405,22 +405,52 @@ public final class VillainFactory
 		return pool;
 	}
 
-	private static final double GAUSS_DERIV = 2;
-	private static final double GAUSS_BIAS = 0.4;
+    private static final double BASE_MEAN_OFFSET = 0.2;    // small early bias
+    private static final double MIDGAME_PER_LVL = 0.20;   // per level after threshold
+    private static final int MIDGAME_THRESHOLD = 5;       // begin bias after this hero level
+    private static final double ENEMY_COUNT_SCALE = 0.15; // per extra enemy in room
+    private static final double BASE_STDDEV = 1.1;
+    private static final double STDDEV_PER_LEVEL = 0.04;
+    private static final int MAX_OFFSET_CAP = 8;          // max (villainLevel - hero_level)
+    private static final int MIN_LEVEL = 1;
 
-	private static int GenerateVillainLevel(int hero_level)
+	private static int GenerateVillainLevel(int hero_level, int villain_count)
 	{
-		double gauss = rand.nextGaussian() * GAUSS_DERIV;
-		double mean = hero_level + GAUSS_BIAS;
+        if (hero_level <= 0) hero_level = 1;
+        if (villain_count <= 0) villain_count = 1;
 
-		return Math.max(1, (int)Math.round(mean + gauss));
+        // mean offset increases only after MIDGAME_THRESHOLD
+        double lvlAfter = Math.max(0, hero_level - MIDGAME_THRESHOLD);
+        double meanOffset = BASE_MEAN_OFFSET + lvlAfter * MIDGAME_PER_LVL;
+
+        // add small bonus based on how many enemies are in this room
+        // we treat 1 enemy as baseline (no penalty), extras add offset
+        double enemiesBonus = (villain_count > 1) ? (villain_count - 1) * ENEMY_COUNT_SCALE : 0.0;
+        meanOffset += enemiesBonus;
+
+        // cap the offset so villains can't become absurdly higher than the hero
+        if (meanOffset > MAX_OFFSET_CAP) meanOffset = MAX_OFFSET_CAP;
+
+        double mean = hero_level + meanOffset;
+
+        // stddev grows slowly with level to allow more spread late-game
+        double stddev = BASE_STDDEV + hero_level * STDDEV_PER_LEVEL;
+
+        double gauss = rand.nextGaussian() * stddev;
+        int villainLevel = (int) Math.round(mean + gauss);
+
+        // Enforce reasonable bounds
+        // villain should never be less than MIN_LEVEL
+        if (villainLevel < MIN_LEVEL) villainLevel = MIN_LEVEL;
+
+        return villainLevel;
 	}
 
-	public static Villain GenerateVillain(Hero hero)
+	public static Villain GenerateVillain(Hero hero, int villain_count)
 	{
 		Init();
 
-		int level = GenerateVillainLevel(hero.GetLevel());
+		int level = GenerateVillainLevel(hero.GetLevel(), villain_count);
 		List<VillainTemplate> pool = GetPool(level);
 
 		VillainTemplate template = pool.get(rand.nextInt(pool.size()));
@@ -439,9 +469,24 @@ public final class VillainFactory
 		return new Villain(template.GetName(), level, template.GetExpMultiplier(), stats);
 	}
 
+	public static int GenerateBossLevel(int hero_level)
+	{
+        // Base boss offset plus mild scaling by hero level:
+        // example: hero 6 -> +3.1, hero 25 -> +5.5
+        double baseBossOffset = 3.0;
+        double bossScaling = 0.10; // 10% of hero level
+        double offset = baseBossOffset + hero_level * bossScaling;
+
+        // optional cap for bosses if you want to limit crazy values:
+        if (offset > MAX_OFFSET_CAP) offset = MAX_OFFSET_CAP;
+
+        int bossLevel = (int)Math.round(hero_level + offset);
+        return Math.max(MIN_LEVEL, bossLevel);
+	}
+
 	public static Villain GenerateBoss(Hero hero)
 	{
-		int level = hero.GetLevel() + 5;
+		int level = GenerateBossLevel(hero.GetLevel());
 		List<VillainTemplate> pool = GetBossesPool(level);
 
 		VillainTemplate template = pool.get(rand.nextInt(pool.size()));

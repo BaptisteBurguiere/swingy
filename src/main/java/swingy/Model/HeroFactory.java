@@ -23,9 +23,9 @@ public final class HeroFactory
 		switch (Class)
 		{
 			case KNIGHT:
-				health = 100;
-				attack = 10;
-				defense = 10;
+				health = 110;
+				attack = 11;
+				defense = 11;
 				speed = 10;
 				evasion = 0.1;
 				accuracy = 0.9;
@@ -35,9 +35,9 @@ public final class HeroFactory
 				break;
 
 			case GUARDIAN:
-				health = 140;
-				attack = 6;
-				defense = 14;
+				health = 180;
+				attack = 9;
+				defense = 18;
 				speed = 7;
 				evasion = 0.08;
 				accuracy = 0.85;

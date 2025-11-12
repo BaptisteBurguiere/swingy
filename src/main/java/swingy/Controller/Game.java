@@ -141,15 +141,19 @@ public class Game
 	{
 		switch (this._map.MoveHero(direction)) {
 			case EXIT:
+				if (this._hero.GetLevel() < 2)
+					break;
+					
 				Villain boss = this._map.GetBoss();
-				this.StartCombat(boss);
+				this.StartCombat(boss, true);
+
 				if (this._is_running)
 					this._map = new GameMap(this._hero);
 				break;
 
 			case FIGHT:
 				Villain villain = this._map.GetCurrentVillain();
-				this.StartCombat(villain);
+				this.StartCombat(villain, false);
 				break;
 
 			case CHEST:
@@ -161,7 +165,7 @@ public class Game
 		}
 	}
 
-	public void StartCombat(Villain villain) throws Exception
+	public void StartCombat(Villain villain, boolean is_boss) throws Exception
 	{
 		Combat combat = new Combat(this._hero, villain);
 		this._view.DisplayStartCombat(this._hero, villain);
@@ -217,7 +221,7 @@ public class Game
 
 			this._save_manager.Save();
 
-			if (this._map.IsRoomEmpty())
+			if (this._map.IsRoomEmpty() && !is_boss)
 			{
 				this._map.SpawnChest();
 				this._view.DisplayChestSpawn();

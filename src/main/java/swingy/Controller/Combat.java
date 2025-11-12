@@ -182,10 +182,10 @@ public class Combat
 		double hero_evasion = this._hero.GetStatistic(StatisticTemplate.Type.EVASION).GetValue();
 		double hero_luck = this._hero.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
 		double villain_speed = this._villain.GetStatistic(StatisticTemplate.Type.SPEED).GetValue();
-		double villain_evasion = this._hero.GetStatistic(StatisticTemplate.Type.EVASION).GetValue();
+		double villain_evasion = this._villain.GetStatistic(StatisticTemplate.Type.EVASION).GetValue();
 
-		double hero_agility = hero_speed * hero_evasion;
-		double villain_agility = villain_speed * villain_evasion;
+		double hero_agility = hero_speed * (1.0 + hero_evasion);
+		double villain_agility = villain_speed * ( 1.0 + villain_evasion);
 
 		double flee_chance = (hero_agility / (hero_agility + villain_agility)) + hero_luck * LUCK_FLEE_CHANCE;
 
