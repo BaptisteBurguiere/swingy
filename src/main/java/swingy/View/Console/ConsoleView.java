@@ -547,9 +547,18 @@ public class ConsoleView extends View
 	
 			if (input.equals("C"))
 				return Action.DISPLAY_STATISTICS;
+
+			if (input.equals("H"))
+			{
+				DisplayHelp();
+				continue;
+			}
 	
 			if (input.equals("Q"))
+			{
+				Clear();
 				return Action.QUIT;
+			}
 	
 			if (input.equals("W"))
 				return Action.MOVE_UP;
@@ -696,7 +705,7 @@ public class ConsoleView extends View
 		}
 	}
 
-	public Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns)
+	public Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns, boolean is_boss)
 	{
 		while (true)
 		{
@@ -738,7 +747,7 @@ public class ConsoleView extends View
 			System.out.println();
 
 			System.out.println();
-			DisplayHelpCombat();
+			DisplayHelpCombat(is_boss);
 			System.out.println();
 
 			DisplayPrompt();
@@ -751,17 +760,18 @@ public class ConsoleView extends View
 			if (input.equals("D"))
 				return Action.DEFEND;
 
-			if (input.equals("F"))
+			if (!is_boss && input.equals("F"))
 				return Action.FLEE;
 		}
 	}
 
-	public void DisplayHelpCombat()
+	public void DisplayHelpCombat(boolean is_boss)
 	{
 		System.out.println("Controls:");
 		System.out.println("  a: Attack");
 		System.out.println("  d: Defend");
-		System.out.println("  f: Flee");
+		if (!is_boss)
+			System.out.println("  f: Flee");
 	}
 
 	public int DisplayChooseChestContent(Hero hero, List<Item> chest_content)
@@ -806,5 +816,71 @@ public class ConsoleView extends View
 		Clear();
 
 		System.out.println("As all ennemies in the room are defeated,\nyou can hear a mechanism revealing a chest in the center of the room.");
+	}
+
+	public void DisplayHelp()
+	{
+		String to_display;
+
+		System.out.println("Gameplay:");
+		System.out.println("  You spawn on a map filled with ennemies.");
+		System.out.println("  Your objective is to defeat them to level up and get a chance to drop loot.");
+		System.out.println("  Level up enough to confidently escape the room and face the boss.");
+		System.out.println("  You can escape the room by hitting a border");
+		System.out.println("  The game ends when you die.");
+
+		System.out.println();
+
+		System.out.println("Combat:");
+		System.out.println("  Turn by turn combat system.");
+		System.out.println("  You have multiple options when fighting an ennemy:");
+		System.out.println("    Attack: I don't think I need to explain this one.");
+		System.out.println("    Defend: Boost your defense until your next turn.");
+		System.out.println("            If you have enough defense, you might be able to parry the incoming attack.");
+		System.out.println("    Flee: If the ennemy is too strong for you, fly away might be the best option for you.");
+		System.out.println("          The more speed and evasion you have compared to your opponent, the more chance you have to escape.");
+
+		System.out.println();
+
+		System.out.println("Statistics:");
+		for (Map.Entry<StatisticTemplate.Type, StatisticTemplate> entry : StatisticTemplate.GetTemplates().entrySet())
+		{
+			StatisticTemplate stat = entry.getValue();
+			to_display = String.format("  %s: %s", stat.GetName(), stat.GetDescription());
+			System.out.println(to_display);
+		}
+
+		System.out.println();
+
+		System.out.println("Items:");
+		System.out.println("  Items have a rarity according to the power of their effect:");
+		to_display = String.format("    %sCommon%s, %sRare%s, %sEpic%s, %sLegendary%s", WHITE, RESET, BLUE, RESET, MAGENTA, RESET, YELLOW, RESET);
+		System.out.println(to_display);
+		System.out.println("  You have multiple item categories, some you can equip and some you cannot.");
+		System.out.println("  Equipments:");
+		System.out.println("    Weapon: Boosts your attack");
+		System.out.println("    Armor: Boosts your defense");
+		System.out.println("    Helmet: Boosts your health");
+		System.out.println("    Relic: Boosts a secondary statistic");
+		System.out.println("  Consumables:");
+		System.out.println("    Healing: Heals by the amount");
+		System.out.println("    Essence: Permanantly boosts a statistic");
+
+		System.out.println();
+
+		System.out.println("Classes:");
+		System.out.println("  Choose your class according to the gameplay you want to play.");
+		System.out.println("    Knight: Balanced");
+		System.out.println("    Guardian: Focussed on health and defense");
+		System.out.println("    Juggernaut: Focussed on health and attack");
+		System.out.println("    Assassin: Focussed on speed, evasion and crit chance");
+		System.out.println("    Berserker: Focussed on attack, crit chance and crit damage");
+		System.out.println("    Gambler: Focussed on luck, will level up luck and 2 random statistics when leveling up");
+
+		System.out.println();
+		
+		System.out.println("Press Enter to exit");
+
+		GetUserInput();
 	}
 }

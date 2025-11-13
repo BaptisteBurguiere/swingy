@@ -83,12 +83,12 @@ public final class HeroFactory
 				break;
 
 			case GAMBLER:
-				health = 85;
+				health = 95;
 				attack = 9;
-				defense = 7;
+				defense = 8;
 				speed = 11;
 				evasion = 0.17;
-				accuracy = 0.75;
+				accuracy = 0.8;
 				crit_chance = 0.15;
 				crit_damage = 2;
 				luck = 10;

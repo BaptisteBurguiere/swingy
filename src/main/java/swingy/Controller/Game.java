@@ -140,12 +140,12 @@ public class Game
 	public void MoveHero(Direction direction) throws Exception
 	{
 		switch (this._map.MoveHero(direction)) {
-			case EXIT:
-				if (this._hero.GetLevel() < 2)
-					break;
-					
-				Villain boss = this._map.GetBoss();
-				this.StartCombat(boss, true);
+			case EXIT:					
+				if (this._hero.GetLevel() > 2)
+				{
+					Villain boss = this._map.GetBoss();
+					this.StartCombat(boss, true);
+				}
 
 				if (this._is_running)
 					this._map = new GameMap(this._hero);
@@ -167,7 +167,7 @@ public class Game
 
 	public void StartCombat(Villain villain, boolean is_boss) throws Exception
 	{
-		Combat combat = new Combat(this._hero, villain);
+		Combat combat = new Combat(this._hero, villain, is_boss);
 		this._view.DisplayStartCombat(this._hero, villain);
 		CombatResult result = combat.Start();
 
@@ -248,9 +248,9 @@ public class Game
 		this._view.GetUserInput();
 	}
 
-	public View.Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns)
+	public View.Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns, boolean is_boss)
 	{
-		return this._view.DisplayHeroCombatChoice(hero, villain, next_turns);
+		return this._view.DisplayHeroCombatChoice(hero, villain, next_turns, is_boss);
 	}
 
 	public void OpenChest()

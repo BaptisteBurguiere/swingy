@@ -170,7 +170,7 @@ public class Hero extends Entity
 					break;
 	
 				case JUGGERNAUT:
-					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(15);
+					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(18);
 					this._statistics.get(StatisticTemplate.Type.ATTACK).Increase(5);
 					this._statistics.get(StatisticTemplate.Type.DEFENSE).Increase(2);
 					break;

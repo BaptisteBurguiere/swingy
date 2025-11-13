@@ -45,7 +45,7 @@ public abstract class View
 	public abstract int DisplayChooseSave(SaveFile save_file);
 	public abstract Hero.Class DisplayCreateHeroClass();
 	public abstract String DisplayCreateHeroName();
-	public abstract Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns);
+	public abstract Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns, boolean is_boss);
 	public abstract int DisplayChooseChestContent(Hero hero, List<Item> chest_content);
 	public abstract void DisplayChestSpawn();
 }

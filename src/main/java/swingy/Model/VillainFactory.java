@@ -39,7 +39,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 2.3));
 		growth_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 1));
 		growth_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0.45));
-		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.006));
+		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.003));
 		growth_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.012));
 		growth_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.004));
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.012));
@@ -64,7 +64,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 1.3));
 		growth_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 2.4));
 		growth_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0.35));
-		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.005));
+		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.001));
 		growth_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.01));
 		growth_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.003));
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.012));
@@ -75,27 +75,27 @@ public final class VillainFactory
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
 
-		base_stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 40));
-		base_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 6));
-		base_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 3));
-		base_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 10));
-		base_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.12));
-		base_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.85));
-		base_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.05));
-		base_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 1.2));
-		base_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 2));
+		base_stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 55));
+		base_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 8));
+		base_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 4));
+		base_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 13));
+		base_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.1));
+		base_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.88));
+		base_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.10));
+		base_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 1.25));
+		base_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 3));
 
-		growth_stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 7));
-		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 1.4));
-		growth_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 0.7));
-		growth_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 1.2));
-		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.018));
-		growth_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.012));
-		growth_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.006));
-		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.025));
-		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.28));
+		growth_stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 8));
+		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 1.5));
+		growth_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 0.8));
+		growth_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 1.5));
+		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.005));
+		growth_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.014));
+		growth_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.010));
+		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.030));
+		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.24));
 
-		_villain_templates.add(new VillainTemplate("Skirmisher", 5, 25, 0.8, base_stats, growth_stats));
+		_villain_templates.add(new VillainTemplate("Skirmisher", 5, 25, 1, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -114,7 +114,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 1.7));
 		growth_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 0.8));
 		growth_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0.8));
-		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.012));
+		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.004));
 		growth_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.015));
 		growth_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.01));
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.04));
@@ -139,7 +139,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 4.8));
 		growth_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 2.4));
 		growth_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0.3));
-		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.004));
+		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.003));
 		growth_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.008));
 		growth_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.006));
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.03));
@@ -164,7 +164,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 1.4));
 		growth_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 0.9));
 		growth_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 1.4));
-		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.03));
+		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.01));
 		growth_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.015));
 		growth_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.012));
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.035));
@@ -189,7 +189,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 3.2));
 		growth_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 2.4));
 		growth_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0.8));
-		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.015));
+		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.003));
 		growth_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.02));
 		growth_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.008));
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.035));
@@ -226,7 +226,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.02));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.2));
 
-		_boss_templates.add(new VillainTemplate("Dreadknight Varok", 1, 45, 1.8, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("Dreadknight Varok", 1, 45, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -245,13 +245,13 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 4));
 		growth_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 1));
 		growth_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 1.2));
-		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.015));
+		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.01));
 		growth_stats.put(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0.01));
 		growth_stats.put(StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0.006));
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.03));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.3));
 
-		_boss_templates.add(new VillainTemplate("Seraphina the Fallen", 1, 45, 1.8, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("Seraphina the Fallen", 1, 45, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -276,7 +276,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.04));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.3));
 
-		_boss_templates.add(new VillainTemplate("The Maw of Cinders", 1, 45, 1.8, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("The Maw of Cinders", 1, 45, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -301,7 +301,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.02));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.7));
 
-		_boss_templates.add(new VillainTemplate("Oracle Nihra", 1, 45, 1.8, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("Oracle Nihra", 1, 45, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -326,7 +326,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.015));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.2));
 
-		_boss_templates.add(new VillainTemplate("Vorax, Devourer of Hope", 1, 45, 1.8, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("Vorax, Devourer of Hope", 1, 45, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -351,7 +351,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.02));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.4));
 
-		_boss_templates.add(new VillainTemplate("The Marionette King", 1, 45, 1.8, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("The Marionette King", 1, 45, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -376,7 +376,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.03));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.5));
 
-		_boss_templates.add(new VillainTemplate("Eclipsion, The World-Ender", 45, 50, 2.3, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("Eclipsion, The World-Ender", 45, 50, 4.6, base_stats, growth_stats));
 	}
 
 	private static List<VillainTemplate> GetPool(int level)

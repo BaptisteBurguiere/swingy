@@ -14,6 +14,7 @@ public class Combat
 {
 	private Hero 	_hero;
 	private Villain _villain;
+	private boolean	_is_boss;
 
 	private final double TP_THRESHOLD = 100;
 	private final double BASE_GAIN = 4;
@@ -36,10 +37,11 @@ public class Combat
 	private double	_villain_tp;
 	private boolean	_hero_defense_stance;
 
-	public Combat(Hero hero, Villain villain)
+	public Combat(Hero hero, Villain villain, boolean is_boss)
 	{
 		this._hero = hero;
 		this._villain = villain;
+		this._is_boss = is_boss;
 		this._hero_tp = 0;
 		this._villain_tp = 0;
 		this._hero_defense_stance = false;
@@ -191,7 +193,7 @@ public class Combat
 
 		double flee_roll = Math.random();
 
-		return flee_chance < flee_roll;
+		return flee_chance > flee_roll;
 	}
 
 	private CombatTurnResult HeroTurn() throws Exception
@@ -204,7 +206,7 @@ public class Combat
 
 		List<Entity> next_turns = SimulateNextTurns(SIMULATE_NEXT_TURNS);
 
-		switch (game_controller.DisplayHeroCombatChoice(_hero, _villain, next_turns)) {
+		switch (game_controller.DisplayHeroCombatChoice(_hero, _villain, next_turns, _is_boss)) {
 			case FLEE:
 				result.try_flee = true;
 				if (IsFlee())
