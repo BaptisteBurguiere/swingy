@@ -8,9 +8,12 @@ import java.awt.Graphics;
 import java.awt.Font;
 
 import swingy.Model.SaveFile;
+import swingy.View.Gui.SwingView;
+import swingy.View.Gui.Components.PanelComponent;
+import swingy.View.Gui.Components.SaveSlot;
 import swingy.Model.Hero;
 
-public class ChooseSavePanel extends JPanel
+public class ChooseSavePanel extends BasePanel
 {
 	private SaveFile _save_file;
 	private int _cursor_x;
@@ -26,15 +29,15 @@ public class ChooseSavePanel extends JPanel
 	{
 		super.paintComponent(g);
 
-		int font_size = 18;
-		int padding = 4;
+		// int font_size = 18;
+		int padding = 10;
 
 		g.setColor(Color.BLACK);
         g.fillRect(0, 0, getWidth(), getHeight());
-		g.setColor(Color.WHITE);
-		g.setFont(new Font("Monospaced", Font.BOLD, font_size));
+		// g.setColor(Color.WHITE);
+		// g.setFont(new Font("Monospaced", Font.BOLD, font_size));
 		this._cursor_x = 5;
-		this._cursor_y = 12;
+		this._cursor_y = SwingView.PADDING_TOP;
 
 		for (int i = 0; i < SaveFile.NB_SAVES; i++)
 		{
@@ -46,8 +49,14 @@ public class ChooseSavePanel extends JPanel
 			else
 				to_display = String.format("%d: %s lvl. %d - %s", i + 1, hero.GetClassStr(), hero.GetLevel(), hero.GetName());
 
-			g.drawString(to_display, this._cursor_x, this._cursor_y);
-			this._cursor_y += font_size + padding;
+			AddComponent(new SaveSlot(to_display, this._cursor_x, this._cursor_y));
+			// g.drawString(to_display, this._cursor_x, this._cursor_y);
+			this._cursor_y += SaveSlot.HEIGHT + padding;
+		}
+
+		for (PanelComponent component : this._components)	
+		{
+			component.Draw(g);
 		}
 	}
 }

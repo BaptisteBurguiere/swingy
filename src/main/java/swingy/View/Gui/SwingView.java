@@ -10,6 +10,7 @@ public class SwingView
 {
 	public static final int WIDTH = 700;
 	public static final int HEIGHT = 700;
+	public static final int PADDING_TOP = 20;
 
 	private JFrame _frame;
 	private JPanel _panel;

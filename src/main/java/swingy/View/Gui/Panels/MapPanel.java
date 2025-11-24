@@ -1,4 +1,4 @@
-package main.java.swingy.View.Gui.Panels;
+package swingy.View.Gui.Panels;
 
 public class MapPanel
 {

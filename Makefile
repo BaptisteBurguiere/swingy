@@ -15,6 +15,6 @@ clean:
 re: clean all
 
 run:
-	java -jar $(EXEC)
+	java -Djava.awt.headless=false -jar $(EXEC)
 
 .PHONY: $(NAME) all clean re run

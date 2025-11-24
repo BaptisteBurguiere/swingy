@@ -1,0 +1,91 @@
+package swingy.View.Gui.Components;
+
+import java.awt.Graphics;
+
+public class PanelComponent
+{
+	protected int _top_left_x;
+	protected int _top_left_y;
+	protected int _bottom_right_x;
+	protected int _bottom_right_y;
+	
+	protected boolean	_hover;
+
+	public PanelComponent()
+	{
+		this._top_left_x = 0;
+		this._top_left_y = 0;
+		this._bottom_right_x = 0;
+		this._bottom_right_y = 0;
+	}
+
+	public PanelComponent(int origin_x, int origin_y, int width, int height)
+	{
+		this._top_left_x = origin_x;
+		this._top_left_y = origin_y;
+		this._bottom_right_x = origin_x + width;
+		this._bottom_right_y = origin_y + height;
+	}
+
+	public void Set(int origin_x, int origin_y, int width, int height)
+	{
+		this._top_left_x = origin_x;
+		this._top_left_y = origin_y;
+		this._bottom_right_x = origin_x + width;
+		this._bottom_right_y = origin_y + height;
+	}
+
+	public void SetOrigin(int origin_x, int origin_y)
+	{
+		this._bottom_right_x = this._top_left_x - origin_x;
+		this._bottom_right_y = this._top_left_y - origin_y;
+		this._top_left_x = origin_x;
+		this._top_left_y = origin_y;
+	}
+
+	public void SetOriginX(int origin_x)
+	{
+		this._bottom_right_x = this._top_left_x - origin_x;
+		this._top_left_x = origin_x;
+	}
+
+	public void SetOriginY(int origin_y)
+	{
+		this._bottom_right_y = this._top_left_y - origin_y;
+		this._top_left_y = origin_y;
+	}
+
+	public void SetSize(int width, int height)
+	{
+		this._bottom_right_x = this._top_left_x + width;
+		this._bottom_right_y = this._top_left_y + height;
+	}
+
+	public void SetWidth(int width)
+	{
+		this._bottom_right_x = this._top_left_x + width;
+	}
+
+	public void SetHeight(int height)
+	{
+		this._bottom_right_y = this._top_left_y + height;
+	}
+
+
+	public boolean IsIn(int x, int y)
+	{
+		if (	x >= this._top_left_x && x <= this._bottom_right_x
+			&&	y >= this._top_left_y && y <= this._bottom_right_y)
+			return true;
+
+		return false;
+	}
+
+	public boolean IsHover() { return this._hover; }
+
+	public void HoverIn() { this._hover = true; }
+
+	public void HoverOut() { this._hover = false; }
+
+	public void Draw(Graphics g) {};
+}
