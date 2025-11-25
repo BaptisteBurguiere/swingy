@@ -16,7 +16,8 @@ public class Main {
 
 			SaveManager	save_manager = SaveManager.GetInstance();
 			SwingView view = new SwingView();
-			view.DisplayChooseSave(save_manager.GetSaveFile());
+			int res = view.DisplayChooseSave(save_manager.GetSaveFile());
+			System.out.println(String.format("%d", res));
 		}
 		catch (Exception e)
 		{

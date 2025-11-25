@@ -2,6 +2,7 @@ package swingy.View.Gui.Components;
 
 import java.awt.Graphics;
 
+
 public class PanelComponent
 {
 	protected int _top_left_x;
@@ -9,7 +10,8 @@ public class PanelComponent
 	protected int _bottom_right_x;
 	protected int _bottom_right_y;
 	
-	protected boolean	_hover;
+	protected boolean	_hover = false;
+	protected boolean	_interactive = false;
 
 	public PanelComponent()
 	{
@@ -26,6 +28,10 @@ public class PanelComponent
 		this._bottom_right_x = origin_x + width;
 		this._bottom_right_y = origin_y + height;
 	}
+
+	public int GetWidth() { return this._bottom_right_x - this._top_left_x; }
+
+	public int GetHeight() { return this._bottom_right_y - this._top_left_y; }
 
 	public void Set(int origin_x, int origin_y, int width, int height)
 	{
@@ -86,6 +92,10 @@ public class PanelComponent
 	public void HoverIn() { this._hover = true; }
 
 	public void HoverOut() { this._hover = false; }
+
+	public boolean IsInteractive() { return this._interactive; }
+
+	public int Click(int x, int y) { return -1; }
 
 	public void Draw(Graphics g) {};
 }

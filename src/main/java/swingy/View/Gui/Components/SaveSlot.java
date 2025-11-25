@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
+
 public class SaveSlot extends PanelComponent
 {
 	public static final int		FONT_SIZE = 32;
@@ -15,12 +16,35 @@ public class SaveSlot extends PanelComponent
 	public static final Color	HOVER_BG_COLOR = Color.CYAN;
 	public static final Color	HOVER_FG_COLOR = Color.BLACK;
 
+	private int		_slot;
 	private String	_content;
 
-	public SaveSlot(String content, int origin_x, int origin_y)
+	public SaveSlot(int slot, String content, int origin_x, int origin_y)
 	{
 		super(origin_x, origin_y, WIDTH, HEIGHT);
+		this._interactive = true;
+
+		this._slot = slot;
 		this._content = content;
+	}
+
+	@Override
+	public void HoverIn()
+	{
+		this._hover = true;
+	}
+
+	@Override
+	public void HoverOut()
+	{
+		this._hover = false;
+	}
+
+	@Override
+	public int Click(int x, int y)
+	{
+		System.out.println(String.format("Slot %d clicked", this._slot));
+		return this._slot;
 	}
 
 	@Override
