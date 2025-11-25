@@ -1,5 +1,7 @@
 package swingy.View.Gui;
 
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Files;
@@ -18,9 +20,10 @@ import swingy.Model.SaveFile;
 
 public class SwingView
 {
-	public static final String	ASSETS_PATH = "./assets";
-	public static final int 	WIDTH = 700;
-	public static final int 	HEIGHT = 700;
+	public static final String	FONT_PATH = "./assets/DungeonFont.ttf";
+	public static final String	SPRITES_PATH = "./assets/sprites";
+	public static final int 	WIDTH = 1920 / 2;
+	public static final int 	HEIGHT = 1080 / 2;
 	public static final int 	PADDING_TOP = 20;
 
 	private static final Map<String, BufferedImage> _sprites = new HashMap<>();
@@ -50,7 +53,7 @@ public class SwingView
 
 	private static void LoadSprites()
 	{
-		Path assets_path = Paths.get(ASSETS_PATH);
+		Path assets_path = Paths.get(SPRITES_PATH);
 
 		try
 		{
@@ -62,6 +65,22 @@ public class SwingView
 		{
 			System.err.println("Error loading assets.");
 			System.err.println(e.getMessage());
+		}
+	}
+
+	public static Font LoadCustomFont(float size)
+	{
+		try
+		{
+			Font font = Font.createFont(Font.TRUETYPE_FONT, new File(FONT_PATH));
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(font);
+			return font.deriveFont(size);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getMessage());
+			return new Font("SansSerif", Font.PLAIN, (int) size);
 		}
 	}
 

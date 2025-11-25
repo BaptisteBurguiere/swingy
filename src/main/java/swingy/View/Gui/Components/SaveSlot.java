@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
+import swingy.View.Gui.SwingView;
+
 
 public class SaveSlot extends PanelComponent
 {
@@ -31,12 +33,14 @@ public class SaveSlot extends PanelComponent
 	@Override
 	public void HoverIn()
 	{
+		this._changed = true;
 		this._hover = true;
 	}
 
 	@Override
 	public void HoverOut()
 	{
+		this._changed = true;
 		this._hover = false;
 	}
 
@@ -50,6 +54,9 @@ public class SaveSlot extends PanelComponent
 	@Override
 	public void Draw(Graphics g)
 	{
+		if (!this._changed)
+			return;
+
 		Color bg_color;
 		Color fg_color;
 
@@ -68,7 +75,9 @@ public class SaveSlot extends PanelComponent
 		g.fillRoundRect(this._top_left_x, this._top_left_y, WIDTH, HEIGHT, BORDER_RADIUS, BORDER_RADIUS);
 
 		g.setColor(fg_color);
-		g.setFont(new Font("Monospaced", Font.BOLD, FONT_SIZE));
+		g.setFont(SwingView.LoadCustomFont(FONT_SIZE));
 		g.drawString(this._content, this._top_left_x + 10, this._bottom_right_y - (HEIGHT - FONT_SIZE) / 2);
+
+		this._changed = false;
 	}
 }
