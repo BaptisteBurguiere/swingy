@@ -12,25 +12,26 @@ import swingy.Model.Hero;
 public class ChooseSavePanel extends BasePanel
 {
 	private static final int MAX_NAME_LENGTH = 15;
-	private BufferedImage	_background;
 
 	public ChooseSavePanel(SaveFile save_file)
 	{
 		super();
 
-        this._background = new BufferedImage(SwingView.WIDTH, SwingView.HEIGHT, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = this._background.getGraphics();
-        g.drawImage(SwingView.GetSprite("save_background"), 0, 0, SwingView.WIDTH, SwingView.HEIGHT, null);
+		Graphics g = this._background.getGraphics();
+        g.drawImage(SwingView.GetSprite("save_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
         g.dispose();
 
 		int nb_margin = SaveFile.NB_SAVES + 1;
-		int width = (int)((double)SwingView.WIDTH * 0.7);
-		int height = SwingView.HEIGHT / nb_margin;
+		int width = (int)((double)SwingView.GetWidth() * 0.7);
+		int height = SwingView.GetHeight() / nb_margin;
 		int margin_top = height / 9;
-		int margin_left = (SwingView.WIDTH - width) / 2;
+		int margin_left = (SwingView.GetWidth() - width) / 2;
 		int font_size = (int)((double)height * 0.8);
 
 		int cursor_y = margin_top;
+
+		if (height * SaveFile.NB_SAVES + nb_margin * margin_top < SwingView.GetHeight())
+			cursor_y += (SwingView.GetHeight() - (height * SaveFile.NB_SAVES + nb_margin * margin_top)) / 2;
 
 		for (int i = 0; i < SaveFile.NB_SAVES; i++)
 		{

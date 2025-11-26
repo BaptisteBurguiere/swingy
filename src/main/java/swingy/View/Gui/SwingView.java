@@ -1,8 +1,10 @@
 package swingy.View.Gui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Files;
@@ -17,26 +19,32 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import swingy.View.Gui.Panels.ChooseSavePanel;
+import swingy.View.Gui.Panels.MapPanel;
+import swingy.Model.GameMap;
+import swingy.Model.Hero;
 import swingy.Model.SaveFile;
 
 public class SwingView
 {
 	public static final String	FONT_PATH = "./assets/DungeonFont.ttf";
 	public static final String	SPRITES_PATH = "./assets/sprites";
-	public static final int 	WIDTH = 1920 / 2;
-	public static final int 	HEIGHT = 1080 / 2;
 	public static final int 	PADDING_TOP = 20;
 
 	private static final Map<String, BufferedImage> _sprites = new HashMap<>();
 
 	static
 	{
+		Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
+		_width = (int)((double)screen_size.width / 1.2);
+		_height = (int)((double)screen_size.height / 1.2);
+
 		LoadSprites();
 	}
 
 
-
-	private JFrame						_frame;
+	private static int	_width;
+	private static int	_height;
+	private JFrame		_frame;
 
 	public SwingView()
 	{
@@ -53,16 +61,20 @@ public class SwingView
 		Insets insets = this._frame.getInsets();
 
 		// Compute final window size so drawable area = WIDTH x HEIGHT
-		int frameWidth  = WIDTH  + insets.left + insets.right;
-		int frameHeight = HEIGHT + insets.top  + insets.bottom;
+		int frameWidth  = _width  + insets.left + insets.right;
+		int frameHeight = _height + insets.top  + insets.bottom;
 
 		this._frame.setSize(frameWidth, frameHeight);
-		
+
 		this._frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this._frame.setLocationRelativeTo(null);
 		this._frame.setVisible(false);
 		this._frame.setResizable(false);
 	}
+
+	public static int GetWidth() { return _width; }
+
+	public static int GetHeight() { return _height; }
 
 	private static void LoadSprites()
 	{
@@ -152,5 +164,15 @@ public class SwingView
 		// this._frame.add(this._panel);
 		// this._panel.repaint();
 		// this._frame.setVisible(true);
+	}
+
+	public void DisplayMainView(GameMap map, Hero hero)
+	{
+		MapPanel panel = new MapPanel(map);
+
+		this._frame.setContentPane(panel);
+		this._frame.revalidate();
+		this._frame.repaint();
+		this._frame.setVisible(true);
 	}
 }

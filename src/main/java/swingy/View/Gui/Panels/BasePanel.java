@@ -3,6 +3,7 @@ package swingy.View.Gui.Panels;
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.image.BufferedImage;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,15 +11,18 @@ import java.util.function.IntConsumer;
 
 import javax.swing.JPanel;
 
+import swingy.View.Gui.SwingView;
 import swingy.View.Gui.Components.PanelComponent;
 
 public class BasePanel extends JPanel
 {
+	protected BufferedImage			_background;
 	protected List<PanelComponent>	_components;
 	protected IntConsumer			_click_listener = null;
 
 	public BasePanel()
 	{
+		this._background = new BufferedImage(SwingView.GetWidth(), SwingView.GetHeight(), BufferedImage.TYPE_INT_ARGB);
 		this._components = new ArrayList<>();
 
 		// Listen for clicks, press, release, enter, exit
