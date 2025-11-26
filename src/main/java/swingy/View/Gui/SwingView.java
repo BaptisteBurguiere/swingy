@@ -168,7 +168,7 @@ public class SwingView
 
 	public void DisplayMainView(GameMap map, Hero hero)
 	{
-		MapPanel panel = new MapPanel(map);
+		MapPanel panel = new MapPanel(map, hero);
 
 		this._frame.setContentPane(panel);
 		this._frame.revalidate();

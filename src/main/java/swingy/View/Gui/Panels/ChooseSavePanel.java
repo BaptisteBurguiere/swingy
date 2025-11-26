@@ -16,7 +16,7 @@ public class ChooseSavePanel extends BasePanel
 	{
 		super();
 
-		Graphics g = this._background.getGraphics();
+		Graphics g = this._background.createGraphics();
         g.drawImage(SwingView.GetSprite("save_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
         g.dispose();
 

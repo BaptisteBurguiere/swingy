@@ -6,16 +6,18 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import swingy.Model.GameMap;
+import swingy.Model.Hero;
 import swingy.View.Gui.SwingView;
+import swingy.View.Gui.Components.MapSide;
 import swingy.View.Gui.Components.PanelComponent;
 
 public class MapPanel extends BasePanel
 {
 	private static final Random rand = new Random();
 
-	public MapPanel(GameMap map)
+	public MapPanel(GameMap map, Hero hero)
 	{
-		Graphics g = this._background.getGraphics();
+		Graphics g = this._background.createGraphics();
 		g.drawImage(SwingView.GetSprite("map_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
 
 		int height = SwingView.GetHeight();
@@ -70,13 +72,13 @@ public class MapPanel extends BasePanel
 		}
 		g.drawImage(SwingView.GetSprite("bottom_right_wall"), cursor_x, cursor_y, tile_size, tile_size, null);
 
-		cursor_x = tile_size * (map_size + 2);
-		cursor_y = 0;
-
-		// g.setColor(new Color(0, 0, 0, 20));
-		// g.fillRect(cursor_x, cursor_y, width - cursor_x, height);
-		
 		g.dispose();
+
+		int map_side_margin = (int)((11. / 16.) * (tile_size));
+		cursor_x = tile_size * (map_size + 2);
+		cursor_y = map_side_margin;
+
+		AddComponent(new MapSide(hero, cursor_x, cursor_y, SwingView.GetWidth() - cursor_x - map_side_margin, height - map_side_margin * 2));
 	}
 
 	private static BufferedImage GetRandomFloor()
