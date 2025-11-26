@@ -12,7 +12,6 @@ public class PanelComponent
 	
 	protected boolean	_hover = false;
 	protected boolean	_interactive = false;
-	protected boolean	_changed = true;
 
 	public PanelComponent()
 	{
@@ -28,6 +27,14 @@ public class PanelComponent
 		this._top_left_y = origin_y;
 		this._bottom_right_x = origin_x + width;
 		this._bottom_right_y = origin_y + height;
+	}
+
+	public PanelComponent(int origin_x, int origin_y)
+	{
+		this._top_left_x = origin_x;
+		this._top_left_y = origin_y;
+		this._bottom_right_x = origin_x;
+		this._bottom_right_y = origin_y;
 	}
 
 	public int GetOriginX() { return this._top_left_x; }
@@ -102,5 +109,5 @@ public class PanelComponent
 
 	public int Click(int x, int y) { return -1; }
 
-	public void Draw(Graphics g) { this._changed = false; }
+	public void Draw(Graphics g) {}
 }

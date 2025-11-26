@@ -1,7 +1,6 @@
 package swingy.View.Gui.Components;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 
 import swingy.View.Gui.SwingView;
@@ -9,38 +8,35 @@ import swingy.View.Gui.SwingView;
 
 public class SaveSlot extends PanelComponent
 {
-	public static final int		FONT_SIZE = 32;
-	public static final int		WIDTH = 500;
-	public static final int		HEIGHT = 50;
 	public static final int		BORDER_RADIUS = 10;
-	public static final Color	BG_COLOR = Color.RED;
-	public static final Color	FG_COLOR = Color.BLACK;
-	public static final Color	HOVER_BG_COLOR = Color.CYAN;
+	public static final Color	BG_COLOR = new Color(0, 0, 0, 125);
+	public static final Color	FG_COLOR = new Color(180, 180, 180, 255);
+	public static final Color	HOVER_BG_COLOR = new Color(200, 200, 200, 220);
 	public static final Color	HOVER_FG_COLOR = Color.BLACK;
 
 	private int		_slot;
 	private String	_content;
+	private int		_font_size;
 
-	public SaveSlot(int slot, String content, int origin_x, int origin_y)
+	public SaveSlot(int slot, String content, int origin_x, int origin_y, int width, int height, int font_size)
 	{
-		super(origin_x, origin_y, WIDTH, HEIGHT);
+		super(origin_x, origin_y, width, height);
 		this._interactive = true;
 
 		this._slot = slot;
 		this._content = content;
+		this._font_size = font_size;
 	}
 
 	@Override
 	public void HoverIn()
 	{
-		this._changed = true;
 		this._hover = true;
 	}
 
 	@Override
 	public void HoverOut()
 	{
-		this._changed = true;
 		this._hover = false;
 	}
 
@@ -54,9 +50,6 @@ public class SaveSlot extends PanelComponent
 	@Override
 	public void Draw(Graphics g)
 	{
-		if (!this._changed)
-			return;
-
 		Color bg_color;
 		Color fg_color;
 
@@ -72,12 +65,10 @@ public class SaveSlot extends PanelComponent
 		}
 
 		g.setColor(bg_color);
-		g.fillRoundRect(this._top_left_x, this._top_left_y, WIDTH, HEIGHT, BORDER_RADIUS, BORDER_RADIUS);
+		g.fillRoundRect(this._top_left_x, this._top_left_y, this.GetWidth(), this.GetHeight(), BORDER_RADIUS, BORDER_RADIUS);
 
 		g.setColor(fg_color);
-		g.setFont(SwingView.LoadCustomFont(FONT_SIZE));
-		g.drawString(this._content, this._top_left_x + 10, this._bottom_right_y - (HEIGHT - FONT_SIZE) / 2);
-
-		this._changed = false;
+		g.setFont(SwingView.LoadCustomFont(this._font_size));
+		g.drawString(this._content, this._top_left_x + 10, this._bottom_right_y - (this.GetHeight() - this._font_size) / 2);
 	}
 }

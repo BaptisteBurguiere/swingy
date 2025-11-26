@@ -1,7 +1,6 @@
 package swingy.View.Gui.Panels;
 
 import java.awt.Cursor;
-import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseEvent;

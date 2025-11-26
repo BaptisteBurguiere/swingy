@@ -18,9 +18,6 @@ public class Sprite extends PanelComponent
 	@Override
 	public void Draw(Graphics g)
 	{
-		if (!this._changed)
-			return;
-
 		int width = GetWidth();
 		int height = GetHeight();
 		int image_width = this._image.getWidth();
@@ -38,7 +35,5 @@ public class Sprite extends PanelComponent
 				g.fillRect(x, y, 1, 1);
 			}
 		}
-
-		this._changed = false;
 	}
 }

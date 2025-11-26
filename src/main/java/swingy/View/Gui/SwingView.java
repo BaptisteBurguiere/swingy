@@ -2,6 +2,7 @@ package swingy.View.Gui;
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.Insets;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Files;
@@ -44,7 +45,19 @@ public class SwingView
 
 		this._frame = new JFrame();
 		this._frame.setTitle("Swingy");
-		this._frame.setSize(WIDTH, HEIGHT);
+
+		this._frame.pack();
+		this._frame.setVisible(true);
+
+		// Get decoration size
+		Insets insets = this._frame.getInsets();
+
+		// Compute final window size so drawable area = WIDTH x HEIGHT
+		int frameWidth  = WIDTH  + insets.left + insets.right;
+		int frameHeight = HEIGHT + insets.top  + insets.bottom;
+
+		this._frame.setSize(frameWidth, frameHeight);
+		
 		this._frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this._frame.setLocationRelativeTo(null);
 		this._frame.setVisible(false);
