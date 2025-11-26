@@ -16,8 +16,7 @@ public class MapPanel extends BasePanel
 	public MapPanel(GameMap map)
 	{
 		Graphics g = this._background.getGraphics();
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, SwingView.GetWidth(), SwingView.GetHeight());
+		g.drawImage(SwingView.GetSprite("map_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
 
 		int height = SwingView.GetHeight();
 		int width = SwingView.GetHeight();
@@ -71,6 +70,12 @@ public class MapPanel extends BasePanel
 		}
 		g.drawImage(SwingView.GetSprite("bottom_right_wall"), cursor_x, cursor_y, tile_size, tile_size, null);
 
+		cursor_x = tile_size * (map_size + 2);
+		cursor_y = 0;
+
+		// g.setColor(new Color(0, 0, 0, 20));
+		// g.fillRect(cursor_x, cursor_y, width - cursor_x, height);
+		
 		g.dispose();
 	}
 

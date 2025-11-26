@@ -1,7 +1,6 @@
 package swingy.View.Gui.Panels;
 
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 import swingy.Model.SaveFile;
 import swingy.View.Gui.SwingView;

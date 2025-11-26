@@ -6,7 +6,6 @@ import swingy.Model.CombatTurnResult;
 import swingy.Model.Hero;
 import swingy.Model.Item;
 import swingy.Model.SaveFile;
-import swingy.Model.Statistic;
 import swingy.Model.Villain;
 import swingy.Model.Entity;
 import swingy.Model.GameMap;
