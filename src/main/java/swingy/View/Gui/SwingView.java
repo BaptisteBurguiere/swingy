@@ -26,9 +26,9 @@ import swingy.Model.SaveFile;
 
 public class SwingView
 {
-	public static final String	FONT_PATH = "./assets/DungeonFont.ttf";
+	public static final String	FONT_PATH = "./assets/alagard.ttf";
 	public static final String	SPRITES_PATH = "./assets/sprites";
-	public static final int 	PADDING_TOP = 20;
+	public static final int		TAB_SIZE = 4;
 
 	private static final Map<String, BufferedImage> _sprites = new HashMap<>();
 
@@ -149,8 +149,8 @@ public class SwingView
 		{
 			this._frame.setContentPane(panel);
 			this._frame.revalidate();
-			this._frame.repaint();
 			this._frame.setVisible(true);
+			this._frame.repaint();
 		});
 
 		try {
@@ -172,7 +172,7 @@ public class SwingView
 
 		this._frame.setContentPane(panel);
 		this._frame.revalidate();
-		this._frame.repaint();
 		this._frame.setVisible(true);
+		this._frame.repaint();
 	}
 }
