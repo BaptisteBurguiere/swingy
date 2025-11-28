@@ -3,7 +3,7 @@ package swingy.View.Gui.Components;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class SaveSlot extends PanelComponent
+public class HeroClass extends PanelComponent
 {
 	public static final int		BORDER_RADIUS = 10;
 	public static final Color	BG_COLOR = new Color(0, 0, 0, 125);
@@ -11,16 +11,16 @@ public class SaveSlot extends PanelComponent
 	public static final Color	HOVER_BG_COLOR = new Color(200, 200, 200, 220);
 	public static final Color	HOVER_FG_COLOR = Color.BLACK;
 
-	private int		_slot;
+	private int		_class;
 	private String	_content;
 	private int		_font_size;
 
-	public SaveSlot(int slot, String content, int origin_x, int origin_y, int width, int height, int font_size)
+	public HeroClass(int Class, String content, int origin_x, int origin_y, int width, int height, int font_size)
 	{
 		super(origin_x, origin_y, width, height);
 		this._interactive = true;
 
-		this._slot = slot;
+		this._class = Class;
 		this._content = content;
 		this._font_size = font_size;
 	}
@@ -40,7 +40,7 @@ public class SaveSlot extends PanelComponent
 	@Override
 	public int Click(int x, int y)
 	{
-		return this._slot;
+		return this._class;
 	}
 
 	@Override

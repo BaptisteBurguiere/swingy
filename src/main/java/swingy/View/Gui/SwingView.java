@@ -11,7 +11,10 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -20,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import swingy.View.Gui.Panels.BasePanel;
+import swingy.View.Gui.Panels.ChooseHeroClassPanel;
 import swingy.View.Gui.Panels.ChooseSavePanel;
 import swingy.View.Gui.Panels.MapPanel;
 import swingy.View.View.Action;
@@ -223,5 +227,39 @@ public class SwingView
 				Thread.currentThread().interrupt();
 			}
 		}
+	}
+
+	public Hero.Class DisplayCreateHeroClass()
+	{
+		EnumSet<Hero.Class> all_classes = EnumSet.allOf(Hero.Class.class);
+		List<Hero.Class> all_classes_lst = new ArrayList<>(all_classes);
+
+		this._panel = new ChooseHeroClassPanel();
+
+		this._latch = new CountDownLatch(1);
+
+    	final int[] selected_class = { -1 };
+
+		this._panel.SetClickListener(Class ->
+		{
+			selected_class[0] = Class;
+			this._latch.countDown();   // RELEASE wait
+		});
+
+		SwingUtilities.invokeLater(() ->
+		{
+			this._frame.setContentPane(this._panel);
+			this._frame.revalidate();
+			this._frame.setVisible(true);
+			this._frame.repaint();
+		});
+
+		try {
+			this._latch.await(); // BLOCK until clicked
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+
+		return all_classes_lst.get(selected_class[0]);
 	}
 }
