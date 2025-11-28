@@ -1,7 +1,7 @@
 package swingy.View.Gui.Panels;
 
-import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -15,10 +15,22 @@ public class MapPanel extends BasePanel
 {
 	private static final Random rand = new Random();
 
+	private GameMap	_map;
+
 	public MapPanel(GameMap map, Hero hero)
 	{
+		super();
+
+		BindKey(KeyEvent.VK_W, "moveUp");
+		BindKey(KeyEvent.VK_A, "moveLeft");
+		BindKey(KeyEvent.VK_S, "moveDown");
+		BindKey(KeyEvent.VK_D, "moveRight");
+		BindKey(KeyEvent.VK_ESCAPE, "escape");
+
 		Graphics g = this._background.createGraphics();
 		g.drawImage(SwingView.GetSprite("map_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
+
+		this._map = map;
 
 		int height = SwingView.GetHeight();
 		int width = SwingView.GetHeight();
@@ -101,6 +113,50 @@ public class MapPanel extends BasePanel
 		super.paintComponent(g);
 
 		g.drawImage(this._background, 0, 0, null);
+
+		GameMap.Element[][] grid = this._map.GetGrid();
+		int height = SwingView.GetHeight();
+		int width = SwingView.GetHeight();
+		int map_size = this._map.GetSize();
+		int tile_size = width / (map_size + 2);
+
+		int cursor_x = 0;
+		int cursor_y = 0;
+
+		if (tile_size * (map_size + 2) < height)
+			cursor_y = (height - tile_size * (map_size + 2)) / 2;
+
+		cursor_y += tile_size;
+
+		// Map
+		for (int i = 0; i < map_size; i++)
+		{
+			cursor_x = tile_size;
+
+			for (int j = 0; j < map_size; j++)
+			{
+				switch (grid[i][j])
+				{
+					case VILLAIN:
+						g.drawImage(SwingView.GetSprite("placeholder_villain_map"), cursor_x, cursor_y, tile_size, tile_size, null);
+						break;
+
+					case HERO:
+						g.drawImage(SwingView.GetSprite("placeholder_hero_map"), cursor_x, cursor_y, tile_size, tile_size, null);
+						break;
+
+					case CHEST:
+						g.drawImage(SwingView.GetSprite("chest"), cursor_x, cursor_y, tile_size, tile_size, null);
+				
+					default:
+						break;
+				}
+
+				cursor_x += tile_size;
+			}
+
+			cursor_y += tile_size;
+		}
 
 		for (PanelComponent component : this._components)	
 		{

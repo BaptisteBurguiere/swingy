@@ -2,6 +2,11 @@ package swingy.View.Gui.Panels;
 
 import java.awt.Graphics;
 
+import java.awt.Cursor;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseEvent;
+
 import swingy.Model.SaveFile;
 import swingy.View.Gui.SwingView;
 import swingy.View.Gui.Components.PanelComponent;
@@ -15,6 +20,62 @@ public class ChooseSavePanel extends BasePanel
 	public ChooseSavePanel(SaveFile save_file)
 	{
 		super();
+		// Listen for clicks, press, release, enter, exit
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				for (PanelComponent component : _components)
+				{
+					if (component.IsIn(e.getX(), e.getY()))
+					{
+						int click_res = component.Click(e.getX(), e.getY());
+						
+						if (click_res != -1 && _click_listener != null)
+							_click_listener.accept(click_res);
+
+						return;
+					}
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+		});
+
+		// Listen for mouse movement and drag
+		addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e)
+			{
+				boolean change = false;
+				for (PanelComponent component : _components)
+				{
+					if (component.IsIn(e.getX(), e.getY()) && !component.IsHover())
+					{
+						change = true;
+						component.HoverIn();
+						if (component.IsInteractive())
+							setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+					}
+					else if (!component.IsIn(e.getX(), e.getY()) && component.IsHover())
+					{
+						change = true;
+						component.HoverOut();
+						if (component.IsInteractive())
+							setCursor(Cursor.getDefaultCursor());
+					}
+				}
+
+				if (change)
+					repaint();
+			}
+
+			@Override
+			public void mouseDragged(MouseEvent e) {}
+		});
 
 		Graphics g = this._background.createGraphics();
         g.drawImage(SwingView.GetSprite("save_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);

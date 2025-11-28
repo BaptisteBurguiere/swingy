@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import swingy.Model.Hero;
+import swingy.Model.Item;
+import swingy.Model.Statistic;
 import swingy.Model.StatisticTemplate;
-import swingy.View.Gui.SwingView;
 
 public class MapSide extends PanelComponent
 {
@@ -27,7 +29,7 @@ public class MapSide extends PanelComponent
 		
 		this._components = new ArrayList<>();
 		
-		int padding = 10;
+		int padding = 20;
 		
 		int font_size = 32;
 		String text = String.format("%d", this._hero.GetLevel());
@@ -96,6 +98,199 @@ public class MapSide extends PanelComponent
 		text_area = new TextArea(component_origin_x, component_origin_y, component_width, component_height, font_size);
 		text_area.AddChunk(text, FG_COLOR);
 		this._components.add(text_area);
+
+		font_size = 20;
+		component_origin_y = exp_bar.GetOriginY() + exp_bar.GetHeight() + padding * 2;
+		component_origin_x = this._top_left_x + padding;
+		component_width = this._bottom_right_x - this._top_left_x - padding * 2;
+		component_height = TextArea.CalculateHeight(font_size) * 9;
+		
+		text_area = new TextArea(component_origin_x, component_origin_y, component_width, component_height, font_size);
+
+		Statistic stat = hero.GetStatistic(StatisticTemplate.Type.ATTACK);
+		text = String.format("%s: %.0f\n", stat.GetName(), stat.GetValue());
+		text_area.AddChunk(text, FG_COLOR);
+
+		stat = hero.GetStatistic(StatisticTemplate.Type.DEFENSE);
+		text = String.format("%s: %.0f\n", stat.GetName(), stat.GetValue());
+		text_area.AddChunk(text, FG_COLOR);
+
+		stat = hero.GetStatistic(StatisticTemplate.Type.SPEED);
+		text = String.format("%s: %.0f\n", stat.GetName(), stat.GetValue());
+		text_area.AddChunk(text, FG_COLOR);
+
+		stat = hero.GetStatistic(StatisticTemplate.Type.EVASION);
+		text = String.format("%s: %.2f\n", stat.GetName(), stat.GetValue());
+		text_area.AddChunk(text, FG_COLOR);
+
+		stat = hero.GetStatistic(StatisticTemplate.Type.ACCURACY);
+		text = String.format("%s: %.2f\n", stat.GetName(), stat.GetValue());
+		text_area.AddChunk(text, FG_COLOR);
+
+		stat = hero.GetStatistic(StatisticTemplate.Type.CRIT_CHANCE);
+		text = String.format("%s: %.2f\n", stat.GetName(), stat.GetValue());
+		text_area.AddChunk(text, FG_COLOR);
+
+		stat = hero.GetStatistic(StatisticTemplate.Type.CRIT_DAMAGE);
+		text = String.format("%s: %.2f\n", stat.GetName(), stat.GetValue());
+		text_area.AddChunk(text, FG_COLOR);
+
+		stat = hero.GetStatistic(StatisticTemplate.Type.LUCK);
+		text = String.format("%s: %.0f\n", stat.GetName(), stat.GetValue());
+		text_area.AddChunk(text, FG_COLOR);
+
+		this._components.add(text_area);
+
+		component_origin_y = text_area.GetOriginY() + text_area.GetHeight() + padding * 2;
+		component_origin_x = this._top_left_x + padding;
+		component_width = this._bottom_right_x - this._top_left_x - padding * 2;
+		component_height = this._bottom_right_y - component_origin_y - padding - TextArea.CalculateHeight(font_size);
+
+		text_area = new TextArea(component_origin_x, component_origin_y, component_width, component_height, font_size);
+		
+		Item item = hero.GetItem(Item.Type.WEAPON);
+		text_area.AddChunk("Weapon: ", FG_COLOR);
+		if (item != null)
+			DisplayEquipmentItem(item, text_area);
+		else
+			text_area.AddChunk("\n", FG_COLOR);
+		text_area.AddChunk("\n", FG_COLOR);
+
+		item = hero.GetItem(Item.Type.ARMOR);
+		text_area.AddChunk("Armor: ", FG_COLOR);
+		if (item != null)
+			DisplayEquipmentItem(item, text_area);
+		else
+			text_area.AddChunk("\n", FG_COLOR);
+		text_area.AddChunk("\n", FG_COLOR);
+
+		item = hero.GetItem(Item.Type.HELMET);
+		text_area.AddChunk("Helmet: ", FG_COLOR);
+		if (item != null)
+			DisplayEquipmentItem(item, text_area);
+		else
+			text_area.AddChunk("\n", FG_COLOR);
+		text_area.AddChunk("\n", FG_COLOR);
+
+		item = hero.GetItem(Item.Type.RELIC);
+		text_area.AddChunk("Relic: ", FG_COLOR);
+		if (item != null)
+			DisplayEquipmentItem(item, text_area);
+		else
+			text_area.AddChunk("\n", FG_COLOR);
+		text_area.AddChunk("\n", FG_COLOR);
+
+		this._components.add(text_area);
+
+		text = "W, A, S, D: Move";
+		component_origin_y = this._bottom_right_y - padding - TextArea.CalculateHeight(font_size);
+		component_origin_x = this._top_left_x + padding;
+		component_width = TextArea.CalculateWidth(text, font_size);
+		component_height = TextArea.CalculateHeight(font_size);
+
+		text_area = new TextArea(component_origin_x, component_origin_y, component_width, component_height, font_size);
+		text_area.AddChunk(text, FG_COLOR);
+
+		this._components.add(text_area);
+
+		text = "H: Display help";
+		component_origin_y = this._bottom_right_y - padding - TextArea.CalculateHeight(font_size);
+		component_origin_x += component_width + padding * 2;
+		component_width = TextArea.CalculateWidth(text, font_size);
+		component_height = TextArea.CalculateHeight(font_size);
+
+		text_area = new TextArea(component_origin_x, component_origin_y, component_width, component_height, font_size);
+		text_area.AddChunk(text, FG_COLOR);
+
+		this._components.add(text_area);
+
+		text = "Esc: Quit";
+		component_origin_y = this._bottom_right_y - padding - TextArea.CalculateHeight(font_size);
+		component_origin_x += component_width + padding * 2;
+		component_width = TextArea.CalculateWidth(text, font_size);
+		component_height = TextArea.CalculateHeight(font_size);
+
+		text_area = new TextArea(component_origin_x, component_origin_y, component_width, component_height, font_size);
+		text_area.AddChunk(text, FG_COLOR);
+
+		this._components.add(text_area);
+	}
+
+	private void DisplayEquipmentItem(Item item, TextArea text_area)
+	{
+		Color color = FG_COLOR;
+		switch (item.GetRarity())
+		{
+			case COMMON:
+				color = Color.WHITE;
+				break;
+			case RARE:
+				color = Color.BLUE;
+				break;
+			case EPIC:
+				color = Color.MAGENTA;
+				break;
+			case LEGENDARY:
+				color = Color.YELLOW;
+				break;
+		}
+		
+		text_area.AddChunk(String.format("%s (", item.GetName()), FG_COLOR);
+		text_area.AddChunk(item.GetRarityStr(), color);
+		text_area.AddChunk(")\n", FG_COLOR);
+
+		String text = "";
+
+		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : item.GetStatistics().entrySet())
+		{
+			Statistic stat = entry.getValue();
+			switch (stat.GetType())
+			{
+				case HEALTH:
+					text = String.format("  +%.0f %s\n", stat.GetValue(), stat.GetName());
+					break;
+
+				case ATTACK:
+					text = String.format("  +%.0f %s\n", stat.GetValue(), stat.GetName());
+					break;
+
+				case DEFENSE:
+					text = String.format("  +%.0f %s\n", stat.GetValue(), stat.GetName());
+					break;
+
+				case SPEED:
+					text = String.format("  +%.0f %s\n", stat.GetValue(), stat.GetName());
+					break;
+
+				case EVASION:
+					text = String.format("  +%.2f %s\n", stat.GetValue(), stat.GetName());
+					break;
+
+				case ACCURACY:
+					text = String.format("  +%.2f %s\n", stat.GetValue(), stat.GetName());
+					break;
+
+				case CRIT_CHANCE:
+					text = String.format("  +%.2f %s\n", stat.GetValue(), stat.GetName());
+					break;
+
+				case CRIT_DAMAGE:
+					text = String.format("  +%.2f %s\n", stat.GetValue(), stat.GetName());
+					break;
+
+				case LUCK:
+					text = String.format("  +%.0f %s\n", stat.GetValue(), stat.GetName());
+					break;
+			
+				default:
+					break;
+			}
+			
+			text_area.AddChunk(text, FG_COLOR);
+		}
+		
+		text = String.format("Description: %s\n", item.GetDescription());
+		text_area.AddChunk(text, FG_COLOR);
 	}
 
 	@Override

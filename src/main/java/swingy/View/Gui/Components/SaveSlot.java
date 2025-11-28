@@ -3,9 +3,6 @@ package swingy.View.Gui.Components;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import swingy.View.Gui.SwingView;
-
-
 public class SaveSlot extends PanelComponent
 {
 	public static final int		BORDER_RADIUS = 10;
@@ -67,8 +64,14 @@ public class SaveSlot extends PanelComponent
 		g.setColor(bg_color);
 		g.fillRoundRect(this._top_left_x, this._top_left_y, this.GetWidth(), this.GetHeight(), BORDER_RADIUS, BORDER_RADIUS);
 
-		g.setColor(fg_color);
-		g.setFont(SwingView.LoadCustomFont(this._font_size));
-		g.drawString(this._content, this._top_left_x + 10, this._bottom_right_y - (this.GetHeight() - this._font_size) / 2);
+		int height = TextArea.CalculateHeight(this._font_size);
+		int width = TextArea.CalculateWidth(this._content, this._font_size);
+		int y = this._top_left_y + (this.GetHeight() - height) / 2;
+		int x = this._top_left_x + 10;
+
+		TextArea text_area = new TextArea(x, y, width, height, this._font_size);
+		text_area.AddChunk(this._content, fg_color);
+
+		text_area.Draw(g);
 	}
 }

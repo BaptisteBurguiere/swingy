@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Files;
@@ -18,8 +19,10 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import swingy.View.Gui.Panels.BasePanel;
 import swingy.View.Gui.Panels.ChooseSavePanel;
 import swingy.View.Gui.Panels.MapPanel;
+import swingy.View.View.Action;
 import swingy.Model.GameMap;
 import swingy.Model.Hero;
 import swingy.Model.SaveFile;
@@ -45,6 +48,10 @@ public class SwingView
 	private static int	_width;
 	private static int	_height;
 	private JFrame		_frame;
+	private BasePanel	_panel;
+	private CountDownLatch _latch;
+
+	private	boolean _is_main_view_displayed = false;
 
 	public SwingView()
 	{
@@ -133,28 +140,28 @@ public class SwingView
 
 	public int DisplayChooseSave(SaveFile save_file)
 	{
-		ChooseSavePanel panel = new ChooseSavePanel(save_file);
+		this._panel = new ChooseSavePanel(save_file);
 
-		CountDownLatch latch = new CountDownLatch(1);
+		this._latch = new CountDownLatch(1);
 
     	final int[] selected_slot = { -1 };
 
-		panel.setClickListener(slot ->
+		this._panel.SetClickListener(slot ->
 		{
 			selected_slot[0] = slot;
-			latch.countDown();   // RELEASE wait
+			this._latch.countDown();   // RELEASE wait
 		});
 
 		SwingUtilities.invokeLater(() ->
 		{
-			this._frame.setContentPane(panel);
+			this._frame.setContentPane(this._panel);
 			this._frame.revalidate();
 			this._frame.setVisible(true);
 			this._frame.repaint();
 		});
 
 		try {
-			latch.await(); // BLOCK until clicked
+			this._latch.await(); // BLOCK until clicked
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
@@ -166,13 +173,55 @@ public class SwingView
 		// this._frame.setVisible(true);
 	}
 
-	public void DisplayMainView(GameMap map, Hero hero)
+	public Action DisplayMainView(GameMap map, Hero hero)
 	{
-		MapPanel panel = new MapPanel(map, hero);
+		if (!this._is_main_view_displayed)
+		{
+			this._panel = new MapPanel(map, hero);
+		}
 
-		this._frame.setContentPane(panel);
-		this._frame.revalidate();
-		this._frame.setVisible(true);
-		this._frame.repaint();
+		this._latch = new CountDownLatch(1);
+		final int[] key_code = { -1 };
+
+		this._panel.SetKeyListener(key -> {
+			key_code[0] = key;
+			this._latch.countDown();
+		});
+
+		SwingUtilities.invokeLater(() -> {
+			this._frame.setContentPane(this._panel);
+			this._frame.revalidate();
+			this._frame.setVisible(true);
+			this._frame.repaint();
+			this._panel.requestFocusInWindow();       // IMPORTANT
+			this._is_main_view_displayed = true;
+		});
+
+		while (true) {
+			try {
+				this._latch.await();
+
+				switch (key_code[0]) {
+					case KeyEvent.VK_W: return Action.MOVE_UP;
+					case KeyEvent.VK_S: return Action.MOVE_DOWN;
+					case KeyEvent.VK_A: return Action.MOVE_LEFT;
+					case KeyEvent.VK_D: return Action.MOVE_RIGHT;
+
+					case KeyEvent.VK_ESCAPE:
+						System.exit(0);
+				}
+
+				// Reset latch for next key
+				this._latch = new CountDownLatch(1);
+
+				this._panel.SetKeyListener(key -> {
+					key_code[0] = key;
+					this._latch.countDown();
+				});
+
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 }
