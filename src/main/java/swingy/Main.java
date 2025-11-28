@@ -57,7 +57,9 @@ public class Main {
 			// 	}
 			// }
 
-			view.DisplayCreateHeroClass();
+			// view.DisplayCreateHeroClass();
+
+			view.DisplayCreateHeroName();
 
 			// int res = view.DisplayChooseSave(save_manager.GetSaveFile());
 			// System.out.println(String.format("%d", res));

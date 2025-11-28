@@ -24,6 +24,7 @@ import javax.swing.SwingUtilities;
 
 import swingy.View.Gui.Panels.BasePanel;
 import swingy.View.Gui.Panels.ChooseHeroClassPanel;
+import swingy.View.Gui.Panels.ChooseNamePanel;
 import swingy.View.Gui.Panels.ChooseSavePanel;
 import swingy.View.Gui.Panels.MapPanel;
 import swingy.View.View.Action;
@@ -261,5 +262,17 @@ public class SwingView
 		}
 
 		return all_classes_lst.get(selected_class[0]);
+	}
+
+	public String DisplayCreateHeroName()
+	{
+		this._panel = new ChooseNamePanel();
+
+		this._frame.setContentPane(this._panel);
+		this._frame.revalidate();
+		this._frame.setVisible(true);
+		this._frame.repaint();
+
+		return "";
 	}
 }
