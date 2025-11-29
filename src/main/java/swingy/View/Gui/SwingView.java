@@ -268,11 +268,28 @@ public class SwingView
 	{
 		this._panel = new ChooseNamePanel();
 
-		this._frame.setContentPane(this._panel);
-		this._frame.revalidate();
-		this._frame.setVisible(true);
-		this._frame.repaint();
+		this._latch = new CountDownLatch(1);
 
-		return "";
+		this._panel.SetClickListener(buf ->
+		{
+			this._latch.countDown();   // RELEASE wait
+		});
+
+		SwingUtilities.invokeLater(() ->
+		{
+			this._frame.setContentPane(this._panel);
+			this._frame.revalidate();
+			this._frame.setVisible(true);
+			this._frame.repaint();
+		});
+
+		try {
+			this._latch.await(); // BLOCK until clicked
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+
+		ChooseNamePanel panel = (ChooseNamePanel)this._panel;
+		return panel.GetName();
 	}
 }

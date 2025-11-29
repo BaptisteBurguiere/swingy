@@ -2,6 +2,8 @@ package swingy.View.Gui.Panels;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
 
 import swingy.View.Gui.SwingView;
 import swingy.View.Gui.Components.TextArea;
@@ -17,12 +19,39 @@ public class ChooseNamePanel extends BasePanel
 	{
 		super();
 
-		this._name = "Test";
+		this._name = "";
 
 		Graphics g = this._background.createGraphics();
         g.drawImage(SwingView.GetSprite("save_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
         g.dispose();
+
+		setFocusable(true);
+
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+
+                if (Character.isLetterOrDigit(c) || c == ' ') {
+                    _name += c;
+                    repaint();
+                } else if (c == '\b' && _name.length() > 0) {
+                    _name = _name.substring(0, _name.length() - 1);
+                    repaint();
+                }
+				else if (c == '\n')
+					_click_listener.accept(0);
+            }
+
+			@Override
+			public void keyPressed(KeyEvent e) {}
+
+			@Override
+			public void keyReleased(KeyEvent e) {}
+        });
 	}
+
+	public String GetName() { return this._name; }
 
 	@Override
 	protected void paintComponent(Graphics g)

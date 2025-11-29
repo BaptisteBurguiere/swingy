@@ -18,6 +18,7 @@ public class ProgressBar extends PanelComponent
 		super(origin_x, origin_y, width, height);
 		this._max_value = max_value;
 		this._border_size = border_size;
+		this._interactive = false;
 	}
 
 	public void SetValue(int value) { this._value = Math.min(value, this._max_value); }
