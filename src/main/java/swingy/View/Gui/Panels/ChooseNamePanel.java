@@ -25,8 +25,6 @@ public class ChooseNamePanel extends BasePanel
         g.drawImage(SwingView.GetSprite("save_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
         g.dispose();
 
-		setFocusable(true);
-
         addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {

@@ -17,8 +17,10 @@ public class MapSide extends PanelComponent
 	public static final Color	BG_COLOR = new Color(0, 0, 0, 125);
 	public static final Color	FG_COLOR = new Color(220, 220, 220);
 
+	private boolean					_display_help;
 	private Hero					_hero;
 	private List<PanelComponent>	_components;
+	private TextArea				_help;
 
 	public MapSide(Hero hero, int origin_x, int origin_y, int width, int height)
 	{
@@ -214,6 +216,67 @@ public class MapSide extends PanelComponent
 		text_area.AddChunk(text, FG_COLOR);
 
 		this._components.add(text_area);
+
+		component_origin_x = this._top_left_x + padding;
+		component_origin_y = this._top_left_y + padding;
+		component_width = this.GetWidth() - padding * 2;
+		component_height = this.GetHeight() - padding * 2;
+
+		this._help = new TextArea(component_origin_x, component_origin_y, component_width, component_height, font_size);
+		this._help.AddChunk("Gameplay:\n", FG_COLOR);
+		this._help.AddChunk("  Your objective is to defeat them to level up and get a chance to drop loot.\n", FG_COLOR);
+		this._help.AddChunk("  Level up enough to confidently escape the room and face the boss.\n", FG_COLOR);
+		this._help.AddChunk("  You can escape the room by hitting a border\n", FG_COLOR);
+		this._help.AddChunk("  The game ends when you die.\n\n", FG_COLOR);
+
+		this._help.AddChunk("Combat:\n", FG_COLOR);
+		this._help.AddChunk("  Turn by turn combat system.\n", FG_COLOR);
+		this._help.AddChunk("  You have multiple options when fighting an ennemy:\n", FG_COLOR);
+		this._help.AddChunk("    Attack: I don't think I need to explain this one.\n", FG_COLOR);
+		this._help.AddChunk("    Defend: Boost your defense until your next turn.\n", FG_COLOR);
+		this._help.AddChunk("			   If you have enough defense, you might be able to parry the incoming attack.\n", FG_COLOR);
+		this._help.AddChunk("    Flee: If the ennemy is too strong for you, fly away might be the best option for you.\n", FG_COLOR);
+		this._help.AddChunk("		     The more speed and evasion you have compared to your opponent, the more chance you have to escape.\n\n", FG_COLOR);
+		
+		this._help.AddChunk("Statistics:\n", FG_COLOR);
+		for (Map.Entry<StatisticTemplate.Type, StatisticTemplate> entry : StatisticTemplate.GetTemplates().entrySet())
+		{
+			StatisticTemplate stat_template = entry.getValue();
+			text = String.format("  %s: %s\n", stat_template.GetName(), stat_template.GetDescription());
+			this._help.AddChunk(text, FG_COLOR);
+		}
+		
+		this._help.AddChunk("\nItems:\n", FG_COLOR);
+		this._help.AddChunk("  Items have a rarity according to the power of their effect:\n", FG_COLOR);
+		this._help.AddChunk("    Common", Color.WHITE);
+		this._help.AddChunk(", ", FG_COLOR);
+		this._help.AddChunk("Rare", Color.BLUE);
+		this._help.AddChunk(", ", FG_COLOR);
+		this._help.AddChunk("Epic", Color.MAGENTA);
+		this._help.AddChunk(", ", FG_COLOR);
+		this._help.AddChunk("Legendary\n", Color.YELLOW);
+		this._help.AddChunk("  You have multiple item categories, some you can equip and some you cannot.\n", FG_COLOR);
+		this._help.AddChunk("  Equipments:\n", FG_COLOR);
+		this._help.AddChunk("    Weapon: Boosts your attack\n", FG_COLOR);
+		this._help.AddChunk("    Armor: Boosts your defense\n", FG_COLOR);
+		this._help.AddChunk("    Helmet: Boosts your health\n", FG_COLOR);
+		this._help.AddChunk("    Relic: Boosts a secondary statistic\n", FG_COLOR);
+		this._help.AddChunk("  Consumables:\n", FG_COLOR);
+		this._help.AddChunk("    Healing: Heals by the amount\n", FG_COLOR);
+		this._help.AddChunk("    Essence: Permanantly boosts a statistic\n\n", FG_COLOR);
+
+		this._help.AddChunk("Classes:\n", FG_COLOR);
+		this._help.AddChunk("  Choose your class according to the gameplay you want to play.\n", FG_COLOR);
+		this._help.AddChunk("    Knight: Balanced\n", FG_COLOR);
+		this._help.AddChunk("    Guardian: Focussed on health and defense\n", FG_COLOR);
+		this._help.AddChunk("    Juggernaut: Focussed on health and attack\n", FG_COLOR);
+		this._help.AddChunk("    Assassin: Focussed on speed, evasion and crit chance\n", FG_COLOR);
+		this._help.AddChunk("    Berserker: Focussed on attack, crit chance and crit damage\n", FG_COLOR);
+		this._help.AddChunk("    Gambler: Focussed on luck, will level up luck and 2 random statistics when leveling up\n\n", FG_COLOR);
+
+		this._help.AddChunk("Press Enter to exit", FG_COLOR);
+
+		this._help.CalculateFontSize();
 	}
 
 	private void DisplayEquipmentItem(Item item, TextArea text_area)
@@ -293,15 +356,24 @@ public class MapSide extends PanelComponent
 		text_area.AddChunk(text, FG_COLOR);
 	}
 
+	public void DisplayHelp(boolean display) { this._display_help = display; }
+
 	@Override
 	public void Draw(Graphics g)
 	{
 		g.setColor(BG_COLOR);
 		g.fillRoundRect(this._top_left_x, this._top_left_y, this.GetWidth(), this.GetHeight(), BORDER_RADIUS, BORDER_RADIUS);
 
-		for (PanelComponent component : this._components)
+		if (!this._display_help)
 		{
-			component.Draw(g);	
+			for (PanelComponent component : this._components)
+			{
+				component.Draw(g);	
+			}
+		}
+		else
+		{
+			this._help.Draw(g);
 		}
 	}
 }

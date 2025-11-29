@@ -59,6 +59,92 @@ public class TextArea extends PanelComponent
 		return fm.getAscent() + fm.getDescent();
 	}
 
+	public void CalculateFontSize()
+	{
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = img.createGraphics();
+		g.dispose();
+
+		boolean is_set = false;
+
+		while (!is_set)
+		{
+			is_set = true;
+			FontMetrics fm = g.getFontMetrics(SwingView.LoadCustomFont(this._font_size));
+			int line_height = fm.getHeight();
+
+			int cursor_x = this._top_left_x;
+			int cursor_y = this._top_left_y + fm.getAscent();
+
+			for (Chunk chunk : this._chunks)
+			{
+				int chunk_cursor = 0;
+
+				while (chunk_cursor < chunk.text.length())
+				{
+					String current_text = chunk.text.substring(chunk_cursor);
+
+					if (current_text.charAt(0) == '\n')
+					{
+						chunk_cursor += 1;
+						cursor_y += line_height;
+						cursor_x = this._top_left_x;
+						continue;
+					}
+					if (current_text.charAt(0) == '\t')
+					{
+						String tab = GetTab();
+						if (cursor_x + fm.stringWidth(tab) > this._bottom_right_x)
+						{
+							cursor_y += line_height;
+							cursor_x = 0;
+						}
+						else
+							cursor_x += fm.stringWidth(tab);
+
+						chunk_cursor += 1;
+						continue;
+					}
+					if (current_text.charAt(0) == ' ')
+					{
+						if (cursor_x + fm.stringWidth(" ") > this._bottom_right_x)
+						{
+							cursor_y += line_height;
+							cursor_x = 0;
+						}
+						else
+							cursor_x += fm.stringWidth(" ");
+
+						chunk_cursor += 1;
+						continue;
+					}
+
+					String word = current_text.substring(0, GetSeparatorIndex(current_text));
+
+					if (cursor_x + fm.stringWidth(word) > this._bottom_right_x)
+					{
+						cursor_y += line_height;
+						cursor_x = this._top_left_x;
+					}
+
+					if (cursor_y + fm.getDescent() > this._bottom_right_y)
+					{
+						is_set = false;
+						this._font_size--;
+						System.out.println(this._font_size);
+						break;
+					}
+
+					cursor_x += fm.stringWidth(word);
+					chunk_cursor += word.length();
+				}
+
+				if (!is_set)
+					break;
+			}
+		}
+	}
+
 	@Override
 	public void Draw(Graphics g)
 	{

@@ -10,11 +10,9 @@ import java.util.EnumSet;
 import java.util.List;
 
 import swingy.Model.Hero;
-import swingy.Model.SaveFile;
 import swingy.View.Gui.SwingView;
 import swingy.View.Gui.Components.HeroClass;
 import swingy.View.Gui.Components.PanelComponent;
-import swingy.View.Gui.Components.SaveSlot;
 
 public class ChooseHeroClassPanel extends BasePanel
 {

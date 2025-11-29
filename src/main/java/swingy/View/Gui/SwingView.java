@@ -163,6 +163,7 @@ public class SwingView
 			this._frame.revalidate();
 			this._frame.setVisible(true);
 			this._frame.repaint();
+			this._panel.requestFocusInWindow();       // IMPORTANT
 		});
 
 		try {
@@ -202,6 +203,8 @@ public class SwingView
 			this._is_main_view_displayed = true;
 		});
 
+		MapPanel panel = (MapPanel)this._panel;
+
 		while (true) {
 			try {
 				this._latch.await();
@@ -211,6 +214,8 @@ public class SwingView
 					case KeyEvent.VK_S: return Action.MOVE_DOWN;
 					case KeyEvent.VK_A: return Action.MOVE_LEFT;
 					case KeyEvent.VK_D: return Action.MOVE_RIGHT;
+					case KeyEvent.VK_H: panel.DisplayHelp(true); break;
+					case KeyEvent.VK_ENTER: panel.DisplayHelp(false); break;
 
 					case KeyEvent.VK_ESCAPE:
 						System.exit(0);
@@ -253,6 +258,7 @@ public class SwingView
 			this._frame.revalidate();
 			this._frame.setVisible(true);
 			this._frame.repaint();
+			this._panel.requestFocusInWindow();       // IMPORTANT
 		});
 
 		try {
@@ -281,6 +287,7 @@ public class SwingView
 			this._frame.revalidate();
 			this._frame.setVisible(true);
 			this._frame.repaint();
+			this._panel.requestFocusInWindow();       // IMPORTANT
 		});
 
 		try {

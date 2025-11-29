@@ -109,7 +109,7 @@ public class ChooseSavePanel extends BasePanel
 				to_display = String.format("[ ] lvl. %d - %s", hero.GetLevel(), name);
 			}
 
-			AddComponent(new SaveSlot(i + 1, to_display, margin_left, cursor_y, width, height, font_size));
+			AddComponent(new SaveSlot(i, to_display, margin_left, cursor_y, width, height, font_size));
 			cursor_y += height + margin_top;
 		}
 	}
