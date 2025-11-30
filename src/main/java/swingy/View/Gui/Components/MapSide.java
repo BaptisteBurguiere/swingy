@@ -10,6 +10,7 @@ import swingy.Model.Hero;
 import swingy.Model.Item;
 import swingy.Model.Statistic;
 import swingy.Model.StatisticTemplate;
+import swingy.View.Gui.SwingView;
 
 public class MapSide extends PanelComponent
 {
@@ -248,13 +249,13 @@ public class MapSide extends PanelComponent
 		
 		this._help.AddChunk("\nItems:\n", FG_COLOR);
 		this._help.AddChunk("  Items have a rarity according to the power of their effect:\n", FG_COLOR);
-		this._help.AddChunk("    Common", Color.WHITE);
+		this._help.AddChunk("    Common", SwingView.COMMON_COLOR);
 		this._help.AddChunk(", ", FG_COLOR);
-		this._help.AddChunk("Rare", Color.BLUE);
+		this._help.AddChunk("Rare", SwingView.RARE_COLOR);
 		this._help.AddChunk(", ", FG_COLOR);
-		this._help.AddChunk("Epic", Color.MAGENTA);
+		this._help.AddChunk("Epic", SwingView.EPIC_COLOR);
 		this._help.AddChunk(", ", FG_COLOR);
-		this._help.AddChunk("Legendary\n", Color.YELLOW);
+		this._help.AddChunk("Legendary\n", SwingView.LEGENDARY_COLOR);
 		this._help.AddChunk("  You have multiple item categories, some you can equip and some you cannot.\n", FG_COLOR);
 		this._help.AddChunk("  Equipments:\n", FG_COLOR);
 		this._help.AddChunk("    Weapon: Boosts your attack\n", FG_COLOR);
@@ -285,16 +286,16 @@ public class MapSide extends PanelComponent
 		switch (item.GetRarity())
 		{
 			case COMMON:
-				color = Color.WHITE;
+				color = SwingView.COMMON_COLOR;
 				break;
 			case RARE:
-				color = Color.BLUE;
+				color = SwingView.RARE_COLOR;
 				break;
 			case EPIC:
-				color = Color.MAGENTA;
+				color = SwingView.EPIC_COLOR;
 				break;
 			case LEGENDARY:
-				color = Color.YELLOW;
+				color = SwingView.LEGENDARY_COLOR;
 				break;
 		}
 		

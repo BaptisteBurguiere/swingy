@@ -131,7 +131,6 @@ public class TextArea extends PanelComponent
 					{
 						is_set = false;
 						this._font_size--;
-						System.out.println(this._font_size);
 						break;
 					}
 

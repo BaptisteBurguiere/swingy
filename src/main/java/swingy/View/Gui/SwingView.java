@@ -1,5 +1,6 @@
 package swingy.View.Gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -37,6 +38,10 @@ public class SwingView
 	public static final String	FONT_PATH = "./assets/alagard.ttf";
 	public static final String	SPRITES_PATH = "./assets/sprites";
 	public static final int		TAB_SIZE = 4;
+	public static final Color	COMMON_COLOR = Color.WHITE;
+	public static final Color	RARE_COLOR = new Color(54, 152, 212);
+	public static final Color	EPIC_COLOR = new Color(173, 31, 191);
+	public static final Color	LEGENDARY_COLOR = new Color(246, 213, 51);
 
 	private static final Map<String, BufferedImage> _sprites = new HashMap<>();
 

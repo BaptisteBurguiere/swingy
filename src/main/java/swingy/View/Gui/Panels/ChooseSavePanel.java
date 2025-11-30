@@ -78,7 +78,7 @@ public class ChooseSavePanel extends BasePanel
 		});
 
 		Graphics g = this._background.createGraphics();
-        g.drawImage(SwingView.GetSprite("save_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
+        g.drawImage(SwingView.GetSprite("combat_battleground2"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
         g.dispose();
 
 		int nb_margin = SaveFile.NB_SAVES + 1;
