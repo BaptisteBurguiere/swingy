@@ -27,11 +27,13 @@ import swingy.View.Gui.Panels.BasePanel;
 import swingy.View.Gui.Panels.ChooseHeroClassPanel;
 import swingy.View.Gui.Panels.ChooseNamePanel;
 import swingy.View.Gui.Panels.ChooseSavePanel;
+import swingy.View.Gui.Panels.CombatPanel;
 import swingy.View.Gui.Panels.MapPanel;
 import swingy.View.View.Action;
 import swingy.Model.GameMap;
 import swingy.Model.Hero;
 import swingy.Model.SaveFile;
+import swingy.Model.Villain;
 
 public class SwingView
 {
@@ -303,5 +305,16 @@ public class SwingView
 
 		ChooseNamePanel panel = (ChooseNamePanel)this._panel;
 		return panel.GetName();
+	}
+
+	public void DisplayStartCombat(Hero hero, Villain villain)
+	{
+		this._panel = new CombatPanel(hero, villain);
+
+		this._frame.setContentPane(this._panel);
+		this._frame.revalidate();
+		this._frame.setVisible(true);
+		this._frame.repaint();
+		this._panel.requestFocusInWindow();       // IMPORTANT
 	}
 }

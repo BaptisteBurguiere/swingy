@@ -1,11 +1,14 @@
 package swingy;
 
+import swingy.Controller.Combat;
 import swingy.Controller.Game;
 import swingy.Controller.SaveManager;
+import swingy.Model.CombatResult;
 import swingy.Model.GameMap;
 import swingy.Model.GameMap.Direction;
 import swingy.Model.Hero;
 import swingy.Model.HeroFactory;
+import swingy.Model.Villain;
 import swingy.View.Console.ConsoleView;
 import swingy.View.Gui.SwingView;
 
@@ -18,53 +21,6 @@ public class Main {
 	
 			// game.ChooseSave();
 			// game.Start();
-
-			// SaveManager	save_manager = SaveManager.GetInstance();
-			// Hero hero = save_manager.GetSave(0);
-			// GameMap map = new GameMap(hero);
-			// SwingView view = new SwingView();
-			// while (true)
-			// {
-			// 	switch (view.DisplayMainView(map, hero))
-			// 	{
-			// 		// case DISPLAY_EQUIPMENT:
-			// 		// 	view.DisplayEquipment(hero);
-			// 		// 	break;
-	
-			// 		// case DISPLAY_STATISTICS:
-			// 		// 	view.DisplayHero(hero);
-			// 		// 	break;
-	
-			// 		case DISPLAY_HELP:
-			// 			break;
-					
-			// 		case MOVE_LEFT:
-			// 			map.MoveHero(Direction.LEFT);
-			// 			break;
-	
-			// 		case MOVE_RIGHT:
-			// 			map.MoveHero(Direction.RIGHT);
-			// 			break;
-	
-			// 		case MOVE_UP:
-			// 			map.MoveHero(Direction.UP);
-			// 			break;
-	
-			// 		case MOVE_DOWN:
-			// 			map.MoveHero(Direction.DOWN);
-			// 			break;
-	
-			// 		default:
-			// 			break;
-			// 	}
-			// }
-
-			// view.DisplayCreateHeroClass();
-
-			// System.out.println(view.DisplayCreateHeroName());
-
-			// int res = view.DisplayChooseSave(save_manager.GetSaveFile());
-			// System.out.println(String.format("%d", res));
 
 			SaveManager save_manager = SaveManager.GetInstance();
 			SwingView view = new SwingView();
@@ -95,19 +51,19 @@ public class Main {
 						break;
 					
 					case MOVE_LEFT:
-						map.MoveHero(Direction.LEFT);
+						MoveHero(view, hero, map, Direction.LEFT);
 						break;
 
 					case MOVE_RIGHT:
-						map.MoveHero(Direction.RIGHT);
+						MoveHero(view, hero, map, Direction.RIGHT);
 						break;
 
 					case MOVE_UP:
-						map.MoveHero(Direction.UP);
+						MoveHero(view, hero, map, Direction.UP);
 						break;
 
 					case MOVE_DOWN:
-						map.MoveHero(Direction.DOWN);
+						MoveHero(view, hero, map, Direction.DOWN);
 						break;
 
 					case QUIT:
@@ -126,4 +82,23 @@ public class Main {
 			System.err.println(e.getMessage());
 		}
     }
+
+	public static void MoveHero(SwingView view, Hero hero, GameMap map, Direction direction) throws Exception
+	{
+		switch (map.MoveHero(direction)) {
+			case FIGHT:
+				Villain villain = map.GetCurrentVillain();
+				StartCombat(view, hero, villain, false);
+				break;
+
+			default:
+				break;
+		}
+	}
+
+	public static void StartCombat(SwingView view, Hero hero, Villain villain, boolean is_boss) throws Exception
+	{
+		Combat combat = new Combat(hero, villain, is_boss);
+		view.DisplayStartCombat(hero, villain);
+	}
 }
