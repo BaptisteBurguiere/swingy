@@ -39,6 +39,8 @@ public class TextArea extends PanelComponent
 		this._chunks.add(new Chunk(text, color));
 	}
 
+	public void Clear() { this._chunks.clear(); }
+
 	public static int CalculateWidth(String str, int font_size)
 	{
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
