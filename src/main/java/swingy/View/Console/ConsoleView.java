@@ -574,7 +574,7 @@ public class ConsoleView extends View
 		}
 	}
 
-	public void DisplayStartCombat(Hero hero, Villain villain)
+	public void DisplayStartCombat(Hero hero, Villain villain, boolean is_boss)
 	{
 		Clear();
 		

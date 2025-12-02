@@ -39,7 +39,7 @@ public abstract class View
 	public abstract void DisplayEquipment(Hero hero);
 	public abstract Action DisplayMainView(GameMap map, Hero hero);
 	public abstract String GetUserInput();
-	public abstract void DisplayStartCombat(Hero hero, Villain villain);
+	public abstract void DisplayStartCombat(Hero hero, Villain villain, boolean is_boss);
 	public abstract Action DiplayEquipItem(Item item);
 	public abstract int DisplayChooseSave(SaveFile save_file);
 	public abstract Hero.Class DisplayCreateHeroClass();

@@ -168,7 +168,7 @@ public class Game
 	public void StartCombat(Villain villain, boolean is_boss) throws Exception
 	{
 		Combat combat = new Combat(this._hero, villain, is_boss);
-		this._view.DisplayStartCombat(this._hero, villain);
+		this._view.DisplayStartCombat(this._hero, villain, is_boss);
 		CombatResult result = combat.Start();
 
 		if (result.hero_win)

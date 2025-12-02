@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import swingy.View.Gui.Components.CombatTextArea;
 import swingy.View.Gui.Panels.BasePanel;
 import swingy.View.Gui.Panels.ChooseHeroClassPanel;
 import swingy.View.Gui.Panels.ChooseNamePanel;
@@ -30,9 +31,12 @@ import swingy.View.Gui.Panels.ChooseSavePanel;
 import swingy.View.Gui.Panels.CombatPanel;
 import swingy.View.Gui.Panels.MapPanel;
 import swingy.View.View.Action;
+import swingy.Model.CombatTurnResult;
+import swingy.Model.Entity;
 import swingy.Model.GameMap;
 import swingy.Model.Hero;
 import swingy.Model.SaveFile;
+import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
 
 public class SwingView
@@ -44,6 +48,9 @@ public class SwingView
 	public static final Color	RARE_COLOR = new Color(54, 152, 212);
 	public static final Color	EPIC_COLOR = new Color(173, 31, 191);
 	public static final Color	LEGENDARY_COLOR = new Color(246, 213, 51);
+	public static final Color	HERO_COLOR = new Color(0, 220, 240);
+	public static final Color	VILLAIN_COLOR = new Color(217, 41, 41);
+	public static final Color	CURRENT_TURN_COLOR = new Color(116, 192, 68);
 
 	private static final Map<String, BufferedImage> _sprites = new HashMap<>();
 
@@ -307,14 +314,175 @@ public class SwingView
 		return panel.GetName();
 	}
 
-	public void DisplayStartCombat(Hero hero, Villain villain)
+	public void DisplayStartCombat(Hero hero, Villain villain, boolean is_boss)
 	{
-		this._panel = new CombatPanel(hero, villain);
+		this._panel = new CombatPanel(hero, villain, is_boss);
 
 		this._frame.setContentPane(this._panel);
 		this._frame.revalidate();
 		this._frame.setVisible(true);
 		this._frame.repaint();
 		this._panel.requestFocusInWindow();       // IMPORTANT
+
+		GetUserInput();
+	}
+
+	public void DisplayCombatTurnResult(CombatTurnResult result, List<Entity> next_turns)
+	{
+		CombatPanel panel = (CombatPanel)this._panel;
+		
+		panel.ClearTextArea();
+		panel.ClearNextTurns();
+		
+		panel.NextTurnsAddChunk(result.attacker.GetName(), CURRENT_TURN_COLOR);
+		panel.NextTurnsAddChunk(" > ", CombatTextArea.FG_COLOR);
+		for (int i = 0; i < next_turns.size() - 1; i++)
+		{
+			Entity entity = next_turns.get(i);
+			panel.NextTurnsAddChunk(String.format("%s > ", entity.GetName()), CombatTextArea.FG_COLOR);
+		}
+		panel.NextTurnsAddChunk(String.format("%s", next_turns.get(next_turns.size() - 1).GetName()), CombatTextArea.FG_COLOR);
+
+		Color attacker_color = result.hero_turn ? HERO_COLOR : VILLAIN_COLOR;
+		Color defender_color = result.hero_turn ? VILLAIN_COLOR : HERO_COLOR;
+
+		if (result.defense_stance)
+		{
+			panel.TextAreaAddChunk(result.attacker.GetName(), attacker_color);
+			panel.TextAreaAddChunk(" adopts a defensive stance!", CombatTextArea.FG_COLOR);
+			this._frame.repaint();
+			return;
+		}
+
+		if (result.try_flee)
+		{
+			panel.TextAreaAddChunk(result.attacker.GetName(), attacker_color);
+			panel.TextAreaAddChunk(" tries to fly away!\n", CombatTextArea.FG_COLOR);
+
+			panel.TextAreaAddChunk(result.attacker.GetName(), attacker_color);
+			if (result.flee_successful)
+				panel.TextAreaAddChunk(" escaped successfully!", CombatTextArea.FG_COLOR);
+			else
+				panel.TextAreaAddChunk(" flew in spirit, but his legs disagreed.", CombatTextArea.FG_COLOR);
+
+			this._frame.repaint();
+			return;
+		}
+
+		panel.TextAreaAddChunk(result.attacker.GetName(), attacker_color);
+		panel.TextAreaAddChunk(" attacks ", CombatTextArea.FG_COLOR);
+		panel.TextAreaAddChunk(result.defender.GetName(), defender_color);
+		panel.TextAreaAddChunk("!\n", CombatTextArea.FG_COLOR);
+
+		if (result.parried)
+		{
+			panel.TextAreaAddChunk(result.defender.GetName(), defender_color);
+			panel.TextAreaAddChunk(" parries the attack!\n", CombatTextArea.FG_COLOR);
+		}
+
+		if (result.missed)
+		{
+			panel.TextAreaAddChunk("Missed!", CombatTextArea.FG_COLOR);
+			this._frame.repaint();
+			return;
+		}
+
+		if (result.critical)
+			panel.TextAreaAddChunk("Critical Hit!\n", CombatTextArea.FG_COLOR);
+		
+		panel.TextAreaAddChunk(String.format("%.0f damages dealt!", result.damage), CombatTextArea.FG_COLOR);
+		this._frame.repaint();
+	}
+
+	public Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns, boolean is_boss)
+	{
+		CombatPanel panel = (CombatPanel)this._panel;
+
+		panel.ClearTextArea();
+		panel.ClearNextTurns();
+		
+		panel.NextTurnsAddChunk(hero.GetName(), CURRENT_TURN_COLOR);
+		panel.NextTurnsAddChunk(" > ", CombatTextArea.FG_COLOR);
+		for (int i = 0; i < next_turns.size() - 1; i++)
+		{
+			Entity entity = next_turns.get(i);
+			panel.NextTurnsAddChunk(String.format("%s > ", entity.GetName()), CombatTextArea.FG_COLOR);
+		}
+		panel.NextTurnsAddChunk(String.format("%s", next_turns.get(next_turns.size() - 1).GetName()), CombatTextArea.FG_COLOR);
+
+		panel.TextAreaAddChunk("A: Attack\n", CombatTextArea.FG_COLOR);
+		panel.TextAreaAddChunk("D: Defend\n", CombatTextArea.FG_COLOR);
+		if (!is_boss)
+			panel.TextAreaAddChunk("F: Flee\n", CombatTextArea.FG_COLOR);
+
+		this._frame.repaint();
+
+
+		this._latch = new CountDownLatch(1);
+		final int[] key_code = { -1 };
+
+		this._panel.SetKeyListener(key -> {
+			key_code[0] = key;
+			this._latch.countDown();
+		});
+
+		while (true) {
+			try {
+				this._latch.await();
+
+				switch (key_code[0]) {
+					case KeyEvent.VK_A: return Action.ATTACK;
+					case KeyEvent.VK_D: return Action.DEFEND;
+					case KeyEvent.VK_F: return Action.FLEE;
+					case KeyEvent.VK_ENTER: this._frame.repaint(); break;
+				}
+
+				// Reset latch for next key
+				this._latch = new CountDownLatch(1);
+
+				this._panel.SetKeyListener(key -> {
+					key_code[0] = key;
+					this._latch.countDown();
+				});
+
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+
+	public String GetUserInput()
+	{
+		this._latch = new CountDownLatch(1);
+		final int[] key_code = { -1 };
+
+		this._panel.SetKeyListener(key -> {
+			key_code[0] = key;
+			this._latch.countDown();
+		});
+
+		while (true) {
+			try {
+				this._latch.await();
+
+				switch (key_code[0]) {
+					case KeyEvent.VK_A: break;
+					case KeyEvent.VK_D: break;
+					case KeyEvent.VK_F: break;
+					case KeyEvent.VK_ENTER: return "";
+				}
+
+				// Reset latch for next key
+				this._latch = new CountDownLatch(1);
+
+				this._panel.SetKeyListener(key -> {
+					key_code[0] = key;
+					this._latch.countDown();
+				});
+
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
 	}
 }

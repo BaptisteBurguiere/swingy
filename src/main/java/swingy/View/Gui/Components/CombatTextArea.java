@@ -47,6 +47,7 @@ public class CombatTextArea extends PanelComponent
         g.fillRoundRect(this._top_left_x, this._top_left_y, this.GetWidth(), this.GetHeight(), BORDER_RADIUS, BORDER_RADIUS);
 
         this._text_area.Draw(g);
+        this._next_turns.CalculateFontSize();
         this._next_turns.Draw(g);
     }
 }

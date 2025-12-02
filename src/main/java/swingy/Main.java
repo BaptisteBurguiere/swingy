@@ -99,6 +99,8 @@ public class Main {
 	public static void StartCombat(SwingView view, Hero hero, Villain villain, boolean is_boss) throws Exception
 	{
 		Combat combat = new Combat(hero, villain, is_boss);
-		view.DisplayStartCombat(hero, villain);
+		view.DisplayStartCombat(hero, villain, is_boss);
+		CombatResult result = combat.Start(view);
+		System.exit(0);
 	}
 }

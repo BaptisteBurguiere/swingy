@@ -9,6 +9,7 @@ import swingy.Model.Entity;
 import swingy.Model.Hero;
 import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
+import swingy.View.Gui.SwingView;
 
 public class Combat
 {
@@ -237,6 +238,45 @@ public class Combat
 		return result;
 	}
 
+	private CombatTurnResult HeroTurn(SwingView view) throws Exception
+	{
+		this._hero_defense_stance = false;
+		CombatTurnResult result = new CombatTurnResult(this._hero, this._villain);
+		result.hero_turn = true;
+
+		List<Entity> next_turns = SimulateNextTurns(SIMULATE_NEXT_TURNS);
+
+		switch (view.DisplayHeroCombatChoice(_hero, _villain, next_turns, _is_boss)) {
+			case FLEE:
+				result.try_flee = true;
+				if (IsFlee())
+					result.flee_successful = true;
+				break;
+
+			case ATTACK:
+				if (IsMissed(this._hero, this._villain))
+				{
+					result.missed = true;
+					return result;
+				}
+
+				double damage = CalculateDamage(this._hero, this._villain, result, false);
+				this._villain.TakeDamage(damage);
+				result.damage = damage;
+				break;
+
+			case DEFEND:
+				this._hero_defense_stance = true;
+				result.defense_stance = true;
+				break;
+		
+			default:
+				break;
+		}
+
+		return result;
+	}
+
 	private CombatTurnResult VillainTurn()
 	{
 		CombatTurnResult result = new CombatTurnResult(this._villain, this._hero);
@@ -297,6 +337,43 @@ public class Combat
 			}
 
 			game_controller.GetUserInput();
+		}
+
+		return result;
+	}
+
+	public CombatResult Start(SwingView view) throws Exception
+	{
+		CombatResult result = new CombatResult();
+
+		while (true)
+		{
+			CombatTurnResult turn_result;
+			if (IsHeroTurn())
+				turn_result = HeroTurn(view);
+			else
+				turn_result = VillainTurn();
+
+			List<Entity> next_turns = SimulateNextTurns(SIMULATE_NEXT_TURNS);
+			view.DisplayCombatTurnResult(turn_result, next_turns);
+
+			if (this._hero.GetCurrentHealth() <= 0)
+			{
+				result.hero_win = false;
+				break;
+			}
+			if (this._villain.GetCurrentHealth() <= 0)
+			{
+				result.hero_win = true;
+				break;
+			}
+			if (turn_result.flee_successful)
+			{
+				result.flee = true;
+				break;
+			}
+
+			view.GetUserInput();
 		}
 
 		return result;
