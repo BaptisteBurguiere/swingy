@@ -6,18 +6,24 @@ import java.awt.TextArea;
 import java.awt.event.KeyEvent;
 
 import swingy.Model.Hero;
+import swingy.Model.Item;
 import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
 import swingy.View.Gui.SwingView;
 import swingy.View.Gui.Components.CombatCard;
 import swingy.View.Gui.Components.CombatTextArea;
+import swingy.View.Gui.Components.EquipItem;
 import swingy.View.Gui.Components.PanelComponent;
+import swingy.View.Gui.Components.Sprite;
 
 public class CombatPanel extends BasePanel
 {
 	private Hero	_hero;
 	private Villain	_villain;
 	private CombatTextArea	_text_area;
+	private EquipItem	_equip_item;
+
+	private boolean _display_equip_item = false;
 
 	public CombatPanel(Hero hero, Villain villain, boolean is_boss)
 	{
@@ -29,6 +35,8 @@ public class CombatPanel extends BasePanel
 		BindKey(KeyEvent.VK_ENTER, "pass");
 		if (!is_boss)
 			BindKey(KeyEvent.VK_F, "flee");
+		BindKey(KeyEvent.VK_E, "equip");
+		BindKey(KeyEvent.VK_L, "leave");
 		
 		Graphics g = this._background.createGraphics();
 		g.drawImage(SwingView.GetSprite("combat_battleground"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
@@ -52,8 +60,8 @@ public class CombatPanel extends BasePanel
 		width = (int)((double)SwingView.GetHeight() * 0.6);
 		height = width;
 
-		g.drawImage(SwingView.GetSprite(String.format("combat_V_%s", this._villain.GetName())), component_x, component_y, width, height, null);
-		g.dispose();
+		Sprite villain_sprite = new Sprite(SwingView.GetSprite(String.format("combat_V_%s", this._villain.GetName())), component_x, component_y, width, height);
+		AddComponent(villain_sprite);
 
 		component_x -= (int)((double)SwingView.GetWidth() * 0.1);
 		width = (int)((double)SwingView.GetWidth() * 0.2);
@@ -71,6 +79,12 @@ public class CombatPanel extends BasePanel
 
 		String to_display = String.format("%s starts a fight against %s lvl. %d!", this._hero.GetName(), this._villain.GetName(), this._villain.GetLevel());
 		this._text_area.TextAreaAddChunk(to_display, CombatTextArea.FG_COLOR);
+
+		component_x = (int)((float)SwingView.GetWidth() * 0.2);
+		component_y = (int)((float)SwingView.GetHeight() * 0.2);
+		width = (int)((float)SwingView.GetWidth() * 0.6);
+		height = (int)((float)SwingView.GetHeight() * 0.6);
+		this._equip_item = new EquipItem(component_x, component_y, width, height, hero);
 	}
 
 	public void ClearTextArea() { this._text_area.ClearTextArea(); }
@@ -80,6 +94,12 @@ public class CombatPanel extends BasePanel
 	public void TextAreaAddChunk(String text, Color color) { this._text_area.TextAreaAddChunk(text, color); }
 
 	public void NextTurnsAddChunk(String text, Color color) { this._text_area.NextTurnsAddChunk(text, color); }
+
+	public void SetEquipItem(Item item)
+	{
+		this._display_equip_item = true;
+		this._equip_item.SetItem(item);
+	}
 
 	@Override
 	protected void paintComponent(Graphics g)
@@ -94,5 +114,8 @@ public class CombatPanel extends BasePanel
 		{
 			component.Draw(g);
 		}
+
+		if (this._display_equip_item)
+			_equip_item.Draw(g);
 	}
 }

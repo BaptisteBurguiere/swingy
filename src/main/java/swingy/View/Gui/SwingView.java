@@ -30,11 +30,13 @@ import swingy.View.Gui.Panels.ChooseNamePanel;
 import swingy.View.Gui.Panels.ChooseSavePanel;
 import swingy.View.Gui.Panels.CombatPanel;
 import swingy.View.Gui.Panels.MapPanel;
+import swingy.View.Gui.Panels.YouDiedPanel;
 import swingy.View.View.Action;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Entity;
 import swingy.Model.GameMap;
 import swingy.Model.Hero;
+import swingy.Model.Item;
 import swingy.Model.SaveFile;
 import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
@@ -80,8 +82,9 @@ public class SwingView
 		this._frame = new JFrame();
 		this._frame.setTitle("Swingy");
 
-		this._frame.pack();
-		this._frame.setVisible(true);
+		// this._frame.pack();
+		// this._frame.setVisible(true);
+		this._frame.addNotify();
 
 		// Get decoration size
 		Insets insets = this._frame.getInsets();
@@ -316,6 +319,8 @@ public class SwingView
 
 	public void DisplayStartCombat(Hero hero, Villain villain, boolean is_boss)
 	{
+		this._is_main_view_displayed = false;
+		
 		this._panel = new CombatPanel(hero, villain, is_boss);
 
 		this._frame.setContentPane(this._panel);
@@ -434,7 +439,7 @@ public class SwingView
 					case KeyEvent.VK_A: return Action.ATTACK;
 					case KeyEvent.VK_D: return Action.DEFEND;
 					case KeyEvent.VK_F: return Action.FLEE;
-					case KeyEvent.VK_ENTER: this._frame.repaint(); break;
+					default: this._frame.repaint(); break;
 				}
 
 				// Reset latch for next key
@@ -466,10 +471,8 @@ public class SwingView
 				this._latch.await();
 
 				switch (key_code[0]) {
-					case KeyEvent.VK_A: break;
-					case KeyEvent.VK_D: break;
-					case KeyEvent.VK_F: break;
 					case KeyEvent.VK_ENTER: return "";
+					default: break;
 				}
 
 				// Reset latch for next key
@@ -484,5 +487,98 @@ public class SwingView
 				Thread.currentThread().interrupt();
 			}
 		}
+	}
+
+	public void DisplayVillainDied(Entity entity)
+	{
+		CombatPanel panel = (CombatPanel)this._panel;
+
+		panel.ClearNextTurns();
+		panel.ClearTextArea();
+
+		panel.TextAreaAddChunk(String.format("Ennemy %s died!", entity.GetName()), CombatTextArea.FG_COLOR);
+
+		this._panel.repaint();
+	}
+
+	public void DisplayXpGained(int xp)
+	{
+		CombatPanel panel = (CombatPanel)this._panel;
+
+		panel.ClearNextTurns();
+		panel.ClearTextArea();
+
+		panel.TextAreaAddChunk(String.format("%d XP gained!", xp), CombatTextArea.FG_COLOR);
+
+		this._panel.repaint();
+	}
+
+	public void DisplayLevelUp(Hero hero)
+	{
+		CombatPanel panel = (CombatPanel)this._panel;
+
+		panel.ClearNextTurns();
+		panel.ClearTextArea();
+
+		panel.TextAreaAddChunk(String.format("%s levels up to level %d!", hero.GetName(), hero.GetLevel()), CombatTextArea.FG_COLOR);
+
+		this._panel.repaint();
+	}
+
+	public Action DiplayEquipItem(Item item)
+	{
+		CombatPanel panel = (CombatPanel)this._panel;
+
+		panel.SetEquipItem(item);
+
+		this._frame.repaint();
+
+
+		this._latch = new CountDownLatch(1);
+		final int[] key_code = { -1 };
+
+		this._panel.SetKeyListener(key -> {
+			key_code[0] = key;
+			this._latch.countDown();
+		});
+
+		while (true) {
+			try {
+				this._latch.await();
+
+				switch (key_code[0]) {
+					case KeyEvent.VK_E: return Action.EQUIP_ITEM;
+					case KeyEvent.VK_L: return Action.LEAVE_ITEM;
+					default: this._frame.repaint(); break;
+				}
+
+				// Reset latch for next key
+				this._latch = new CountDownLatch(1);
+
+				this._panel.SetKeyListener(key -> {
+					key_code[0] = key;
+					this._latch.countDown();
+				});
+
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+
+	public void DisplayChestSpawn()
+	{
+
+	}
+
+	public void DisplayYouDied()
+	{
+		this._panel = new YouDiedPanel();
+
+		this._frame.setContentPane(this._panel);
+		this._frame.revalidate();
+		this._frame.setVisible(true);
+		this._frame.repaint();
+		this._panel.requestFocusInWindow();       // IMPORTANT
 	}
 }

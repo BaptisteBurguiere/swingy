@@ -8,6 +8,8 @@ import swingy.Model.GameMap;
 import swingy.Model.GameMap.Direction;
 import swingy.Model.Hero;
 import swingy.Model.HeroFactory;
+import swingy.Model.Item;
+import swingy.Model.ItemFactory;
 import swingy.Model.Villain;
 import swingy.View.Console.ConsoleView;
 import swingy.View.Gui.SwingView;
@@ -51,19 +53,19 @@ public class Main {
 						break;
 					
 					case MOVE_LEFT:
-						MoveHero(view, hero, map, Direction.LEFT);
+						MoveHero(save_manager, view, hero, map, Direction.LEFT);
 						break;
 
 					case MOVE_RIGHT:
-						MoveHero(view, hero, map, Direction.RIGHT);
+						MoveHero(save_manager, view, hero, map, Direction.RIGHT);
 						break;
 
 					case MOVE_UP:
-						MoveHero(view, hero, map, Direction.UP);
+						MoveHero(save_manager, view, hero, map, Direction.UP);
 						break;
 
 					case MOVE_DOWN:
-						MoveHero(view, hero, map, Direction.DOWN);
+						MoveHero(save_manager, view, hero, map, Direction.DOWN);
 						break;
 
 					case QUIT:
@@ -83,12 +85,12 @@ public class Main {
 		}
     }
 
-	public static void MoveHero(SwingView view, Hero hero, GameMap map, Direction direction) throws Exception
+	public static void MoveHero(SaveManager save_manager, SwingView view, Hero hero, GameMap map, Direction direction) throws Exception
 	{
 		switch (map.MoveHero(direction)) {
 			case FIGHT:
 				Villain villain = map.GetCurrentVillain();
-				StartCombat(view, hero, villain, false);
+				StartCombat(save_manager, map, view, hero, villain, false);
 				break;
 
 			default:
@@ -96,11 +98,73 @@ public class Main {
 		}
 	}
 
-	public static void StartCombat(SwingView view, Hero hero, Villain villain, boolean is_boss) throws Exception
+	public static void StartCombat(SaveManager save_manager, GameMap map, SwingView view, Hero hero, Villain villain, boolean is_boss) throws Exception
 	{
 		Combat combat = new Combat(hero, villain, is_boss);
 		view.DisplayStartCombat(hero, villain, is_boss);
 		CombatResult result = combat.Start(view);
-		System.exit(0);
+
+		if (result.hero_win)
+		{
+			view.DisplayVillainDied(villain);
+			view.GetUserInput();
+
+			int xp_gained = Game.CalculateXpGained(villain, hero);
+			hero.GainExperience(xp_gained);
+			view.DisplayXpGained(xp_gained);
+			view.GetUserInput();
+			
+			if (hero.GetExperience() >= hero.GetExperienceNeeded())
+			{
+				hero.LevelUp();
+				view.DisplayLevelUp(hero);
+				view.GetUserInput();
+			}
+
+			Item drop = ItemFactory.GenerateItem(hero);
+			if (drop != null)
+			{
+				boolean is_equip = false;
+				while (!is_equip)
+				{
+					switch (view.DiplayEquipItem(drop))
+					{
+						case EQUIP_ITEM:
+							hero.EquipItem(drop);	
+							is_equip = true;					
+							break;
+						
+						case LEAVE_ITEM:
+							is_equip = true;
+							break;
+					
+						default:
+							break;
+					}
+				}
+			}
+
+			save_manager.Save();
+
+			if (map.IsRoomEmpty() && !is_boss)
+			{
+				map.SpawnChest();
+				view.DisplayChestSpawn();
+				view.GetUserInput();
+			}
+		}
+		else if (result.flee)
+		{
+			save_manager.Save();
+			map.GoToLastPosition();
+			view.GetUserInput();
+		}
+		else
+		{
+			save_manager.DeleteHero(hero);
+			view.DisplayYouDied();
+			view.GetUserInput();
+			System.exit(0);
+		}
 	}
 }

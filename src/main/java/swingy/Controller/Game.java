@@ -27,12 +27,12 @@ public class Game
 	private View		_view;
 	private SaveManager	_save_manager;
 
-	private final double XP_BASE = 4;
-	private final double XP_GROWTH = 0.6;
-	private final double XP_DIFF_SCALE = 10;
-	private final double XP_MIN_MULT = 0.2;
-	private final double XP_MAX_MULT = 2;
-	private final double XP_SPREAD = 0.1;
+	private static final double XP_BASE = 4;
+	private static final double XP_GROWTH = 0.6;
+	private static final double XP_DIFF_SCALE = 10;
+	private static final double XP_MIN_MULT = 0.2;
+	private static final double XP_MAX_MULT = 2;
+	private static final double XP_SPREAD = 0.1;
 
 	private Game() throws Exception
 	{
@@ -125,6 +125,23 @@ public class Game
 		double k = XP_BASE + XP_GROWTH * (double)villain.GetLevel();
 
 		double mult = 1. + ((double)villain.GetLevel() - (double)this._hero.GetLevel()) / XP_DIFF_SCALE;
+		mult = Math.max(XP_MIN_MULT, Math.min(XP_MAX_MULT, mult));
+
+		double villain_xp_needed = villain.GetExperienceNeeded();
+
+		double xp_gained = villain_xp_needed / k * mult * villain.GetExpMultiplier();
+
+		double spread_roll = Math.min(1., Math.random());
+		xp_gained *= 1. + (((XP_SPREAD * 2) * spread_roll) - XP_SPREAD);
+
+		return (int) xp_gained;
+	}
+
+	public static int CalculateXpGained(Villain villain, Hero hero)
+	{
+		double k = XP_BASE + XP_GROWTH * (double)villain.GetLevel();
+
+		double mult = 1. + ((double)villain.GetLevel() - (double)hero.GetLevel()) / XP_DIFF_SCALE;
 		mult = Math.max(XP_MIN_MULT, Math.min(XP_MAX_MULT, mult));
 
 		double villain_xp_needed = villain.GetExperienceNeeded();
