@@ -8,7 +8,7 @@ import swingy.Model.ItemFactory;
 import swingy.Model.Villain;
 import swingy.Model.Entity;
 import swingy.View.View;
-import swingy.View.Console.ConsoleView;
+import swingy.View.Gui.SwingView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class Game
 	private Game() throws Exception
 	{
 		this._save_manager = SaveManager.GetInstance();
-		this._view = new ConsoleView();
+		this._view = new SwingView();
 	}
 
 	public static Game GetInstance() throws Exception
@@ -115,9 +115,9 @@ public class Game
 		}
 	}
 
-	public void DisplayCombatTurnResult(CombatTurnResult result)
+	public void DisplayCombatTurnResult(CombatTurnResult result, List<Entity> next_turns)
 	{
-		this._view.DisplayCombatTurnResult(result);
+		this._view.DisplayCombatTurnResult(result, next_turns);
 	}
 
 	public int CalculateXpGained(Villain villain)
@@ -165,7 +165,10 @@ public class Game
 				}
 
 				if (this._is_running)
+				{
 					this._map = new GameMap(this._hero);
+					this._view.MapChanged();
+				}
 				break;
 
 			case FIGHT:

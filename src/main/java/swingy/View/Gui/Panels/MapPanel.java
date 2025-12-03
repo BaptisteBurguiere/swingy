@@ -3,11 +3,15 @@ package swingy.View.Gui.Panels;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Random;
 
 import swingy.Model.GameMap;
 import swingy.Model.Hero;
+import swingy.Model.Item;
 import swingy.View.Gui.SwingView;
+import swingy.View.Gui.Components.EquipChestLoot;
+import swingy.View.Gui.Components.EquipItem;
 import swingy.View.Gui.Components.MapSide;
 import swingy.View.Gui.Components.PanelComponent;
 import swingy.View.Gui.Components.TextArea;
@@ -19,7 +23,9 @@ public class MapPanel extends BasePanel
 	private GameMap	_map;
 
 	private MapSide _map_side;
-	private boolean _display_help;
+	private EquipChestLoot	_chest_loot;
+
+	private boolean	_display_chest_loot = false;
 
 	public MapPanel(GameMap map, Hero hero)
 	{
@@ -32,12 +38,14 @@ public class MapPanel extends BasePanel
 		BindKey(KeyEvent.VK_ESCAPE, "escape");
 		BindKey(KeyEvent.VK_H, "displayHelp");
 		BindKey(KeyEvent.VK_ENTER, "enter");
+		BindKey(KeyEvent.VK_1, "1");
+		BindKey(KeyEvent.VK_2, "2");
+		BindKey(KeyEvent.VK_3, "3");
 
 		Graphics g = this._background.createGraphics();
 		g.drawImage(SwingView.GetSprite("map_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);
 
 		this._map = map;
-		this._display_help = false;
 
 		int height = SwingView.GetHeight();
 		int width = SwingView.GetHeight();
@@ -98,7 +106,21 @@ public class MapPanel extends BasePanel
 		cursor_y = map_side_margin;
 
 		this._map_side = new MapSide(hero, cursor_x, cursor_y, SwingView.GetWidth() - cursor_x - map_side_margin, height - map_side_margin * 2);
+
+		cursor_x = (int)((float)SwingView.GetWidth() * 0.2);
+		cursor_y = (int)((float)SwingView.GetHeight() * 0.2);
+		width = (int)((float)SwingView.GetWidth() * 0.6);
+		height = (int)((float)SwingView.GetHeight() * 0.6);
+		this._chest_loot = new EquipChestLoot(cursor_x, cursor_y, width, height, hero);
 	}
+
+	public void SetChestLoot(List<Item> items)
+	{
+		this._display_chest_loot = true;
+		this._chest_loot.SetItems(items);
+	}
+
+	public void HideChest() { this._display_chest_loot = false; }
 
 	private static BufferedImage GetRandomFloor()
 	{
@@ -172,5 +194,8 @@ public class MapPanel extends BasePanel
 		}
 
 		this._map_side.Draw(g);
+
+		if (this._display_chest_loot)
+			this._chest_loot.Draw(g);
 	}
 }

@@ -23,6 +23,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import swingy.View.View;
 import swingy.View.Gui.Components.CombatTextArea;
 import swingy.View.Gui.Panels.BasePanel;
 import swingy.View.Gui.Panels.ChooseHeroClassPanel;
@@ -31,17 +32,15 @@ import swingy.View.Gui.Panels.ChooseSavePanel;
 import swingy.View.Gui.Panels.CombatPanel;
 import swingy.View.Gui.Panels.MapPanel;
 import swingy.View.Gui.Panels.YouDiedPanel;
-import swingy.View.View.Action;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Entity;
 import swingy.Model.GameMap;
 import swingy.Model.Hero;
 import swingy.Model.Item;
 import swingy.Model.SaveFile;
-import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
 
-public class SwingView
+public class SwingView extends View
 {
 	public static final String	FONT_PATH = "./assets/alagard.ttf";
 	public static final String	SPRITES_PATH = "./assets/sprites";
@@ -581,4 +580,54 @@ public class SwingView
 		this._frame.repaint();
 		this._panel.requestFocusInWindow();       // IMPORTANT
 	}
+
+	public int DisplayChooseChestContent(Hero hero, List<Item> chest_content)
+	{
+		MapPanel panel = (MapPanel)this._panel;
+
+		panel.SetChestLoot(chest_content);
+
+		this._frame.repaint();
+
+
+		this._latch = new CountDownLatch(1);
+		final int[] key_code = { -1 };
+
+		this._panel.SetKeyListener(key -> {
+			key_code[0] = key;
+			this._latch.countDown();
+		});
+
+		while (true) {
+			try {
+				this._latch.await();
+
+				switch (key_code[0]) {
+					case KeyEvent.VK_1: panel.HideChest(); return 0;
+					case KeyEvent.VK_2: panel.HideChest(); return 1;
+					case KeyEvent.VK_3: panel.HideChest(); return 2;
+					default: this._frame.repaint(); break;
+				}
+
+				// Reset latch for next key
+				this._latch = new CountDownLatch(1);
+
+				this._panel.SetKeyListener(key -> {
+					key_code[0] = key;
+					this._latch.countDown();
+				});
+
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
+
+	public void DisplayEquipment(Hero hero) {}
+
+	public void DisplayItem(Item item) {}
+
+	public void DisplayHero(Hero hero) {}
+
+	public void MapChanged() { this._is_main_view_displayed = false; }
 }

@@ -318,7 +318,8 @@ public class Combat
 			else
 				turn_result = VillainTurn();
 
-			game_controller.DisplayCombatTurnResult(turn_result);
+			List<Entity> next_turns = SimulateNextTurns(SIMULATE_NEXT_TURNS);
+			game_controller.DisplayCombatTurnResult(turn_result, next_turns);
 
 			if (this._hero.GetCurrentHealth() <= 0)
 			{

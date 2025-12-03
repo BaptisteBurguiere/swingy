@@ -72,7 +72,7 @@ public class CombatPanel extends BasePanel
 
 		component_x = 20;
 		component_y = 20;
-		width = (int)((double)SwingView.GetWidth() * 0.3);
+		width = (int)((double)SwingView.GetWidth() * 0.4);
 		height = (int)((double)SwingView.GetHeight() * 0.3);
 
 		this._text_area = new CombatTextArea(component_x, component_y, width, height);

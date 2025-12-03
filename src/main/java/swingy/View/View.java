@@ -31,7 +31,7 @@ public abstract class View
 
 	public abstract void DisplayHero(Hero hero);
 	public abstract void DisplayItem(Item item);
-	public abstract void DisplayCombatTurnResult(CombatTurnResult result);
+	public abstract void DisplayCombatTurnResult(CombatTurnResult result, List<Entity> next_turns);
 	public abstract void DisplayYouDied();
 	public abstract void DisplayVillainDied(Entity entity);
 	public abstract void DisplayLevelUp(Hero hero);
@@ -47,4 +47,5 @@ public abstract class View
 	public abstract Action DisplayHeroCombatChoice(Hero hero, Villain villain, List<Entity> next_turns, boolean is_boss);
 	public abstract int DisplayChooseChestContent(Hero hero, List<Item> chest_content);
 	public abstract void DisplayChestSpawn();
+	public abstract void MapChanged();
 }

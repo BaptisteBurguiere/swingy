@@ -256,7 +256,7 @@ public class ConsoleView extends View
 		System.out.println(to_display);
 	}
 
-	public void DisplayCombatTurnResult(CombatTurnResult result)
+	public void DisplayCombatTurnResult(CombatTurnResult result, List<Entity> next_turns)
 	{
 		Clear();
 
@@ -883,4 +883,6 @@ public class ConsoleView extends View
 
 		GetUserInput();
 	}
+
+	public void MapChanged() {}
 }

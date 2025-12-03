@@ -19,63 +19,10 @@ public class Main {
 	{
 		try
 		{
-			// Game game = Game.GetInstance();
+			Game game = Game.GetInstance();
 	
-			// game.ChooseSave();
-			// game.Start();
-
-			SaveManager save_manager = SaveManager.GetInstance();
-			SwingView view = new SwingView();
-
-			int save_slot = view.DisplayChooseSave(save_manager.GetSaveFile());
-
-			Hero hero = save_manager.GetSave(save_slot);
-
-			if (hero == null)
-			{
-				Hero.Class Class = view.DisplayCreateHeroClass();
-				String name = view.DisplayCreateHeroName();
-
-				hero = HeroFactory.NewHero(Class, name);
-				save_manager.SetSave(save_slot, hero);
-				save_manager.Save();
-			}
-
-			GameMap map = new GameMap(hero);
-
-			boolean is_running = true;
-
-			while (is_running)
-			{
-				switch (view.DisplayMainView(map, hero))
-				{
-					case DISPLAY_HELP:
-						break;
-					
-					case MOVE_LEFT:
-						MoveHero(save_manager, view, hero, map, Direction.LEFT);
-						break;
-
-					case MOVE_RIGHT:
-						MoveHero(save_manager, view, hero, map, Direction.RIGHT);
-						break;
-
-					case MOVE_UP:
-						MoveHero(save_manager, view, hero, map, Direction.UP);
-						break;
-
-					case MOVE_DOWN:
-						MoveHero(save_manager, view, hero, map, Direction.DOWN);
-						break;
-
-					case QUIT:
-						is_running = false;
-						break;
-
-					default:
-						break;
-				}
-			}
+			game.ChooseSave();
+			game.Start();
 
 			System.exit(0);
 		}
