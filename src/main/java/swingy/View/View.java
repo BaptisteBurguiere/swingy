@@ -26,7 +26,8 @@ public abstract class View
 		LEAVE_ITEM,
 		ATTACK,
 		DEFEND,
-		FLEE
+		FLEE,
+		SWITCH_VIEW
 	}
 
 	public abstract void DisplayHero(Hero hero);
@@ -40,7 +41,7 @@ public abstract class View
 	public abstract Action DisplayMainView(GameMap map, Hero hero);
 	public abstract String GetUserInput();
 	public abstract void DisplayStartCombat(Hero hero, Villain villain, boolean is_boss);
-	public abstract Action DiplayEquipItem(Item item);
+	public abstract Action DisplayEquipItem(Item item);
 	public abstract int DisplayChooseSave(SaveFile save_file);
 	public abstract Hero.Class DisplayCreateHeroClass();
 	public abstract String DisplayCreateHeroName();

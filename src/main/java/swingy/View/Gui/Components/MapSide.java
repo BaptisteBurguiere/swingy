@@ -218,6 +218,17 @@ public class MapSide extends PanelComponent
 
 		this._components.add(text_area);
 
+		text = "V: Switch view";
+		component_origin_y = this._bottom_right_y - padding - TextArea.CalculateHeight(font_size);
+		component_origin_x += component_width + padding * 2;
+		component_width = TextArea.CalculateWidth(text, font_size);
+		component_height = TextArea.CalculateHeight(font_size);
+
+		text_area = new TextArea(component_origin_x, component_origin_y, component_width, component_height, font_size);
+		text_area.AddChunk(text, FG_COLOR);
+
+		this._components.add(text_area);
+
 		component_origin_x = this._top_left_x + padding;
 		component_origin_y = this._top_left_y + padding;
 		component_width = this.GetWidth() - padding * 2;

@@ -344,6 +344,7 @@ public class ConsoleView extends View
 		System.out.println("  c: Display hero statistics");
 		System.out.println("  q: Quit");
 		System.out.println("  h: Display help");
+		System.out.println("  v: Switch view");
 	}
 
 	public void DiplayInputHelpEquipItem()
@@ -571,6 +572,9 @@ public class ConsoleView extends View
 			
 			if (input.equals("D"))
 				return Action.MOVE_RIGHT;
+
+			if (input.equals("V"))
+				return Action.SWITCH_VIEW;
 		}
 	}
 
@@ -582,7 +586,7 @@ public class ConsoleView extends View
 		System.out.println(to_display);
 	}
 
-	public Action DiplayEquipItem(Item item)
+	public Action DisplayEquipItem(Item item)
 	{
 		while (true)
 		{

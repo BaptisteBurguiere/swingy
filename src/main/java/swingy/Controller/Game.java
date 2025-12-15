@@ -8,6 +8,7 @@ import swingy.Model.ItemFactory;
 import swingy.Model.Villain;
 import swingy.Model.Entity;
 import swingy.View.View;
+import swingy.View.Console.ConsoleView;
 import swingy.View.Gui.SwingView;
 
 import java.util.ArrayList;
@@ -19,8 +20,15 @@ import swingy.Model.GameMap.Direction;
 
 public class Game
 {
+	public static enum ViewMode
+	{
+		CONSOLE,
+		SWING
+	}
+
 	private static Game	_instance = null;
 	private boolean		_is_running = false;
+	private ViewMode	_view_mode = ViewMode.SWING;
 
 	private GameMap		_map;
 	private Hero		_hero;
@@ -37,7 +45,7 @@ public class Game
 	private Game() throws Exception
 	{
 		this._save_manager = SaveManager.GetInstance();
-		this._view = new SwingView();
+		SetView();
 	}
 
 	public static Game GetInstance() throws Exception
@@ -46,6 +54,34 @@ public class Game
 			_instance = new Game();
 
 		return _instance;
+	}
+
+	public void SetView()
+	{
+		switch (this._view_mode)
+		{
+			case CONSOLE:
+				this._view = new ConsoleView();
+				break;
+
+			case SWING:
+				this._view = new SwingView();
+				break;
+		
+			default:
+				this._view = new SwingView();
+				break;
+		}
+	}
+
+	public void SwitchView()
+	{
+		if (this._view_mode == ViewMode.CONSOLE)
+			this._view_mode = ViewMode.SWING;
+		else
+			this._view_mode = ViewMode.CONSOLE;
+
+		SetView();
 	}
 
 	public void ChooseSave()
@@ -107,6 +143,10 @@ public class Game
 
 				case QUIT:
 					this._is_running = false;
+					break;
+
+				case SWITCH_VIEW:
+					this.SwitchView();
 					break;
 
 				default:
@@ -214,7 +254,7 @@ public class Game
 				boolean is_equip = false;
 				while (!is_equip)
 				{
-					switch (this._view.DiplayEquipItem(drop))
+					switch (this._view.DisplayEquipItem(drop))
 					{
 						case EQUIP_ITEM:
 							this._hero.EquipItem(drop);	

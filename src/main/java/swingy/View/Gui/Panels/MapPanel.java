@@ -41,6 +41,7 @@ public class MapPanel extends BasePanel
 		BindKey(KeyEvent.VK_1, "1");
 		BindKey(KeyEvent.VK_2, "2");
 		BindKey(KeyEvent.VK_3, "3");
+		BindKey(KeyEvent.VK_V, "switchView");
 
 		Graphics g = this._background.createGraphics();
 		g.drawImage(SwingView.GetSprite("map_background"), 0, 0, SwingView.GetWidth(), SwingView.GetHeight(), null);

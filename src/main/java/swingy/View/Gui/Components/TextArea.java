@@ -180,7 +180,7 @@ public class TextArea extends PanelComponent
 					if (cursor_x + fm.stringWidth(tab) > this._bottom_right_x)
 					{
 						cursor_y += line_height;
-						cursor_x = 0;
+						cursor_x = this._top_left_x;
 					}
 					else
 						cursor_x += fm.stringWidth(tab);
@@ -193,7 +193,7 @@ public class TextArea extends PanelComponent
 					if (cursor_x + fm.stringWidth(" ") > this._bottom_right_x)
 					{
 						cursor_y += line_height;
-						cursor_x = 0;
+						cursor_x = this._top_left_x;
 					}
 					else
 						cursor_x += fm.stringWidth(" ");

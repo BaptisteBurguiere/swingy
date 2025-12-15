@@ -232,6 +232,7 @@ public class SwingView extends View
 					case KeyEvent.VK_D: return Action.MOVE_RIGHT;
 					case KeyEvent.VK_H: panel.DisplayHelp(true); break;
 					case KeyEvent.VK_ENTER: panel.DisplayHelp(false); break;
+					case KeyEvent.VK_V: this._frame.dispose(); return Action.SWITCH_VIEW;
 
 					case KeyEvent.VK_ESCAPE:
 						System.exit(0);
@@ -524,7 +525,7 @@ public class SwingView extends View
 		this._panel.repaint();
 	}
 
-	public Action DiplayEquipItem(Item item)
+	public Action DisplayEquipItem(Item item)
 	{
 		CombatPanel panel = (CombatPanel)this._panel;
 
