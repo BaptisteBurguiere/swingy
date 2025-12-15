@@ -568,7 +568,11 @@ public class SwingView extends View
 
 	public void DisplayChestSpawn()
 	{
+		CombatPanel panel = (CombatPanel)this._panel;
 
+		panel.DisplayChestSpawn();
+
+		this._frame.repaint();
 	}
 
 	public void DisplayYouDied()

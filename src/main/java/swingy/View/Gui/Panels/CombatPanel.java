@@ -2,7 +2,6 @@ package swingy.View.Gui.Panels;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.TextArea;
 import java.awt.event.KeyEvent;
 
 import swingy.Model.Hero;
@@ -10,10 +9,12 @@ import swingy.Model.Item;
 import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
 import swingy.View.Gui.SwingView;
+import swingy.View.Gui.Components.ChestSpawn;
 import swingy.View.Gui.Components.CombatCard;
 import swingy.View.Gui.Components.CombatTextArea;
 import swingy.View.Gui.Components.EquipItem;
 import swingy.View.Gui.Components.PanelComponent;
+import swingy.View.Gui.Components.TextArea;
 import swingy.View.Gui.Components.Sprite;
 
 public class CombatPanel extends BasePanel
@@ -22,8 +23,10 @@ public class CombatPanel extends BasePanel
 	private Villain	_villain;
 	private CombatTextArea	_text_area;
 	private EquipItem	_equip_item;
+	private ChestSpawn	_chest_spawn;
 
 	private boolean _display_equip_item = false;
+	private boolean _display_chest_spawn = false;
 
 	public CombatPanel(Hero hero, Villain villain, boolean is_boss)
 	{
@@ -85,6 +88,12 @@ public class CombatPanel extends BasePanel
 		width = (int)((float)SwingView.GetWidth() * 0.6);
 		height = (int)((float)SwingView.GetHeight() * 0.6);
 		this._equip_item = new EquipItem(component_x, component_y, width, height, hero);
+
+		component_x = (int)((float)SwingView.GetWidth() * 0.25);
+		height = TextArea.CalculateHeight(ChestSpawn.FONT_SIZE) * 2 + 2 * ChestSpawn.PADDING + 5;
+		width = (int)((float)SwingView.GetWidth() * 0.5);
+		component_y = (SwingView.GetHeight() - height) / 2;
+		this._chest_spawn = new ChestSpawn(component_x, component_y, width, height);
 	}
 
 	public void ClearTextArea() { this._text_area.ClearTextArea(); }
@@ -99,6 +108,12 @@ public class CombatPanel extends BasePanel
 	{
 		this._display_equip_item = true;
 		this._equip_item.SetItem(item);
+	}
+
+	public void DisplayChestSpawn()
+	{
+		this._display_equip_item = false;
+		this._display_chest_spawn = true;
 	}
 
 	@Override
@@ -117,5 +132,8 @@ public class CombatPanel extends BasePanel
 
 		if (this._display_equip_item)
 			_equip_item.Draw(g);
+
+		if (this._display_chest_spawn)
+			_chest_spawn.Draw(g);
 	}
 }
