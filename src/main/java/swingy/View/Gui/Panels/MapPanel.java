@@ -11,10 +11,7 @@ import swingy.Model.Hero;
 import swingy.Model.Item;
 import swingy.View.Gui.SwingView;
 import swingy.View.Gui.Components.EquipChestLoot;
-import swingy.View.Gui.Components.EquipItem;
 import swingy.View.Gui.Components.MapSide;
-import swingy.View.Gui.Components.PanelComponent;
-import swingy.View.Gui.Components.TextArea;
 
 public class MapPanel extends BasePanel
 {

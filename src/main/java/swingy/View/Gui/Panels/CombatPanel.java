@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 
 import swingy.Model.Hero;
 import swingy.Model.Item;
-import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
 import swingy.View.Gui.SwingView;
 import swingy.View.Gui.Components.ChestSpawn;
