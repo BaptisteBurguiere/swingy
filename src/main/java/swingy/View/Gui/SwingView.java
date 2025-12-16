@@ -588,6 +588,7 @@ public class SwingView extends View
 
 	public int DisplayChooseChestContent(Hero hero, List<Item> chest_content)
 	{
+		this._is_main_view_displayed = false;
 		MapPanel panel = (MapPanel)this._panel;
 
 		panel.SetChestLoot(chest_content);
