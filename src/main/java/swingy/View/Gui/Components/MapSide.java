@@ -183,6 +183,7 @@ public class MapSide extends PanelComponent
 			text_area.AddChunk("\n", FG_COLOR);
 		text_area.AddChunk("\n", FG_COLOR);
 
+		text_area.CalculateFontSize();
 		this._components.add(text_area);
 
 		text = "W, A, S, D: Move";
