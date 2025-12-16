@@ -165,7 +165,7 @@ public class Hero extends Entity
 	
 				case GUARDIAN:
 					this._statistics.get(StatisticTemplate.Type.HEALTH).Increase(20);
-					this._statistics.get(StatisticTemplate.Type.DEFENSE).Increase(5);
+					this._statistics.get(StatisticTemplate.Type.DEFENSE).Increase(6);
 					this._statistics.get(StatisticTemplate.Type.ATTACK).Increase(1);
 					break;
 	
