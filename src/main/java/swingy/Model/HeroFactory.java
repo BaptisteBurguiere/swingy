@@ -48,7 +48,7 @@ public final class HeroFactory
 
 			case JUGGERNAUT:
 				health = 130;
-				attack = 14;
+				attack = 19;
 				defense = 9;
 				speed = 8;
 				evasion = 0.06;
