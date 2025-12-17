@@ -248,7 +248,7 @@ public class Game
 				this._view.GetUserInput();
 			}
 
-			Item drop = ItemFactory.GenerateItem(this._hero);
+			Item drop = ItemFactory.GenerateItem(this._hero, villain, is_boss);
 			if (drop != null)
 			{
 				boolean is_equip = false;

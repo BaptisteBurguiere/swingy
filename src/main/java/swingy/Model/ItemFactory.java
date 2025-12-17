@@ -12,7 +12,7 @@ public final class ItemFactory
 	private static final Random rand = new Random();
 
 	private static final double BASE_DROP_CHANCE = 0.25;
-	private static final int LEVEL_CHUNK = 10;
+	private static final int LEVEL_CHUNK = 5;
 	private static final double DROP_CHANCE_SHIFT = 0.05;
 	private static final double LUCK_DROP_CHANCE = 0.005;
 	private static final double BASE_RARE_DROP_CHANCE = 0.15;
@@ -22,36 +22,63 @@ public final class ItemFactory
 	private static final double EPIC_DROP_CHANCE_SHIFT = 0.01;
 	private static final double LEGENDARY_DROP_CHANCE_SHIFT = 0.005;
 	private static final double LUCK_RARITY_SHIFT = 0.0005;
+	private static final double BOSS_EPIC_RARITY_SHIFT = 0.10;
+	private static final double BOSS_LEGENDARY_RARITY_SHIFT = 0.05;
+	private static final double LEVEL_STAT_MULTIPLIER = 0.03;
 
-	public static Item GenerateItem(Hero hero)
+	public static Item GenerateItem(Hero hero, Villain villain, boolean is_boss)
 	{
+		int villain_level = villain.GetLevel();
 		double luck = hero.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
 		double drop_chance = BASE_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * DROP_CHANCE_SHIFT) + luck * LUCK_DROP_CHANCE;
 
-		if (rand.nextDouble() < drop_chance)
+		if (!is_boss && rand.nextDouble() < drop_chance)
 			return null;
 
 		double legendary_drop_chance = BASE_LEGENDARY_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * LEGENDARY_DROP_CHANCE_SHIFT) + luck * LUCK_RARITY_SHIFT;
 		double epic_drop_chance = BASE_EPIC_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * EPIC_DROP_CHANCE_SHIFT) + luck * LUCK_RARITY_SHIFT;
 		double rare_drop_chance = BASE_RARE_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * RARE_DROP_CHANCE_SHIFT) + luck * LUCK_RARITY_SHIFT;
 		
+		if (is_boss)
+		{
+			legendary_drop_chance += BOSS_LEGENDARY_RARITY_SHIFT;
+			epic_drop_chance += BOSS_EPIC_RARITY_SHIFT;
+		}
+
 		double rarity_roll = rand.nextDouble();
-		if (rarity_roll < legendary_drop_chance)
-			return GenerateLegendaryItem();
-		if (rarity_roll < legendary_drop_chance + epic_drop_chance)
-			return GenerateEpicItem();
-		if (rarity_roll < legendary_drop_chance + epic_drop_chance + rare_drop_chance)
-			return GenerateRareItem();
+		if (is_boss)
+		{
+			if (rarity_roll < legendary_drop_chance)
+				return GenerateLegendaryItem(villain_level);
+			if (rarity_roll < legendary_drop_chance + epic_drop_chance)
+				return GenerateEpicItem(villain_level);
+			else
+				return GenerateRareItem(villain_level);
+		}
 		else
-			return GenerateCommonItem();
+		{
+			if (rarity_roll < legendary_drop_chance)
+				return GenerateLegendaryItem(villain_level);
+			if (rarity_roll < legendary_drop_chance + epic_drop_chance)
+				return GenerateEpicItem(villain_level);
+			if (rarity_roll < legendary_drop_chance + epic_drop_chance + rare_drop_chance)
+				return GenerateRareItem(villain_level);
+			else
+				return GenerateCommonItem(villain_level);
+		}
 	}
 
-	private static final int COMMON_MIN_ATTACK = 5;
-	private static final int COMMON_MAX_ATTACK = 15;
-	private static final int COMMON_MIN_DEFENSE = 5;
-	private static final int COMMON_MAX_DEFENSE = 15;
-	private static final int COMMON_MIN_HEALTH = 15;
-	private static final int COMMON_MAX_HEALTH = 40;
+	private static double ScaleStat(double stat, int villain_level)
+	{
+		return stat + (double)villain_level * LEVEL_STAT_MULTIPLIER;
+	}
+
+	private static final double COMMON_MIN_ATTACK = 5;
+	private static final double COMMON_MAX_ATTACK = 15;
+	private static final double COMMON_MIN_DEFENSE = 5;
+	private static final double COMMON_MAX_DEFENSE = 15;
+	private static final double COMMON_MIN_HEALTH = 15;
+	private static final double COMMON_MAX_HEALTH = 40;
 
 	private static final List<Item> COMMON_TEMPLATES = List.of(
 		new Item(Item.Type.WEAPON, Item.Rarity.COMMON, "Rusty Sword", "A worn sword, barely sharp but better than bare fists"),
@@ -86,7 +113,7 @@ public final class ItemFactory
 		new Item(Item.Type.HELMET, Item.Rarity.COMMON, "Battle Helm", "Sturdy helm designed for prolonged battles")
 	);
 
-	private static Item GenerateCommonItem()
+	private static Item GenerateCommonItem(int villain_level)
 	{
 		int index = rand.nextInt(COMMON_TEMPLATES.size());
 		Item template = COMMON_TEMPLATES.get(index);
@@ -94,17 +121,17 @@ public final class ItemFactory
 
 		switch (template.GetType()) {
 			case WEAPON:
-				int attack = COMMON_MIN_ATTACK + rand.nextInt(COMMON_MAX_ATTACK - COMMON_MIN_ATTACK + 1);
+				double attack = ScaleStat(COMMON_MIN_ATTACK, villain_level) + rand.nextDouble(ScaleStat(COMMON_MAX_ATTACK, villain_level) - ScaleStat(COMMON_MIN_ATTACK, villain_level));
 				stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, attack));
 				break;
 
 			case ARMOR:
-				int defense = COMMON_MIN_DEFENSE + rand.nextInt(COMMON_MAX_DEFENSE - COMMON_MIN_DEFENSE + 1);
+				double defense = ScaleStat(COMMON_MIN_DEFENSE, villain_level) + rand.nextDouble(ScaleStat(COMMON_MAX_DEFENSE, villain_level) - ScaleStat(COMMON_MIN_DEFENSE, villain_level));
 				stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, defense));
 				break;
 
 			case HELMET:
-				int health = COMMON_MIN_HEALTH + rand.nextInt(COMMON_MAX_HEALTH - COMMON_MIN_HEALTH + 1);
+				double health = ScaleStat(COMMON_MIN_HEALTH, villain_level) + rand.nextDouble(ScaleStat(COMMON_MAX_HEALTH, villain_level) - ScaleStat(COMMON_MIN_HEALTH, villain_level));
 				stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, health));
 				break;
 		
@@ -117,14 +144,14 @@ public final class ItemFactory
 
 
 
-	private static final int RARE_MIN_ATTACK = 15;
-	private static final int RARE_MAX_ATTACK = 30;
-	private static final int RARE_MIN_DEFENSE = 15;
-	private static final int RARE_MAX_DEFENSE = 30;
-	private static final int RARE_MIN_HEALTH = 40;
-	private static final int RARE_MAX_HEALTH = 80;
-	private static final int RARE_MIN_SPEED = 3;
-	private static final int RARE_MAX_SPEED = 8;
+	private static final double RARE_MIN_ATTACK = 15;
+	private static final double RARE_MAX_ATTACK = 30;
+	private static final double RARE_MIN_DEFENSE = 15;
+	private static final double RARE_MAX_DEFENSE = 30;
+	private static final double RARE_MIN_HEALTH = 40;
+	private static final double RARE_MAX_HEALTH = 80;
+	private static final double RARE_MIN_SPEED = 3;
+	private static final double RARE_MAX_SPEED = 8;
 	private static final double RARE_MIN_EVASION = 0.05;
 	private static final double RARE_MAX_EVASION = 0.15;
 	private static final double RARE_MIN_ACCURACY = 0.05;
@@ -133,8 +160,8 @@ public final class ItemFactory
 	private static final double RARE_MAX_CRIT_CHANCE = 0.15;
 	private static final double RARE_MIN_CRIT_DAMAGE = 0.25;
 	private static final double RARE_MAX_CRIT_DAMAGE = 0.50;
-	private static final int RARE_MIN_LUCK = 3;
-	private static final int RARE_MAX_LUCK = 8;
+	private static final double RARE_MIN_LUCK = 3;
+	private static final double RARE_MAX_LUCK = 8;
 
 	private static final List<Item> RARE_TEMPLATES = List.of(
 		new Item(Item.Type.WEAPON, Item.Rarity.RARE, "Knightblade", "A finely forged sword, sharp and balanced"),
@@ -169,7 +196,7 @@ public final class ItemFactory
 		new Item(Item.Type.HELMET, Item.Rarity.RARE, "Lionheart Helm", "Sturdy helmet adorned with a lion motif, increases vitality and inspires courage")
 	);
 
-	private static Item GenerateRareRelic(Item template)
+	private static Item GenerateRareRelic(Item template, int villain_level)
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
@@ -179,27 +206,27 @@ public final class ItemFactory
 
 			switch (type) {
 				case SPEED:
-					value = RARE_MIN_SPEED + rand.nextInt(RARE_MAX_SPEED - RARE_MIN_SPEED + 1);
+					value = ScaleStat(RARE_MIN_SPEED, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_SPEED, villain_level) - ScaleStat(RARE_MIN_SPEED, villain_level));
 					break;
 
 				case EVASION:
-					value = RARE_MIN_EVASION + rand.nextDouble() * (RARE_MAX_EVASION - RARE_MIN_EVASION);
+					value = ScaleStat(RARE_MIN_EVASION, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_EVASION, villain_level) - ScaleStat(RARE_MIN_EVASION, villain_level));
 					break;
 
 				case ACCURACY:
-					value = RARE_MIN_ACCURACY + rand.nextDouble() * (RARE_MAX_ACCURACY - RARE_MIN_ACCURACY);
+					value = ScaleStat(RARE_MIN_ACCURACY, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_ACCURACY, villain_level) - ScaleStat(RARE_MIN_ACCURACY, villain_level));
 					break;
 
 				case CRIT_CHANCE:
-					value = RARE_MIN_CRIT_CHANCE + rand.nextDouble() * (RARE_MAX_CRIT_CHANCE - RARE_MIN_CRIT_CHANCE);
+					value = ScaleStat(RARE_MIN_CRIT_CHANCE, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_CRIT_CHANCE, villain_level) - ScaleStat(RARE_MIN_CRIT_CHANCE, villain_level));
 					break;
 
 				case CRIT_DAMAGE:
-					value = RARE_MIN_CRIT_DAMAGE + rand.nextDouble() * (RARE_MAX_CRIT_DAMAGE - RARE_MIN_CRIT_DAMAGE);
+					value = ScaleStat(RARE_MIN_CRIT_DAMAGE, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_CRIT_DAMAGE, villain_level) - ScaleStat(RARE_MIN_CRIT_DAMAGE, villain_level));
 					break;
 
 				case LUCK:
-					value = RARE_MIN_LUCK + rand.nextInt(RARE_MAX_LUCK - RARE_MIN_LUCK + 1);
+					value = ScaleStat(RARE_MIN_LUCK, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_LUCK, villain_level) - ScaleStat(RARE_MIN_LUCK, villain_level));
 					break;
 			
 				default:
@@ -212,7 +239,7 @@ public final class ItemFactory
 		return new Item(template.GetType(), template.GetRarity(), template.GetName(), template.GetDescription(), stats);
 	}
 
-	private static Item GenerateRareItem()
+	private static Item GenerateRareItem(int villain_level)
 	{
 		int index = rand.nextInt(RARE_TEMPLATES.size());
 		Item template = RARE_TEMPLATES.get(index);
@@ -220,22 +247,22 @@ public final class ItemFactory
 
 		switch (template.GetType()) {
 			case WEAPON:
-				int attack = RARE_MIN_ATTACK + rand.nextInt(RARE_MAX_ATTACK - RARE_MIN_ATTACK + 1);
+				double attack = ScaleStat(RARE_MIN_ATTACK, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_ATTACK, villain_level) - ScaleStat(RARE_MIN_ATTACK, villain_level));
 				stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, attack));
 				break;
 
 			case ARMOR:
-				int defense = RARE_MIN_DEFENSE + rand.nextInt(RARE_MAX_DEFENSE - RARE_MIN_DEFENSE + 1);
+				double defense = ScaleStat(RARE_MIN_DEFENSE, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_DEFENSE, villain_level) - ScaleStat(RARE_MIN_DEFENSE, villain_level));
 				stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, defense));
 				break;
 
 			case HELMET:
-				int health = RARE_MIN_HEALTH + rand.nextInt(RARE_MAX_HEALTH - RARE_MIN_HEALTH + 1);
+				double health = ScaleStat(RARE_MIN_HEALTH, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_HEALTH, villain_level) - ScaleStat(RARE_MIN_HEALTH, villain_level));
 				stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, health));
 				break;
 
 			case RELIC:
-				return GenerateRareRelic(template);
+				return GenerateRareRelic(template, villain_level);
 		
 			default:
 				break;
@@ -246,14 +273,14 @@ public final class ItemFactory
 
 
 
-	private static final int EPIC_MIN_ATTACK = 30;
-	private static final int EPIC_MAX_ATTACK = 50;
-	private static final int EPIC_MIN_DEFENSE = 30;
-	private static final int EPIC_MAX_DEFENSE = 50;
-	private static final int EPIC_MIN_HEALTH = 80;
-	private static final int EPIC_MAX_HEALTH = 120;
-	private static final int EPIC_MIN_SPEED = 8;
-	private static final int EPIC_MAX_SPEED = 15;
+	private static final double EPIC_MIN_ATTACK = 30;
+	private static final double EPIC_MAX_ATTACK = 50;
+	private static final double EPIC_MIN_DEFENSE = 30;
+	private static final double EPIC_MAX_DEFENSE = 50;
+	private static final double EPIC_MIN_HEALTH = 80;
+	private static final double EPIC_MAX_HEALTH = 120;
+	private static final double EPIC_MIN_SPEED = 8;
+	private static final double EPIC_MAX_SPEED = 15;
 	private static final double EPIC_MIN_EVASION = 0.15;
 	private static final double EPIC_MAX_EVASION = 0.25;
 	private static final double EPIC_MIN_ACCURACY = 0.15;
@@ -262,8 +289,8 @@ public final class ItemFactory
 	private static final double EPIC_MAX_CRIT_CHANCE = 0.25;
 	private static final double EPIC_MIN_CRIT_DAMAGE = 0.50;
 	private static final double EPIC_MAX_CRIT_DAMAGE = 0.80;
-	private static final int EPIC_MIN_LUCK = 8;
-	private static final int EPIC_MAX_LUCK = 15;
+	private static final double EPIC_MIN_LUCK = 8;
+	private static final double EPIC_MAX_LUCK = 15;
 
 	private static final List<Item> EPIC_TEMPLATES = List.of(
 		new Item(Item.Type.WEAPON, Item.Rarity.EPIC, "Flamebrand Sword", "Sword wreathed in flames, strikes with extra force on critical hits", Map.of(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0))),
@@ -296,7 +323,7 @@ public final class ItemFactory
 		new Item(Item.Type.RELIC, Item.Rarity.EPIC, "Trickster's Coin", "A two-faced coin blessed by a mischievous god, it bends fate and helps the bearer slip away unscathed", Map.of(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0), StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0)))
 	);
 
-	private static Item GenerateEpicItem()
+	private static Item GenerateEpicItem(int villain_level)
 	{
 		int index = rand.nextInt(EPIC_TEMPLATES.size());
 		Item template = EPIC_TEMPLATES.get(index);
@@ -304,16 +331,16 @@ public final class ItemFactory
 
 		switch (template.GetType()) {
 			case WEAPON:
-				return GenerateEpicWeapon(template);
+				return GenerateEpicWeapon(template, villain_level);
 
 			case ARMOR:
-				return GenerateEpicArmor(template);
+				return GenerateEpicArmor(template, villain_level);
 
 			case HELMET:
-				return GenerateEpicHelmet(template);
+				return GenerateEpicHelmet(template, villain_level);
 
 			case RELIC:
-				return GenerateEpicRelic(template);
+				return GenerateEpicRelic(template, villain_level);
 		
 			default:
 				break;
@@ -322,11 +349,11 @@ public final class ItemFactory
 		return new Item(template.GetType(), template.GetRarity(), template.GetName(), template.GetDescription(), stats);
 	}
 
-	private static Item GenerateEpicWeapon(Item template)
+	private static Item GenerateEpicWeapon(Item template, int villain_level)
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
-		int attack = EPIC_MIN_ATTACK + rand.nextInt(EPIC_MAX_ATTACK - EPIC_MIN_ATTACK + 1);
+		double attack = ScaleStat(EPIC_MIN_ATTACK, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_ATTACK, villain_level) - ScaleStat(EPIC_MIN_ATTACK, villain_level));
 		stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, attack));
 
 		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
@@ -336,35 +363,35 @@ public final class ItemFactory
 
 			switch (type) {
 				case HEALTH:
-					value = RARE_MIN_HEALTH + rand.nextInt(RARE_MAX_HEALTH - RARE_MIN_HEALTH + 1);
+					value = ScaleStat(RARE_MIN_HEALTH, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_HEALTH, villain_level) - ScaleStat(RARE_MIN_HEALTH, villain_level));
 					break;
 
 				case DEFENSE:
-					value = RARE_MIN_DEFENSE + rand.nextInt(RARE_MAX_DEFENSE - RARE_MIN_DEFENSE + 1);
+					value = ScaleStat(RARE_MIN_DEFENSE, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_DEFENSE, villain_level) - ScaleStat(RARE_MIN_DEFENSE, villain_level));
 					break;
 					
 				case SPEED:
-					value = RARE_MIN_SPEED + rand.nextInt(RARE_MAX_SPEED - RARE_MIN_SPEED + 1);
+					value = ScaleStat(RARE_MIN_SPEED, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_SPEED, villain_level) - ScaleStat(RARE_MIN_SPEED, villain_level));
 					break;
 
 				case EVASION:
-					value = RARE_MIN_EVASION + rand.nextDouble() * (RARE_MAX_EVASION - RARE_MIN_EVASION);
+					value = ScaleStat(RARE_MIN_EVASION, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_EVASION, villain_level) - ScaleStat(RARE_MIN_EVASION, villain_level));
 					break;
 
 				case ACCURACY:
-					value = RARE_MIN_ACCURACY + rand.nextDouble() * (RARE_MAX_ACCURACY - RARE_MIN_ACCURACY);
+					value = ScaleStat(RARE_MIN_ACCURACY, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_ACCURACY, villain_level) - ScaleStat(RARE_MIN_ACCURACY, villain_level));
 					break;
 
 				case CRIT_CHANCE:
-					value = RARE_MIN_CRIT_CHANCE + rand.nextDouble() * (RARE_MAX_CRIT_CHANCE - RARE_MIN_CRIT_CHANCE);
+					value = ScaleStat(RARE_MIN_CRIT_CHANCE, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_CRIT_CHANCE, villain_level) - ScaleStat(RARE_MIN_CRIT_CHANCE, villain_level));
 					break;
 
 				case CRIT_DAMAGE:
-					value = RARE_MIN_CRIT_DAMAGE + rand.nextDouble() * (RARE_MAX_CRIT_DAMAGE - RARE_MIN_CRIT_DAMAGE);
+					value = ScaleStat(RARE_MIN_CRIT_DAMAGE, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_CRIT_DAMAGE, villain_level) - ScaleStat(RARE_MIN_CRIT_DAMAGE, villain_level));
 					break;
 
 				case LUCK:
-					value = RARE_MIN_LUCK + rand.nextInt(RARE_MAX_LUCK - RARE_MIN_LUCK + 1);
+					value = ScaleStat(RARE_MIN_LUCK, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_LUCK, villain_level) - ScaleStat(RARE_MIN_LUCK, villain_level));
 					break;
 			
 				default:
@@ -377,11 +404,11 @@ public final class ItemFactory
 		return new Item(template.GetType(), template.GetRarity(), template.GetName(), template.GetDescription(), stats);
 	}
 
-	private static Item GenerateEpicArmor(Item template)
+	private static Item GenerateEpicArmor(Item template, int villain_level)
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
-		int defense = EPIC_MIN_DEFENSE + rand.nextInt(EPIC_MAX_DEFENSE - EPIC_MIN_DEFENSE + 1);
+		double defense = ScaleStat(EPIC_MIN_DEFENSE, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_DEFENSE, villain_level) - ScaleStat(EPIC_MIN_DEFENSE, villain_level));
 		stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, defense));
 
 		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
@@ -391,35 +418,35 @@ public final class ItemFactory
 
 			switch (type) {
 				case HEALTH:
-					value = RARE_MIN_HEALTH + rand.nextInt(RARE_MAX_HEALTH - RARE_MIN_HEALTH + 1);
+					value = ScaleStat(RARE_MIN_HEALTH, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_HEALTH, villain_level) - ScaleStat(RARE_MIN_HEALTH, villain_level));
 					break;
 
 				case ATTACK:
-					value = RARE_MIN_ATTACK + rand.nextInt(RARE_MAX_ATTACK - RARE_MIN_ATTACK + 1);
+					value = ScaleStat(RARE_MIN_ATTACK, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_ATTACK, villain_level) - ScaleStat(RARE_MIN_ATTACK, villain_level));
 					break;
 					
 				case SPEED:
-					value = RARE_MIN_SPEED + rand.nextInt(RARE_MAX_SPEED - RARE_MIN_SPEED + 1);
+					value = ScaleStat(RARE_MIN_SPEED, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_SPEED, villain_level) - ScaleStat(RARE_MIN_SPEED, villain_level));
 					break;
 
 				case EVASION:
-					value = RARE_MIN_EVASION + rand.nextDouble() * (RARE_MAX_EVASION - RARE_MIN_EVASION);
+					value = ScaleStat(RARE_MIN_EVASION, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_EVASION, villain_level) - ScaleStat(RARE_MIN_EVASION, villain_level));
 					break;
 
 				case ACCURACY:
-					value = RARE_MIN_ACCURACY + rand.nextDouble() * (RARE_MAX_ACCURACY - RARE_MIN_ACCURACY);
+					value = ScaleStat(RARE_MIN_ACCURACY, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_ACCURACY, villain_level) - ScaleStat(RARE_MIN_ACCURACY, villain_level));
 					break;
 
 				case CRIT_CHANCE:
-					value = RARE_MIN_CRIT_CHANCE + rand.nextDouble() * (RARE_MAX_CRIT_CHANCE - RARE_MIN_CRIT_CHANCE);
+					value = ScaleStat(RARE_MIN_CRIT_CHANCE, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_CRIT_CHANCE, villain_level) - ScaleStat(RARE_MIN_CRIT_CHANCE, villain_level));
 					break;
 
 				case CRIT_DAMAGE:
-					value = RARE_MIN_CRIT_DAMAGE + rand.nextDouble() * (RARE_MAX_CRIT_DAMAGE - RARE_MIN_CRIT_DAMAGE);
+					value = ScaleStat(RARE_MIN_CRIT_DAMAGE, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_CRIT_DAMAGE, villain_level) - ScaleStat(RARE_MIN_CRIT_DAMAGE, villain_level));
 					break;
 
 				case LUCK:
-					value = RARE_MIN_LUCK + rand.nextInt(RARE_MAX_LUCK - RARE_MIN_LUCK + 1);
+					value = ScaleStat(RARE_MIN_LUCK, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_LUCK, villain_level) - ScaleStat(RARE_MIN_LUCK, villain_level));
 					break;
 			
 				default:
@@ -432,11 +459,11 @@ public final class ItemFactory
 		return new Item(template.GetType(), template.GetRarity(), template.GetName(), template.GetDescription(), stats);
 	}
 
-	private static Item GenerateEpicHelmet(Item template)
+	private static Item GenerateEpicHelmet(Item template, int villain_level)
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
-		int health = EPIC_MIN_HEALTH + rand.nextInt(EPIC_MAX_HEALTH - EPIC_MIN_HEALTH + 1);
+		double health = ScaleStat(EPIC_MIN_HEALTH, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_HEALTH, villain_level) - ScaleStat(EPIC_MIN_HEALTH, villain_level));
 		stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, health));
 
 		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
@@ -446,35 +473,35 @@ public final class ItemFactory
 
 			switch (type) {
 				case ATTACK:
-					value = RARE_MIN_ATTACK + rand.nextInt(RARE_MAX_ATTACK - RARE_MIN_ATTACK + 1);
+					value = ScaleStat(RARE_MIN_ATTACK, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_ATTACK, villain_level) - ScaleStat(RARE_MIN_ATTACK, villain_level));
 					break;
-
+					
 				case DEFENSE:
-					value = RARE_MIN_DEFENSE + rand.nextInt(RARE_MAX_DEFENSE - RARE_MIN_DEFENSE + 1);
+					value = ScaleStat(RARE_MIN_DEFENSE, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_DEFENSE, villain_level) - ScaleStat(RARE_MIN_DEFENSE, villain_level));
 					break;
-
+						
 				case SPEED:
-					value = RARE_MIN_SPEED + rand.nextInt(RARE_MAX_SPEED - RARE_MIN_SPEED + 1);
+					value = ScaleStat(RARE_MIN_SPEED, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_SPEED, villain_level) - ScaleStat(RARE_MIN_SPEED, villain_level));
 					break;
 
 				case EVASION:
-					value = RARE_MIN_EVASION + rand.nextDouble() * (RARE_MAX_EVASION - RARE_MIN_EVASION);
+					value = ScaleStat(RARE_MIN_EVASION, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_EVASION, villain_level) - ScaleStat(RARE_MIN_EVASION, villain_level));
 					break;
 
 				case ACCURACY:
-					value = RARE_MIN_ACCURACY + rand.nextDouble() * (RARE_MAX_ACCURACY - RARE_MIN_ACCURACY);
+					value = ScaleStat(RARE_MIN_ACCURACY, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_ACCURACY, villain_level) - ScaleStat(RARE_MIN_ACCURACY, villain_level));
 					break;
 
 				case CRIT_CHANCE:
-					value = RARE_MIN_CRIT_CHANCE + rand.nextDouble() * (RARE_MAX_CRIT_CHANCE - RARE_MIN_CRIT_CHANCE);
+					value = ScaleStat(RARE_MIN_CRIT_CHANCE, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_CRIT_CHANCE, villain_level) - ScaleStat(RARE_MIN_CRIT_CHANCE, villain_level));
 					break;
 
 				case CRIT_DAMAGE:
-					value = RARE_MIN_CRIT_DAMAGE + rand.nextDouble() * (RARE_MAX_CRIT_DAMAGE - RARE_MIN_CRIT_DAMAGE);
+					value = ScaleStat(RARE_MIN_CRIT_DAMAGE, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_CRIT_DAMAGE, villain_level) - ScaleStat(RARE_MIN_CRIT_DAMAGE, villain_level));
 					break;
 
 				case LUCK:
-					value = RARE_MIN_LUCK + rand.nextInt(RARE_MAX_LUCK - RARE_MIN_LUCK + 1);
+					value = ScaleStat(RARE_MIN_LUCK, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_LUCK, villain_level) - ScaleStat(RARE_MIN_LUCK, villain_level));
 					break;
 			
 				default:
@@ -487,7 +514,7 @@ public final class ItemFactory
 		return new Item(template.GetType(), template.GetRarity(), template.GetName(), template.GetDescription(), stats);
 	}
 
-	private static Item GenerateEpicRelic(Item template)
+	private static Item GenerateEpicRelic(Item template, int villain_level)
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
@@ -498,39 +525,39 @@ public final class ItemFactory
 
 			switch (type) {
 				case HEALTH:
-					value = RARE_MIN_HEALTH + rand.nextInt(RARE_MAX_HEALTH - RARE_MIN_HEALTH + 1);
+					value = ScaleStat(RARE_MIN_HEALTH, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_HEALTH, villain_level) - ScaleStat(RARE_MIN_HEALTH, villain_level));
 					break;
 
 				case ATTACK:
-					value = RARE_MIN_ATTACK + rand.nextInt(RARE_MAX_ATTACK - RARE_MIN_ATTACK + 1);
+					value = ScaleStat(RARE_MIN_ATTACK, villain_level) + rand.nextDouble() * (ScaleStat(RARE_MAX_ATTACK, villain_level) - ScaleStat(RARE_MIN_ATTACK, villain_level));
 					break;
 
 				case DEFENSE:
-					value = RARE_MIN_DEFENSE + rand.nextInt(RARE_MAX_DEFENSE - RARE_MIN_DEFENSE + 1);
+					value = ScaleStat(RARE_MIN_DEFENSE, villain_level) + rand.nextDouble(ScaleStat(RARE_MAX_DEFENSE, villain_level) - ScaleStat(RARE_MIN_DEFENSE, villain_level));
 					break;
-
+					
 				case SPEED:
-					value = EPIC_MIN_SPEED + rand.nextInt(EPIC_MAX_SPEED - EPIC_MIN_SPEED + 1);
+					value = ScaleStat(EPIC_MIN_SPEED, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_SPEED, villain_level) - ScaleStat(EPIC_MIN_SPEED, villain_level));
 					break;
 
 				case EVASION:
-					value = EPIC_MIN_EVASION + rand.nextDouble() * (EPIC_MAX_EVASION - EPIC_MIN_EVASION);
+					value = ScaleStat(EPIC_MIN_EVASION, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_EVASION, villain_level) - ScaleStat(EPIC_MIN_EVASION, villain_level));
 					break;
 
 				case ACCURACY:
-					value = EPIC_MIN_ACCURACY + rand.nextDouble() * (EPIC_MAX_ACCURACY - EPIC_MIN_ACCURACY);
+					value = ScaleStat(EPIC_MIN_ACCURACY, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_ACCURACY, villain_level) - ScaleStat(EPIC_MIN_ACCURACY, villain_level));
 					break;
 
 				case CRIT_CHANCE:
-					value = EPIC_MIN_CRIT_CHANCE + rand.nextDouble() * (EPIC_MAX_CRIT_CHANCE - EPIC_MIN_CRIT_CHANCE);
+					value = ScaleStat(EPIC_MIN_CRIT_CHANCE, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_CRIT_CHANCE, villain_level) - ScaleStat(EPIC_MIN_CRIT_CHANCE, villain_level));
 					break;
 
 				case CRIT_DAMAGE:
-					value = EPIC_MIN_CRIT_DAMAGE + rand.nextDouble() * (EPIC_MAX_CRIT_DAMAGE - EPIC_MIN_CRIT_DAMAGE);
+					value = ScaleStat(EPIC_MIN_CRIT_DAMAGE, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_CRIT_DAMAGE, villain_level) - ScaleStat(EPIC_MIN_CRIT_DAMAGE, villain_level));
 					break;
 
 				case LUCK:
-					value = EPIC_MIN_LUCK + rand.nextInt(EPIC_MAX_LUCK - EPIC_MIN_LUCK + 1);
+					value = ScaleStat(EPIC_MIN_LUCK, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_LUCK, villain_level) - ScaleStat(EPIC_MIN_LUCK, villain_level));
 					break;
 			
 				default:
@@ -545,14 +572,14 @@ public final class ItemFactory
 
 
 
-	private static final int LEGENDARY_MIN_ATTACK = 70;
-	private static final int LEGENDARY_MAX_ATTACK = 100;
-	private static final int LEGENDARY_MIN_DEFENSE = 70;
-	private static final int LEGENDARY_MAX_DEFENSE = 100;
-	private static final int LEGENDARY_MIN_HEALTH = 200;
-	private static final int LEGENDARY_MAX_HEALTH = 350;
-	private static final int LEGENDARY_MIN_SPEED = 20;
-	private static final int LEGENDARY_MAX_SPEED = 40;
+	private static final double LEGENDARY_MIN_ATTACK = 70;
+	private static final double LEGENDARY_MAX_ATTACK = 100;
+	private static final double LEGENDARY_MIN_DEFENSE = 70;
+	private static final double LEGENDARY_MAX_DEFENSE = 100;
+	private static final double LEGENDARY_MIN_HEALTH = 200;
+	private static final double LEGENDARY_MAX_HEALTH = 350;
+	private static final double LEGENDARY_MIN_SPEED = 20;
+	private static final double LEGENDARY_MAX_SPEED = 40;
 	private static final double LEGENDARY_MIN_EVASION = 0.25;
 	private static final double LEGENDARY_MAX_EVASION = 0.35;
 	private static final double LEGENDARY_MIN_ACCURACY = 0.25;
@@ -561,8 +588,8 @@ public final class ItemFactory
 	private static final double LEGENDARY_MAX_CRIT_CHANCE = 0.35;
 	private static final double LEGENDARY_MIN_CRIT_DAMAGE = 1;
 	private static final double LEGENDARY_MAX_CRIT_DAMAGE = 1.5;
-	private static final int LEGENDARY_MIN_LUCK = 20;
-	private static final int LEGENDARY_MAX_LUCK = 40;
+	private static final double LEGENDARY_MIN_LUCK = 20;
+	private static final double LEGENDARY_MAX_LUCK = 40;
 
 	private static final List<Item> LEGENDARY_TEMPLATES = List.of(
 		new Item(Item.Type.WEAPON, Item.Rarity.LEGENDARY, "Sword of Eternal Valor", "A blade that never dulls, always striking with precision and valor", Map.of(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0), StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0))),
@@ -591,7 +618,7 @@ public final class ItemFactory
 		new Item(Item.Type.RELIC, Item.Rarity.LEGENDARY, "Coin of Infinite Chances", "The ultimate gambler's tool - bending fate until it breaks", Map.of(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0), StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0), StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0)))
 	);
 
-	private static Item GenerateLegendaryItem()
+	private static Item GenerateLegendaryItem(int villain_level)
 	{
 		int index = rand.nextInt(LEGENDARY_TEMPLATES.size());
 		Item template = LEGENDARY_TEMPLATES.get(index);
@@ -599,16 +626,16 @@ public final class ItemFactory
 
 		switch (template.GetType()) {
 			case WEAPON:
-				return GenerateLegendaryWeapon(template);
+				return GenerateLegendaryWeapon(template, villain_level);
 
 			case ARMOR:
-				return GenerateLegendaryArmor(template);
+				return GenerateLegendaryArmor(template, villain_level);
 
 			case HELMET:
-				return GenerateLegendaryHelmet(template);
+				return GenerateLegendaryHelmet(template, villain_level);
 
 			case RELIC:
-				return GenerateLegendaryRelic(template);
+				return GenerateLegendaryRelic(template, villain_level);
 		
 			default:
 				break;
@@ -617,11 +644,11 @@ public final class ItemFactory
 		return new Item(template.GetType(), template.GetRarity(), template.GetName(), template.GetDescription(), stats);
 	}
 
-	private static Item GenerateLegendaryWeapon(Item template)
+	private static Item GenerateLegendaryWeapon(Item template, int villain_level)
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
-		int attack = LEGENDARY_MIN_ATTACK + rand.nextInt(LEGENDARY_MAX_ATTACK - LEGENDARY_MIN_ATTACK + 1);
+		double attack = ScaleStat(LEGENDARY_MIN_ATTACK, villain_level) + rand.nextDouble(ScaleStat(LEGENDARY_MAX_ATTACK, villain_level) - ScaleStat(LEGENDARY_MIN_ATTACK, villain_level));
 		stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, attack));
 
 		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
@@ -631,35 +658,35 @@ public final class ItemFactory
 
 			switch (type) {
 				case HEALTH:
-					value = EPIC_MIN_HEALTH + rand.nextInt(EPIC_MAX_HEALTH - EPIC_MIN_HEALTH + 1);
+					value = ScaleStat(EPIC_MIN_HEALTH, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_HEALTH, villain_level) - ScaleStat(EPIC_MIN_HEALTH, villain_level));
 					break;
 
 				case DEFENSE:
-					value = EPIC_MIN_DEFENSE + rand.nextInt(EPIC_MAX_DEFENSE - EPIC_MIN_DEFENSE + 1);
+					value = ScaleStat(EPIC_MIN_DEFENSE, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_DEFENSE, villain_level) - ScaleStat(EPIC_MIN_DEFENSE, villain_level));
 					break;
-
+					
 				case SPEED:
-					value = EPIC_MIN_SPEED + rand.nextInt(EPIC_MAX_SPEED - EPIC_MIN_SPEED + 1);
+					value = ScaleStat(EPIC_MIN_SPEED, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_SPEED, villain_level) - ScaleStat(EPIC_MIN_SPEED, villain_level));
 					break;
 
 				case EVASION:
-					value = EPIC_MIN_EVASION + rand.nextDouble() * (EPIC_MAX_EVASION - EPIC_MIN_EVASION);
+					value = ScaleStat(EPIC_MIN_EVASION, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_EVASION, villain_level) - ScaleStat(EPIC_MIN_EVASION, villain_level));
 					break;
 
 				case ACCURACY:
-					value = EPIC_MIN_ACCURACY + rand.nextDouble() * (EPIC_MAX_ACCURACY - EPIC_MIN_ACCURACY);
+					value = ScaleStat(EPIC_MIN_ACCURACY, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_ACCURACY, villain_level) - ScaleStat(EPIC_MIN_ACCURACY, villain_level));
 					break;
 
 				case CRIT_CHANCE:
-					value = EPIC_MIN_CRIT_CHANCE + rand.nextDouble() * (EPIC_MAX_CRIT_CHANCE - EPIC_MIN_CRIT_CHANCE);
+					value = ScaleStat(EPIC_MIN_CRIT_CHANCE, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_CRIT_CHANCE, villain_level) - ScaleStat(EPIC_MIN_CRIT_CHANCE, villain_level));
 					break;
 
 				case CRIT_DAMAGE:
-					value = EPIC_MIN_CRIT_DAMAGE + rand.nextDouble() * (EPIC_MAX_CRIT_DAMAGE - EPIC_MIN_CRIT_DAMAGE);
+					value = ScaleStat(EPIC_MIN_CRIT_DAMAGE, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_CRIT_DAMAGE, villain_level) - ScaleStat(EPIC_MIN_CRIT_DAMAGE, villain_level));
 					break;
 
 				case LUCK:
-					value = EPIC_MIN_LUCK + rand.nextInt(EPIC_MAX_LUCK - EPIC_MIN_LUCK + 1);
+					value = ScaleStat(EPIC_MIN_LUCK, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_LUCK, villain_level) - ScaleStat(EPIC_MIN_LUCK, villain_level));
 					break;
 			
 				default:
@@ -672,11 +699,11 @@ public final class ItemFactory
 		return new Item(template.GetType(), template.GetRarity(), template.GetName(), template.GetDescription(), stats);
 	}
 
-	private static Item GenerateLegendaryArmor(Item template)
+	private static Item GenerateLegendaryArmor(Item template, int villain_level)
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
-		int defense = LEGENDARY_MIN_DEFENSE + rand.nextInt(LEGENDARY_MAX_DEFENSE - LEGENDARY_MIN_DEFENSE + 1);
+		double defense = ScaleStat(LEGENDARY_MIN_DEFENSE, villain_level) + rand.nextDouble(ScaleStat(LEGENDARY_MAX_DEFENSE, villain_level) - ScaleStat(LEGENDARY_MIN_DEFENSE, villain_level));
 		stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, defense));
 
 		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
@@ -686,35 +713,35 @@ public final class ItemFactory
 
 			switch (type) {
 				case HEALTH:
-					value = EPIC_MIN_HEALTH + rand.nextInt(EPIC_MAX_HEALTH - EPIC_MIN_HEALTH + 1);
+					value = ScaleStat(EPIC_MIN_HEALTH, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_HEALTH, villain_level) - ScaleStat(EPIC_MIN_HEALTH, villain_level));
 					break;
 
 				case ATTACK:
-					value = EPIC_MIN_ATTACK + rand.nextInt(EPIC_MAX_ATTACK - EPIC_MIN_ATTACK + 1);
+					value = ScaleStat(EPIC_MIN_ATTACK, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_ATTACK, villain_level) - ScaleStat(EPIC_MIN_ATTACK, villain_level));
 					break;
-
+					
 				case SPEED:
-					value = EPIC_MIN_SPEED + rand.nextInt(EPIC_MAX_SPEED - EPIC_MIN_SPEED + 1);
+					value = ScaleStat(EPIC_MIN_SPEED, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_SPEED, villain_level) - ScaleStat(EPIC_MIN_SPEED, villain_level));
 					break;
 
 				case EVASION:
-					value = EPIC_MIN_EVASION + rand.nextDouble() * (EPIC_MAX_EVASION - EPIC_MIN_EVASION);
+					value = ScaleStat(EPIC_MIN_EVASION, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_EVASION, villain_level) - ScaleStat(EPIC_MIN_EVASION, villain_level));
 					break;
 
 				case ACCURACY:
-					value = EPIC_MIN_ACCURACY + rand.nextDouble() * (EPIC_MAX_ACCURACY - EPIC_MIN_ACCURACY);
+					value = ScaleStat(EPIC_MIN_ACCURACY, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_ACCURACY, villain_level) - ScaleStat(EPIC_MIN_ACCURACY, villain_level));
 					break;
 
 				case CRIT_CHANCE:
-					value = EPIC_MIN_CRIT_CHANCE + rand.nextDouble() * (EPIC_MAX_CRIT_CHANCE - EPIC_MIN_CRIT_CHANCE);
+					value = ScaleStat(EPIC_MIN_CRIT_CHANCE, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_CRIT_CHANCE, villain_level) - ScaleStat(EPIC_MIN_CRIT_CHANCE, villain_level));
 					break;
 
 				case CRIT_DAMAGE:
-					value = EPIC_MIN_CRIT_DAMAGE + rand.nextDouble() * (EPIC_MAX_CRIT_DAMAGE - EPIC_MIN_CRIT_DAMAGE);
+					value = ScaleStat(EPIC_MIN_CRIT_DAMAGE, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_CRIT_DAMAGE, villain_level) - ScaleStat(EPIC_MIN_CRIT_DAMAGE, villain_level));
 					break;
 
 				case LUCK:
-					value = EPIC_MIN_LUCK + rand.nextInt(EPIC_MAX_LUCK - EPIC_MIN_LUCK + 1);
+					value = ScaleStat(EPIC_MIN_LUCK, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_LUCK, villain_level) - ScaleStat(EPIC_MIN_LUCK, villain_level));
 					break;
 			
 				default:
@@ -727,11 +754,11 @@ public final class ItemFactory
 		return new Item(template.GetType(), template.GetRarity(), template.GetName(), template.GetDescription(), stats);
 	}
 
-	private static Item GenerateLegendaryHelmet(Item template)
+	private static Item GenerateLegendaryHelmet(Item template, int villain_level)
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
-		int health = LEGENDARY_MIN_HEALTH + rand.nextInt(LEGENDARY_MAX_HEALTH - LEGENDARY_MIN_HEALTH + 1);
+		double health = ScaleStat(LEGENDARY_MIN_HEALTH, villain_level) + rand.nextDouble(ScaleStat(LEGENDARY_MAX_HEALTH, villain_level) - ScaleStat(LEGENDARY_MIN_HEALTH, villain_level));
 		stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, health));
 
 		for (Map.Entry<StatisticTemplate.Type, Statistic> entry : template.GetStatistics().entrySet())
@@ -741,35 +768,35 @@ public final class ItemFactory
 
 			switch (type) {
 				case ATTACK:
-					value = EPIC_MIN_ATTACK + rand.nextInt(EPIC_MAX_ATTACK - EPIC_MIN_ATTACK + 1);
+					value = ScaleStat(EPIC_MIN_ATTACK, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_ATTACK, villain_level) - ScaleStat(EPIC_MIN_ATTACK, villain_level));
 					break;
-
+					
 				case DEFENSE:
-					value = EPIC_MIN_DEFENSE + rand.nextInt(EPIC_MAX_DEFENSE - EPIC_MIN_DEFENSE + 1);
+					value = ScaleStat(EPIC_MIN_DEFENSE, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_DEFENSE, villain_level) - ScaleStat(EPIC_MIN_DEFENSE, villain_level));
 					break;
 
 				case SPEED:
-					value = EPIC_MIN_SPEED + rand.nextInt(EPIC_MAX_SPEED - EPIC_MIN_SPEED + 1);
+					value = ScaleStat(EPIC_MIN_SPEED, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_SPEED, villain_level) - ScaleStat(EPIC_MIN_SPEED, villain_level));
 					break;
 
 				case EVASION:
-					value = EPIC_MIN_EVASION + rand.nextDouble() * (EPIC_MAX_EVASION - EPIC_MIN_EVASION);
+					value = ScaleStat(EPIC_MIN_EVASION, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_EVASION, villain_level) - ScaleStat(EPIC_MIN_EVASION, villain_level));
 					break;
 
 				case ACCURACY:
-					value = EPIC_MIN_ACCURACY + rand.nextDouble() * (EPIC_MAX_ACCURACY - EPIC_MIN_ACCURACY);
+					value = ScaleStat(EPIC_MIN_ACCURACY, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_ACCURACY, villain_level) - ScaleStat(EPIC_MIN_ACCURACY, villain_level));
 					break;
 
 				case CRIT_CHANCE:
-					value = EPIC_MIN_CRIT_CHANCE + rand.nextDouble() * (EPIC_MAX_CRIT_CHANCE - EPIC_MIN_CRIT_CHANCE);
+					value = ScaleStat(EPIC_MIN_CRIT_CHANCE, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_CRIT_CHANCE, villain_level) - ScaleStat(EPIC_MIN_CRIT_CHANCE, villain_level));
 					break;
 
 				case CRIT_DAMAGE:
-					value = EPIC_MIN_CRIT_DAMAGE + rand.nextDouble() * (EPIC_MAX_CRIT_DAMAGE - EPIC_MIN_CRIT_DAMAGE);
+					value = ScaleStat(EPIC_MIN_CRIT_DAMAGE, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_CRIT_DAMAGE, villain_level) - ScaleStat(EPIC_MIN_CRIT_DAMAGE, villain_level));
 					break;
 
 				case LUCK:
-					value = EPIC_MIN_LUCK + rand.nextInt(EPIC_MAX_LUCK - EPIC_MIN_LUCK + 1);
+					value = ScaleStat(EPIC_MIN_LUCK, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_LUCK, villain_level) - ScaleStat(EPIC_MIN_LUCK, villain_level));
 					break;
 			
 				default:
@@ -782,7 +809,7 @@ public final class ItemFactory
 		return new Item(template.GetType(), template.GetRarity(), template.GetName(), template.GetDescription(), stats);
 	}
 
-	private static Item GenerateLegendaryRelic(Item template)
+	private static Item GenerateLegendaryRelic(Item template, int villain_level)
 	{
 		Map<StatisticTemplate.Type, Statistic> stats = new EnumMap<>(StatisticTemplate.Type.class);
 
@@ -793,39 +820,39 @@ public final class ItemFactory
 
 			switch (type) {
 				case HEALTH:
-					value = EPIC_MIN_HEALTH + rand.nextInt(EPIC_MAX_HEALTH - EPIC_MIN_HEALTH + 1);
+					value = ScaleStat(EPIC_MIN_HEALTH, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_HEALTH, villain_level) - ScaleStat(EPIC_MIN_HEALTH, villain_level));
 					break;
 
 				case ATTACK:
-					value = EPIC_MIN_ATTACK + rand.nextInt(EPIC_MAX_ATTACK - EPIC_MIN_ATTACK + 1);
+					value = ScaleStat(EPIC_MIN_ATTACK, villain_level) + rand.nextDouble() * (ScaleStat(EPIC_MAX_ATTACK, villain_level) - ScaleStat(EPIC_MIN_ATTACK, villain_level));
 					break;
-
+					
 				case DEFENSE:
-					value = EPIC_MIN_DEFENSE + rand.nextInt(EPIC_MAX_DEFENSE - EPIC_MIN_DEFENSE + 1);
+					value = ScaleStat(EPIC_MIN_DEFENSE, villain_level) + rand.nextDouble(ScaleStat(EPIC_MAX_DEFENSE, villain_level) - ScaleStat(EPIC_MIN_DEFENSE, villain_level));
 					break;
 
 				case SPEED:
-					value = LEGENDARY_MIN_SPEED + rand.nextInt(LEGENDARY_MAX_SPEED - LEGENDARY_MIN_SPEED + 1);
+					value = ScaleStat(LEGENDARY_MIN_SPEED, villain_level) + rand.nextDouble(ScaleStat(LEGENDARY_MAX_SPEED, villain_level) - ScaleStat(LEGENDARY_MIN_SPEED, villain_level));
 					break;
 
 				case EVASION:
-					value = LEGENDARY_MIN_EVASION + rand.nextDouble() * (LEGENDARY_MAX_EVASION - LEGENDARY_MIN_EVASION);
+					value = ScaleStat(LEGENDARY_MIN_EVASION, villain_level) + rand.nextDouble() * (ScaleStat(LEGENDARY_MAX_EVASION, villain_level) - ScaleStat(LEGENDARY_MIN_EVASION, villain_level));
 					break;
 
 				case ACCURACY:
-					value = LEGENDARY_MIN_ACCURACY + rand.nextDouble() * (LEGENDARY_MAX_ACCURACY - LEGENDARY_MIN_ACCURACY);
+					value = ScaleStat(LEGENDARY_MIN_ACCURACY, villain_level) + rand.nextDouble() * (ScaleStat(LEGENDARY_MAX_ACCURACY, villain_level) - ScaleStat(LEGENDARY_MIN_ACCURACY, villain_level));
 					break;
 
 				case CRIT_CHANCE:
-					value = LEGENDARY_MIN_CRIT_CHANCE + rand.nextDouble() * (LEGENDARY_MAX_CRIT_CHANCE - LEGENDARY_MIN_CRIT_CHANCE);
+					value = ScaleStat(LEGENDARY_MIN_CRIT_CHANCE, villain_level) + rand.nextDouble() * (ScaleStat(LEGENDARY_MAX_CRIT_CHANCE, villain_level) - ScaleStat(LEGENDARY_MIN_CRIT_CHANCE, villain_level));
 					break;
 
 				case CRIT_DAMAGE:
-					value = LEGENDARY_MIN_CRIT_DAMAGE + rand.nextDouble() * (LEGENDARY_MAX_CRIT_DAMAGE - LEGENDARY_MIN_CRIT_DAMAGE);
+					value = ScaleStat(LEGENDARY_MIN_CRIT_DAMAGE, villain_level) + rand.nextDouble() * (ScaleStat(LEGENDARY_MAX_CRIT_DAMAGE, villain_level) - ScaleStat(LEGENDARY_MIN_CRIT_DAMAGE, villain_level));
 					break;
 
 				case LUCK:
-					value = LEGENDARY_MIN_LUCK + rand.nextInt(LEGENDARY_MAX_LUCK - LEGENDARY_MIN_LUCK + 1);
+					value = ScaleStat(LEGENDARY_MIN_LUCK, villain_level) + rand.nextDouble(ScaleStat(LEGENDARY_MAX_LUCK, villain_level) - ScaleStat(LEGENDARY_MIN_LUCK, villain_level));
 					break;
 			
 				default:

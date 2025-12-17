@@ -84,7 +84,7 @@ public final class HeroFactory
 
 			case GAMBLER:
 				health = 95;
-				attack = 9;
+				attack = 12;
 				defense = 8;
 				speed = 11;
 				evasion = 0.17;
