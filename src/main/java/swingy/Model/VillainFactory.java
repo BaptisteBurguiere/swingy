@@ -398,6 +398,8 @@ public final class VillainFactory
 
 	private static List<VillainTemplate> GetBossesPool(int level)
 	{
+		level = Math.min(level, MAX_LEVEL);
+		
 		List<VillainTemplate> pool = new ArrayList<>();
 
 		for (VillainTemplate template : _boss_templates)
