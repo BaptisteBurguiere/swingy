@@ -8,6 +8,8 @@ import java.util.Random;
 
 public final class VillainFactory
 {
+	private static final int MAX_LEVEL = 50;
+
 	private VillainFactory() {}
 
 	private final static Random rand = new Random();
@@ -381,6 +383,8 @@ public final class VillainFactory
 
 	private static List<VillainTemplate> GetPool(int level)
 	{
+		level = Math.min(level, MAX_LEVEL);
+		
 		List<VillainTemplate> pool = new ArrayList<>();
 
 		for (VillainTemplate template : _villain_templates)

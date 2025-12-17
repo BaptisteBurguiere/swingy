@@ -33,6 +33,7 @@ public class Combat
 	private final double PARRY_DAMAGE_MULTIPLIER = 0.8;
 	private final int SIMULATE_NEXT_TURNS = 5;
 	private final double LUCK_FLEE_CHANCE = 0.003;
+	private final double MAX_PARRY_CHANCE = 0.8;
 
 	private double	_hero_tp;
 	private double	_villain_tp;
@@ -133,7 +134,7 @@ public class Combat
 		double defense = defender.GetStatistic(StatisticTemplate.Type.DEFENSE).GetValue();
 		double luck = defender.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
 
-		double parry_chance = defense * DEFENSE_PARRY_CHANCE + luck * LUCK_PARRY_CHANCE;
+		double parry_chance = Math.min(defense * DEFENSE_PARRY_CHANCE + luck * LUCK_PARRY_CHANCE, MAX_PARRY_CHANCE);
 
 		double parry_roll = Math.random();
 
