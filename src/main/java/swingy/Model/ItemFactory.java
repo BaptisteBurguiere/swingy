@@ -70,7 +70,7 @@ public final class ItemFactory
 
 	private static double ScaleStat(double stat, int villain_level)
 	{
-		return stat + (double)villain_level * LEVEL_STAT_MULTIPLIER;
+		return stat * (1.0 + (double)villain_level * LEVEL_STAT_MULTIPLIER);
 	}
 
 	private static final double COMMON_MIN_ATTACK = 5;
