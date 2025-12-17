@@ -572,23 +572,23 @@ public final class ItemFactory
 
 
 	private static final double LEGENDARY_MIN_ATTACK = 50;
-	private static final double LEGENDARY_MAX_ATTACK = 80;
+	private static final double LEGENDARY_MAX_ATTACK = 65;
 	private static final double LEGENDARY_MIN_DEFENSE = 50;
-	private static final double LEGENDARY_MAX_DEFENSE = 80;
+	private static final double LEGENDARY_MAX_DEFENSE = 65;
 	private static final double LEGENDARY_MIN_HEALTH = 180;
-	private static final double LEGENDARY_MAX_HEALTH = 300;
+	private static final double LEGENDARY_MAX_HEALTH = 230;
 	private static final double LEGENDARY_MIN_SPEED = 15;
-	private static final double LEGENDARY_MAX_SPEED = 35;
+	private static final double LEGENDARY_MAX_SPEED = 25;
 	private static final double LEGENDARY_MIN_EVASION = 0.25;
-	private static final double LEGENDARY_MAX_EVASION = 0.35;
+	private static final double LEGENDARY_MAX_EVASION = 0.30;
 	private static final double LEGENDARY_MIN_ACCURACY = 0.25;
-	private static final double LEGENDARY_MAX_ACCURACY = 0.35;
+	private static final double LEGENDARY_MAX_ACCURACY = 0.30;
 	private static final double LEGENDARY_MIN_CRIT_CHANCE = 0.25;
-	private static final double LEGENDARY_MAX_CRIT_CHANCE = 0.35;
+	private static final double LEGENDARY_MAX_CRIT_CHANCE = 0.30;
 	private static final double LEGENDARY_MIN_CRIT_DAMAGE = 0.8;
-	private static final double LEGENDARY_MAX_CRIT_DAMAGE = 1.3;
+	private static final double LEGENDARY_MAX_CRIT_DAMAGE = 1.0;
 	private static final double LEGENDARY_MIN_LUCK = 15;
-	private static final double LEGENDARY_MAX_LUCK = 35;
+	private static final double LEGENDARY_MAX_LUCK = 25;
 
 	private static final List<Item> LEGENDARY_TEMPLATES = List.of(
 		new Item(Item.Type.WEAPON, Item.Rarity.LEGENDARY, "Sword of Eternal Valor", "A blade that never dulls, always striking with precision and valor", Map.of(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0), StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0))),
