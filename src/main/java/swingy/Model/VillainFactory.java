@@ -228,7 +228,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.02));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.2));
 
-		_boss_templates.add(new VillainTemplate("Dreadknight Varok", 1, 45, 3.6, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("Dreadknight Varok", 1, 49, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -253,7 +253,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.03));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.3));
 
-		_boss_templates.add(new VillainTemplate("Seraphina the Fallen", 1, 45, 3.6, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("Seraphina the Fallen", 1, 49, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -278,7 +278,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.04));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.3));
 
-		_boss_templates.add(new VillainTemplate("The Maw of Cinders", 1, 45, 3.6, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("The Maw of Cinders", 1, 49, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -303,7 +303,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.02));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.7));
 
-		_boss_templates.add(new VillainTemplate("Oracle Nihra", 1, 45, 3.6, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("Oracle Nihra", 1, 49, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -328,7 +328,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.015));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.2));
 
-		_boss_templates.add(new VillainTemplate("Vorax, Devourer of Hope", 1, 45, 3.6, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("Vorax, Devourer of Hope", 1, 49, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -353,7 +353,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.02));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.4));
 
-		_boss_templates.add(new VillainTemplate("The Marionette King", 1, 45, 3.6, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("The Marionette King", 1, 49, 3.6, base_stats, growth_stats));
 
 		base_stats = new EnumMap<>(StatisticTemplate.Type.class);
 		growth_stats = new EnumMap<>(StatisticTemplate.Type.class);
@@ -378,7 +378,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.03));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.5));
 
-		_boss_templates.add(new VillainTemplate("Eclipsion, The World-Ender", 45, 50, 4.6, base_stats, growth_stats));
+		_boss_templates.add(new VillainTemplate("Eclipsion, The World-Ender", 50, 50, 4.6, base_stats, growth_stats));
 	}
 
 	private static List<VillainTemplate> GetPool(int level)

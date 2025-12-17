@@ -236,6 +236,12 @@ public class Game
 			this._view.DisplayVillainDied(villain);
 			this._view.GetUserInput();
 
+			if (villain.GetLevel() == 50)
+			{
+				this._is_running = false;
+				return;
+			}
+
 			int xp_gained = CalculateXpGained(villain);
 			this._hero.GainExperience(xp_gained);
 			this._view.DisplayXpGained(xp_gained);

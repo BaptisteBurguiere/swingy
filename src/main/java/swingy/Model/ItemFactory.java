@@ -571,25 +571,24 @@ public final class ItemFactory
 	}
 
 
-
-	private static final double LEGENDARY_MIN_ATTACK = 70;
-	private static final double LEGENDARY_MAX_ATTACK = 100;
-	private static final double LEGENDARY_MIN_DEFENSE = 70;
-	private static final double LEGENDARY_MAX_DEFENSE = 100;
-	private static final double LEGENDARY_MIN_HEALTH = 200;
-	private static final double LEGENDARY_MAX_HEALTH = 350;
-	private static final double LEGENDARY_MIN_SPEED = 20;
-	private static final double LEGENDARY_MAX_SPEED = 40;
+	private static final double LEGENDARY_MIN_ATTACK = 50;
+	private static final double LEGENDARY_MAX_ATTACK = 80;
+	private static final double LEGENDARY_MIN_DEFENSE = 50;
+	private static final double LEGENDARY_MAX_DEFENSE = 80;
+	private static final double LEGENDARY_MIN_HEALTH = 180;
+	private static final double LEGENDARY_MAX_HEALTH = 300;
+	private static final double LEGENDARY_MIN_SPEED = 15;
+	private static final double LEGENDARY_MAX_SPEED = 35;
 	private static final double LEGENDARY_MIN_EVASION = 0.25;
 	private static final double LEGENDARY_MAX_EVASION = 0.35;
 	private static final double LEGENDARY_MIN_ACCURACY = 0.25;
 	private static final double LEGENDARY_MAX_ACCURACY = 0.35;
 	private static final double LEGENDARY_MIN_CRIT_CHANCE = 0.25;
 	private static final double LEGENDARY_MAX_CRIT_CHANCE = 0.35;
-	private static final double LEGENDARY_MIN_CRIT_DAMAGE = 1;
-	private static final double LEGENDARY_MAX_CRIT_DAMAGE = 1.5;
-	private static final double LEGENDARY_MIN_LUCK = 20;
-	private static final double LEGENDARY_MAX_LUCK = 40;
+	private static final double LEGENDARY_MIN_CRIT_DAMAGE = 0.8;
+	private static final double LEGENDARY_MAX_CRIT_DAMAGE = 1.3;
+	private static final double LEGENDARY_MIN_LUCK = 15;
+	private static final double LEGENDARY_MAX_LUCK = 35;
 
 	private static final List<Item> LEGENDARY_TEMPLATES = List.of(
 		new Item(Item.Type.WEAPON, Item.Rarity.LEGENDARY, "Sword of Eternal Valor", "A blade that never dulls, always striking with precision and valor", Map.of(StatisticTemplate.Type.ACCURACY, new Statistic(StatisticTemplate.Type.ACCURACY, 0), StatisticTemplate.Type.CRIT_CHANCE, new Statistic(StatisticTemplate.Type.CRIT_CHANCE, 0))),
