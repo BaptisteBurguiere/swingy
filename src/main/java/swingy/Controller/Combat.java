@@ -34,6 +34,7 @@ public class Combat
 	private final int SIMULATE_NEXT_TURNS = 5;
 	private final double LUCK_FLEE_CHANCE = 0.003;
 	private final double MAX_PARRY_CHANCE = 0.7;
+	private final double DEFENSE_LOG_MULTIPLIER = 1.0;
 
 	private double	_hero_tp;
 	private double	_villain_tp;
@@ -143,26 +144,27 @@ public class Combat
 
 	private double CalculateDamage(Entity attacker, Entity defender, CombatTurnResult result, boolean defense_stance)
 	{
-		double attack = attacker.GetStatistic(StatisticTemplate.Type.ATTACK).GetValue();
-		double defense = defender.GetStatistic(StatisticTemplate.Type.DEFENSE).GetValue();
-		double luck = attacker.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
+    double attack = attacker.GetStatistic(StatisticTemplate.Type.ATTACK).GetValue();
+    double defense = defender.GetStatistic(StatisticTemplate.Type.DEFENSE).GetValue();
+    double luck = attacker.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
 
-		if (defense_stance)
-			defense *= DEFENSE_STANCE_MULTIPLIER;
+    if (defense_stance)
+        defense *= DEFENSE_STANCE_MULTIPLIER;
 
-		double damage = attack - (defense * DEFENSE_SCALING);
-		double spread_roll = Math.min(1., Math.random() * (1 + luck * LUCK_DAMAGE_SPREAD));
-		damage *= 1. + (((DAMAGE_SPREAD * 2) * spread_roll) - DAMAGE_SPREAD);
-		damage = Math.max(damage, 1);
+    double effectiveDefense = Math.log(defense + 1.0) * DEFENSE_LOG_MULTIPLIER;
+    double damage = attack * (attack / (attack + effectiveDefense));
 
-		if (IsCritical(attacker))
-		{
-			result.critical = true;
-			double crit_damage = attacker.GetStatistic(StatisticTemplate.Type.CRIT_DAMAGE).GetValue();
-			damage *= crit_damage;
-		}
+    double spread_roll = Math.min(1., Math.random() * (1 + luck * LUCK_DAMAGE_SPREAD));
+    damage *= 1. + (((DAMAGE_SPREAD * 2) * spread_roll) - DAMAGE_SPREAD);
 
-		return damage;
+    if (IsCritical(attacker))
+    {
+        result.critical = true;
+        double crit_damage = attacker.GetStatistic(StatisticTemplate.Type.CRIT_DAMAGE).GetValue();
+        damage *= crit_damage;
+    }
+
+    return Math.max(damage, 1);
 	}
 
 	private double CalculateParryDamage(Entity attacker, Entity defender)

@@ -31,6 +31,8 @@ public class GameMap
 		CHEST
 	}
 
+	private static final int MAX_MAP_SIZE = 20;
+
 	private static final Random rand = new Random();
 
 	private int			_size;
@@ -49,7 +51,7 @@ public class GameMap
 
 	public GameMap(Hero hero)
 	{
-		this._size = Math.min((hero.GetLevel() - 1) * 5 + 10 - (hero.GetLevel() % 2), 25);
+		this._size = Math.min((hero.GetLevel() - 1) * 5 + 10 - (hero.GetLevel() % 2), MAX_MAP_SIZE);
 		this._grid = new Element[this._size][this._size];
 		this._villains_grid = new Villain[this._size][this._size];
 		this._hero_x = this._size / 2;
