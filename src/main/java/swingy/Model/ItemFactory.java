@@ -32,7 +32,7 @@ public final class ItemFactory
 		double luck = hero.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
 		double drop_chance = BASE_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * DROP_CHANCE_SHIFT) + luck * LUCK_DROP_CHANCE;
 
-		if (!is_boss && rand.nextDouble() < drop_chance)
+		if (!is_boss && rand.nextDouble() > drop_chance)
 			return null;
 
 		double legendary_drop_chance = BASE_LEGENDARY_DROP_CHANCE + ((double)(hero.GetLevel() / LEVEL_CHUNK) * LEGENDARY_DROP_CHANCE_SHIFT) + luck * LUCK_RARITY_SHIFT;
