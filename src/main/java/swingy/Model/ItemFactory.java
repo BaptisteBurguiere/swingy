@@ -24,7 +24,7 @@ public final class ItemFactory
 	private static final double LUCK_RARITY_SHIFT = 0.0005;
 	private static final double BOSS_EPIC_RARITY_SHIFT = 0.10;
 	private static final double BOSS_LEGENDARY_RARITY_SHIFT = 0.05;
-	private static final double LEVEL_STAT_MULTIPLIER = 0.03;
+	private static final double LEVEL_STAT_MULTIPLIER = 0.05;
 
 	public static Item GenerateItem(Hero hero, Villain villain, boolean is_boss)
 	{
