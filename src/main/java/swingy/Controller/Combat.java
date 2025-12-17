@@ -34,7 +34,6 @@ public class Combat
 	private final int SIMULATE_NEXT_TURNS = 5;
 	private final double LUCK_FLEE_CHANCE = 0.003;
 	private final double MAX_PARRY_CHANCE = 0.7;
-	private final double DEFENSE_LOG_MULTIPLIER = 1.0;
 
 	private double	_hero_tp;
 	private double	_villain_tp;
@@ -151,8 +150,7 @@ public class Combat
     if (defense_stance)
         defense *= DEFENSE_STANCE_MULTIPLIER;
 
-    double effectiveDefense = Math.log(defense + 1.0) * DEFENSE_LOG_MULTIPLIER;
-    double damage = attack * (attack / (attack + effectiveDefense));
+	double damage = attack - (defense * DEFENSE_SCALING);
 
     double spread_roll = Math.min(1., Math.random() * (1 + luck * LUCK_DAMAGE_SPREAD));
     damage *= 1. + (((DAMAGE_SPREAD * 2) * spread_roll) - DAMAGE_SPREAD);

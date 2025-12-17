@@ -188,7 +188,7 @@ public final class VillainFactory
 		base_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 4));
 
 		growth_stats.put(StatisticTemplate.Type.HEALTH, new Statistic(StatisticTemplate.Type.HEALTH, 16));
-		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 2.9));
+		growth_stats.put(StatisticTemplate.Type.ATTACK, new Statistic(StatisticTemplate.Type.ATTACK, 2.5));
 		growth_stats.put(StatisticTemplate.Type.DEFENSE, new Statistic(StatisticTemplate.Type.DEFENSE, 2.4));
 		growth_stats.put(StatisticTemplate.Type.SPEED, new Statistic(StatisticTemplate.Type.SPEED, 0.8));
 		growth_stats.put(StatisticTemplate.Type.EVASION, new Statistic(StatisticTemplate.Type.EVASION, 0.003));
@@ -197,7 +197,7 @@ public final class VillainFactory
 		growth_stats.put(StatisticTemplate.Type.CRIT_DAMAGE, new Statistic(StatisticTemplate.Type.CRIT_DAMAGE, 0.035));
 		growth_stats.put(StatisticTemplate.Type.LUCK, new Statistic(StatisticTemplate.Type.LUCK, 0.4));
 
-		_villain_templates.add(new VillainTemplate("Champion", 15, 50, 1.3, base_stats, growth_stats));
+		_villain_templates.add(new VillainTemplate("Champion", 15, 50, 1.5, base_stats, growth_stats));
 
 
 

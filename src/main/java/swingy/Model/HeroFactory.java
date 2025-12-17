@@ -36,12 +36,12 @@ public final class HeroFactory
 
 			case GUARDIAN:
 				health = 180;
-				attack = 9;
+				attack = 10;
 				defense = 18;
 				speed = 7;
 				evasion = 0.08;
 				accuracy = 0.85;
-				crit_chance = 0.05;
+				crit_chance = 0.06;
 				crit_damage = 1.3;
 				luck = 4;
 				break;
