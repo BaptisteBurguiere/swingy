@@ -2,6 +2,7 @@ package swingy.Controller;
 
 import swingy.Model.CombatTurnResult;
 import swingy.Model.GameMap;
+import swingy.Model.GameStats;
 import swingy.Model.Hero;
 import swingy.Model.HeroFactory;
 import swingy.Model.ItemFactory;
@@ -11,6 +12,7 @@ import swingy.View.View;
 import swingy.View.Console.ConsoleView;
 import swingy.View.Gui.SwingView;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,8 @@ public class Game
 	private View		_view;
 	private SaveManager	_save_manager;
 
+	private GameStats	_stats;
+
 	private static final double XP_BASE = 4;
 	private static final double XP_GROWTH = 0.6;
 	private static final double XP_DIFF_SCALE = 10;
@@ -55,6 +59,8 @@ public class Game
 
 		return _instance;
 	}
+
+	public GameStats GetStats() { return this._stats; }
 
 	public void SetView()
 	{
@@ -89,17 +95,23 @@ public class Game
 		int save_slot = this._view.DisplayChooseSave(this._save_manager.GetSaveFile());
 
 		Hero hero = this._save_manager.GetSave(save_slot);
+		GameStats stats = this._save_manager.GetSaveStats(save_slot);
 
 		if (hero != null)
+		{
 			this._hero = hero;
+			this._stats = stats;
+		}
 		else
 		{
 			Hero.Class Class = this._view.DisplayCreateHeroClass();
 			String name = this._view.DisplayCreateHeroName();
 
 			hero = HeroFactory.NewHero(Class, name);
+			stats = new GameStats();
 			this._hero = hero;
-			this._save_manager.SetSave(save_slot, hero);
+			this._stats = stats;
+			this._save_manager.SetSave(save_slot, hero, stats);
 			this._save_manager.Save();
 		}
 
@@ -206,6 +218,7 @@ public class Game
 
 				if (this._is_running)
 				{
+					this._stats.rooms_exited++;
 					this._map = new GameMap(this._hero);
 					this._view.MapChanged();
 				}
@@ -217,6 +230,7 @@ public class Game
 				break;
 
 			case CHEST:
+				this._stats.chest_opened++;
 				this.OpenChest();
 				break;
 
@@ -236,9 +250,13 @@ public class Game
 			this._view.DisplayVillainDied(villain);
 			this._view.GetUserInput();
 
-			if (villain.GetLevel() == 50)
+			if (is_boss && villain.GetLevel() == 50)
 			{
 				this._is_running = false;
+				this._stats.has_won = true;
+				this._stats.win_date = LocalDate.now();
+				this._save_manager.AddToPantheon(this._hero, this._stats);
+				this._save_manager.DeleteHero(this._hero);
 				return;
 			}
 
@@ -263,6 +281,7 @@ public class Game
 					switch (this._view.DisplayEquipItem(drop))
 					{
 						case EQUIP_ITEM:
+							this._stats.items_equiped++;
 							this._hero.EquipItem(drop);	
 							is_equip = true;					
 							break;
@@ -337,5 +356,30 @@ public class Game
 		chest_content.add(ItemFactory.GenerateEssence(this._hero));
 
 		return chest_content;
+	}
+
+	public boolean IsPantheon()
+	{
+		return this._save_manager.IsPantheon();
+	}
+
+	public void ChooseStart() throws Exception
+	{
+		int action = this._view.DisplayStart();
+
+		switch (action) {
+			case 0:
+				this.ChooseSave();
+				this.Start();
+				break;
+
+			case 1:
+				this._view.DisplayPantheon(this._save_manager.GetPantheonFile());
+				break;
+		
+			default:
+				this.ChooseSave();
+				break;
+		}
 	}
 }

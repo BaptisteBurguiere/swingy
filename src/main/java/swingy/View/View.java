@@ -5,6 +5,7 @@ import java.util.List;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Hero;
 import swingy.Model.Item;
+import swingy.Model.PantheonFile;
 import swingy.Model.SaveFile;
 import swingy.Model.Villain;
 import swingy.Model.Entity;
@@ -49,4 +50,6 @@ public abstract class View
 	public abstract int DisplayChooseChestContent(Hero hero, List<Item> chest_content);
 	public abstract void DisplayChestSpawn();
 	public abstract void MapChanged();
+	public abstract int DisplayStart();
+	public abstract int DisplayPantheon(PantheonFile pantheon);
 }

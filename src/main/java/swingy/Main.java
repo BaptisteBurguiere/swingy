@@ -9,8 +9,14 @@ public class Main {
 		{
 			Game game = Game.GetInstance();
 	
-			game.ChooseSave();
-			game.Start();
+			if (game.IsPantheon())
+				game.ChooseStart();
+			else
+			{
+				game.ChooseSave();
+				game.Start();
+			}
+
 
 			System.exit(0);
 		}

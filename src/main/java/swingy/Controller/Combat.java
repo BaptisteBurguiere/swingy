@@ -6,6 +6,7 @@ import java.util.List;
 import swingy.Model.CombatResult;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Entity;
+import swingy.Model.GameStats;
 import swingy.Model.Hero;
 import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
@@ -239,45 +240,6 @@ public class Combat
 		return result;
 	}
 
-	private CombatTurnResult HeroTurn(SwingView view) throws Exception
-	{
-		this._hero_defense_stance = false;
-		CombatTurnResult result = new CombatTurnResult(this._hero, this._villain);
-		result.hero_turn = true;
-
-		List<Entity> next_turns = SimulateNextTurns(SIMULATE_NEXT_TURNS);
-
-		switch (view.DisplayHeroCombatChoice(_hero, _villain, next_turns, _is_boss)) {
-			case FLEE:
-				result.try_flee = true;
-				if (IsFlee())
-					result.flee_successful = true;
-				break;
-
-			case ATTACK:
-				if (IsMissed(this._hero, this._villain))
-				{
-					result.missed = true;
-					return result;
-				}
-
-				double damage = CalculateDamage(this._hero, this._villain, result, false);
-				this._villain.TakeDamage(damage);
-				result.damage = damage;
-				break;
-
-			case DEFEND:
-				this._hero_defense_stance = true;
-				result.defense_stance = true;
-				break;
-		
-			default:
-				break;
-		}
-
-		return result;
-	}
-
 	private CombatTurnResult VillainTurn()
 	{
 		CombatTurnResult result = new CombatTurnResult(this._villain, this._hero);
@@ -309,15 +271,45 @@ public class Combat
 	public CombatResult Start() throws Exception
 	{
 		Game game_controller = Game.GetInstance();
+		GameStats stats = game_controller.GetStats();
 		CombatResult result = new CombatResult();
 
 		while (true)
 		{
 			CombatTurnResult turn_result;
 			if (IsHeroTurn())
+			{
 				turn_result = HeroTurn();
+				
+				if (turn_result.missed)
+					stats.missed++;
+
+				if (turn_result.critical)
+					stats.crit++;
+
+				if (turn_result.try_flee && turn_result.flee_successful)
+					stats.flee_success++;
+
+				if (turn_result.try_flee && !turn_result.flee_successful)
+					stats.flee_failed++;
+
+				stats.damage_dealt += (int)turn_result.damage;
+			}
 			else
+			{
 				turn_result = VillainTurn();
+
+				if (turn_result.missed)
+					stats.dodged++;
+
+				if (turn_result.parried)
+				{
+					stats.damage_dealt += (int)turn_result.damage;
+					stats.parried++;
+				}
+				else
+					stats.damage_received += (int)turn_result.damage;
+			}
 
 			List<Entity> next_turns = SimulateNextTurns(SIMULATE_NEXT_TURNS);
 			game_controller.DisplayCombatTurnResult(turn_result, next_turns);
@@ -330,6 +322,10 @@ public class Combat
 			if (this._villain.GetCurrentHealth() <= 0)
 			{
 				result.hero_win = true;
+				if (this._is_boss)
+					stats.boss_slained++;
+				else
+					stats.villain_slained++;
 				break;
 			}
 			if (turn_result.flee_successful)
@@ -339,43 +335,6 @@ public class Combat
 			}
 
 			game_controller.GetUserInput();
-		}
-
-		return result;
-	}
-
-	public CombatResult Start(SwingView view) throws Exception
-	{
-		CombatResult result = new CombatResult();
-
-		while (true)
-		{
-			CombatTurnResult turn_result;
-			if (IsHeroTurn())
-				turn_result = HeroTurn(view);
-			else
-				turn_result = VillainTurn();
-
-			List<Entity> next_turns = SimulateNextTurns(SIMULATE_NEXT_TURNS);
-			view.DisplayCombatTurnResult(turn_result, next_turns);
-
-			if (this._hero.GetCurrentHealth() <= 0)
-			{
-				result.hero_win = false;
-				break;
-			}
-			if (this._villain.GetCurrentHealth() <= 0)
-			{
-				result.hero_win = true;
-				break;
-			}
-			if (turn_result.flee_successful)
-			{
-				result.flee = true;
-				break;
-			}
-
-			view.GetUserInput();
 		}
 
 		return result;

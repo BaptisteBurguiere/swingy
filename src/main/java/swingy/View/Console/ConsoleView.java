@@ -9,6 +9,7 @@ import java.util.Scanner;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Hero;
 import swingy.Model.Item;
+import swingy.Model.PantheonFile;
 import swingy.Model.SaveFile;
 import swingy.Model.Statistic;
 import swingy.Model.StatisticTemplate;
@@ -889,4 +890,32 @@ public class ConsoleView extends View
 	}
 
 	public void MapChanged() {}
+
+	public int DisplayStart()
+	{
+		while(true)
+		{
+			Clear();
+
+			System.out.println("1: Start");
+			System.out.println("2: Pantheon");
+			
+			System.out.println();
+	
+			DisplayPrompt();
+	
+			String input = GetUserInput().toUpperCase();
+
+			if (input == "1")
+				return 0;
+
+			if (input == "2")
+				return 1;
+		}
+	}
+
+	public int DisplayPantheon(PantheonFile pantheon)
+	{
+		return 0;
+	}
 }

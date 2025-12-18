@@ -61,7 +61,7 @@ public class TextArea extends PanelComponent
 		return fm.getAscent() + fm.getDescent();
 	}
 
-	public void CalculateFontSize()
+	public int CalculateFontSize()
 	{
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = img.createGraphics();
@@ -144,6 +144,8 @@ public class TextArea extends PanelComponent
 					break;
 			}
 		}
+
+		return this._font_size;
 	}
 
 	@Override

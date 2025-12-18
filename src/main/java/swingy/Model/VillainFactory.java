@@ -383,7 +383,6 @@ public final class VillainFactory
 
 	private static List<VillainTemplate> GetPool(int level)
 	{
-		level = Math.min(level, MAX_LEVEL);
 		
 		List<VillainTemplate> pool = new ArrayList<>();
 
@@ -398,8 +397,6 @@ public final class VillainFactory
 
 	private static List<VillainTemplate> GetBossesPool(int level)
 	{
-		level = Math.min(level, MAX_LEVEL);
-		
 		List<VillainTemplate> pool = new ArrayList<>();
 
 		for (VillainTemplate template : _boss_templates)
@@ -456,7 +453,7 @@ public final class VillainFactory
 	{
 		Init();
 
-		int level = GenerateVillainLevel(hero.GetLevel(), villain_count);
+		int level = Math.min(GenerateVillainLevel(hero.GetLevel(), villain_count), MAX_LEVEL);
 		List<VillainTemplate> pool = GetPool(level);
 
 		VillainTemplate template = pool.get(rand.nextInt(pool.size()));
@@ -487,7 +484,7 @@ public final class VillainFactory
         if (offset > MAX_OFFSET_CAP) offset = MAX_OFFSET_CAP;
 
         int bossLevel = (int)Math.round(hero_level + offset);
-        return Math.max(MIN_LEVEL, bossLevel);
+        return Math.min(Math.max(MIN_LEVEL, bossLevel), MAX_LEVEL);
 	}
 
 	public static Villain GenerateBoss(Hero hero)

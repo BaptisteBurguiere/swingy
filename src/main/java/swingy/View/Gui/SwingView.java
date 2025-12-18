@@ -31,12 +31,15 @@ import swingy.View.Gui.Panels.ChooseNamePanel;
 import swingy.View.Gui.Panels.ChooseSavePanel;
 import swingy.View.Gui.Panels.CombatPanel;
 import swingy.View.Gui.Panels.MapPanel;
+import swingy.View.Gui.Panels.PantheonPanel;
+import swingy.View.Gui.Panels.StartPanel;
 import swingy.View.Gui.Panels.YouDiedPanel;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Entity;
 import swingy.Model.GameMap;
 import swingy.Model.Hero;
 import swingy.Model.Item;
+import swingy.Model.PantheonFile;
 import swingy.Model.SaveFile;
 import swingy.Model.Villain;
 
@@ -157,6 +160,38 @@ public class SwingView extends View
 	public static BufferedImage GetSprite(String name)
 	{
 		return _sprites.get(name);
+	}
+
+	public int DisplayStart()
+	{
+		this._panel = new StartPanel();
+
+		this._latch = new CountDownLatch(1);
+
+    	final int[] selected_slot = { -1 };
+
+		this._panel.SetClickListener(action ->
+		{
+			selected_slot[0] = action;
+			this._latch.countDown();   // RELEASE wait
+		});
+
+		SwingUtilities.invokeLater(() ->
+		{
+			this._frame.setContentPane(this._panel);
+			this._frame.revalidate();
+			this._frame.setVisible(true);
+			this._frame.repaint();
+			this._panel.requestFocusInWindow();       // IMPORTANT
+		});
+
+		try {
+			this._latch.await(); // BLOCK until clicked
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+
+		return selected_slot[0];
 	}
 
 	public int DisplayChooseSave(SaveFile save_file)
@@ -636,4 +671,51 @@ public class SwingView extends View
 	public void DisplayHero(Hero hero) {}
 
 	public void MapChanged() { this._is_main_view_displayed = false; }
+
+	public int DisplayPantheon(PantheonFile pantheon)
+	{
+		this._panel = new PantheonPanel(pantheon);
+
+		this._latch = new CountDownLatch(1);
+		final int[] slot = { -1 };
+
+		this._panel.SetKeyListener(action -> {
+			slot[0] = action;
+			this._latch.countDown();
+		});
+
+		SwingUtilities.invokeLater(() -> {
+			this._frame.setContentPane(this._panel);
+			this._frame.revalidate();
+			this._frame.setVisible(true);
+			this._frame.repaint();
+			this._panel.requestFocusInWindow();       // IMPORTANT
+		});
+
+		PantheonPanel panel = (PantheonPanel)this._panel;
+
+		while (true) {
+			try {
+				this._latch.await();
+
+				if (slot[0] == -2)
+					panel.PreviousPage();
+				else if (slot[0] == -1)
+					panel.NextPage();
+				else
+					return slot[0];
+
+				// Reset latch for next key
+				this._latch = new CountDownLatch(1);
+
+				this._panel.SetKeyListener(action -> {
+					slot[0] = action;
+					this._latch.countDown();
+				});
+
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+	}
 }
