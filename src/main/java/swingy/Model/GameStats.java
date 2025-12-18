@@ -1,7 +1,6 @@
 package swingy.Model;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class GameStats
 {
@@ -19,6 +18,6 @@ public class GameStats
 	public int items_equiped = 0;
 	public int chest_opened = 0;
 	public boolean has_won = false;
-	public LocalDate win_date = null;
+	public LocalDateTime win_date = LocalDateTime.now();
 	public boolean endless_mode = false;
 }

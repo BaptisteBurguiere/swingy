@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -153,7 +153,7 @@ public class SaveManager
 					int items_equiped = 0;
 					int chest_opened = 0;
 					boolean has_won = false;
-					LocalDate win_date = null;
+					LocalDateTime win_date = null;
 					boolean endless_mode = false;
 
 					boolean is_current = true;
@@ -294,8 +294,8 @@ public class SaveManager
 								break;
 
 							case "win_date":
-								DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-								win_date = LocalDate.parse(value, dtf);
+								DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH/mm");
+								win_date = LocalDateTime.parse(value, dtf);
 
 							case "endless_mode":
 								endless_mode = Boolean.parseBoolean(value);
@@ -428,7 +428,7 @@ public class SaveManager
 					int items_equiped = 0;
 					int chest_opened = 0;
 					boolean has_won = false;
-					LocalDate win_date = LocalDate.now();
+					LocalDateTime win_date = LocalDateTime.now();
 					boolean endless_mode = false;
 
 					boolean is_current = true;
@@ -569,8 +569,8 @@ public class SaveManager
 								break;
 
 							case "win_date":
-								DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-								win_date = LocalDate.parse(value, dtf);
+								DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH/mm");
+								win_date = LocalDateTime.parse(value, dtf);
 
 							case "endless_mode":
 								endless_mode = Boolean.parseBoolean(value);
@@ -895,8 +895,8 @@ public class SaveManager
 		WriteToFile(file, String.format("items_equiped: %d\n", stats.items_equiped));
 		WriteToFile(file, String.format("chest_opened: %d\n", stats.chest_opened));
 		WriteToFile(file, String.format("has_won: %b\n", stats.has_won));
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-		WriteToFile(file, String.format("win_date: %s", stats.win_date.format(dtf)));
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH/mm");
+		WriteToFile(file, String.format("win_date: %s\n", stats.win_date.format(dtf)));
 		WriteToFile(file, String.format("endless_mode: %b\n", stats.endless_mode));
 	}
 

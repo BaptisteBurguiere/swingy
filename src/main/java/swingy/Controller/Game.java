@@ -12,7 +12,7 @@ import swingy.View.View;
 import swingy.View.Console.ConsoleView;
 import swingy.View.Gui.SwingView;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -254,7 +254,7 @@ public class Game
 			{
 				this._is_running = false;
 				this._stats.has_won = true;
-				this._stats.win_date = LocalDate.now();
+				this._stats.win_date = LocalDateTime.now();
 				this._save_manager.AddToPantheon(this._hero, this._stats);
 				this._save_manager.DeleteHero(this._hero);
 				return;
