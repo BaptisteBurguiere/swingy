@@ -100,6 +100,12 @@ public class PantheonHeroPanel extends BasePanel
 
 		this._components.add(btn);
 
+		x += width + PADDING;
+		width = TextArea.CalculateWidth("Start endless", FONT_SIZE * 2) + height - TextArea.CalculateHeight(FONT_SIZE * 2);
+		btn = new Button(x, y, width, height, "Start endless", FONT_SIZE * 2, 1);
+
+		this._components.add(btn);
+
 		x = PADDING * 2;
 		y = PADDING * 2;
 		width = (SwingView.GetWidth() - PADDING * 4) / 2 - PADDING / 2;

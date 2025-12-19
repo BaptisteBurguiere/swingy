@@ -10,7 +10,6 @@ import swingy.Model.GameStats;
 import swingy.Model.Hero;
 import swingy.Model.StatisticTemplate;
 import swingy.Model.Villain;
-import swingy.View.Gui.SwingView;
 
 public class Combat
 {

@@ -125,6 +125,22 @@ public class Game
 		this._is_running = true;
 	}
 
+	public void ChooseSaveEndless(Hero hero, GameStats stats)
+	{
+		int save_slot = this._view.DisplayChooseSave(this._save_manager.GetSaveFile());
+
+		this._hero = hero;
+		this._stats = stats;
+		this._stats.endless_mode = true;
+		this._save_manager.SetSave(save_slot, hero, stats);
+
+		this._save_manager.Save();
+
+		this._map = new GameMap(this._hero, this._stats.endless_mode);
+
+		this._is_running = true;
+	}
+
 	public void Start() throws Exception
 	{
 		while (this._is_running)
@@ -396,11 +412,13 @@ public class Game
 					action = this._view.DisplayPantheonHero(hero, stats);
 					switch (action)
 					{
-						case 1:
+						case 0:
 							break;
 
-						case 2:
+						case 1:
 							start_endless = true;
+							ChooseSaveEndless(hero, stats);
+							this.Start();
 							break;
 					
 						default:
