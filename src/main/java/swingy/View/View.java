@@ -54,4 +54,5 @@ public abstract class View
 	public abstract int DisplayStart();
 	public abstract int DisplayPantheon(PantheonFile pantheon);
 	public abstract int DisplayPantheonHero(Hero hero, GameStats stats);
+	public abstract void DisplayWin();
 }

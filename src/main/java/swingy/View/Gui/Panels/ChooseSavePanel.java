@@ -11,6 +11,7 @@ import swingy.Model.SaveFile;
 import swingy.View.Gui.SwingView;
 import swingy.View.Gui.Components.PanelComponent;
 import swingy.View.Gui.Components.SaveSlot;
+import swingy.Model.GameStats;
 import swingy.Model.Hero;
 
 public class ChooseSavePanel extends BasePanel
@@ -96,6 +97,9 @@ public class ChooseSavePanel extends BasePanel
 		for (int i = 0; i < SaveFile.NB_SAVES; i++)
 		{
 			Hero hero = save_file.heroes[i];
+			GameStats stats = save_file.stats[i];
+			boolean has_win = stats != null ? stats.has_won : false;
+			boolean endless = stats != null ? stats.endless_mode : false;
 			String to_display = "";
 
 			if (hero == null)
@@ -109,7 +113,7 @@ public class ChooseSavePanel extends BasePanel
 				to_display = String.format("lvl. %d - %s", hero.GetLevel(), name);
 			}
 
-			AddComponent(new SaveSlot(i, to_display, margin_left, cursor_y, width, height, font_size));
+			AddComponent(new SaveSlot(i, to_display, has_win, endless, margin_left, cursor_y, width, height, font_size));
 			cursor_y += height + margin_top;
 		}
 	}

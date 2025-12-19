@@ -239,7 +239,7 @@ public class MapSide extends PanelComponent
 		this._help.AddChunk("Gameplay:\n", FG_COLOR);
 		this._help.AddChunk("  Your objective is to defeat them to level up and get a chance to drop loot.\n", FG_COLOR);
 		this._help.AddChunk("  Level up enough to confidently escape the room and face the boss.\n", FG_COLOR);
-		this._help.AddChunk("  You can escape the room by hitting a border\n", FG_COLOR);
+		this._help.AddChunk("  You can escape the room by hitting a border after eleminating 50% (or 100% in endless mode) of the ennemies in the room\n", FG_COLOR);
 		this._help.AddChunk("  The game ends when you die.\n\n", FG_COLOR);
 
 		this._help.AddChunk("Combat:\n", FG_COLOR);

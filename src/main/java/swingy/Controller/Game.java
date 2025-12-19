@@ -102,6 +102,9 @@ public class Game
 		{
 			this._hero = hero;
 			this._stats = stats;
+
+			if (this._stats.has_won)
+				this._stats.endless_mode = true;
 		}
 		else
 		{
@@ -113,10 +116,11 @@ public class Game
 			this._hero = hero;
 			this._stats = stats;
 			this._save_manager.SetSave(save_slot, hero, stats);
-			this._save_manager.Save();
 		}
 
-		this._map = new GameMap(this._hero);
+		this._save_manager.Save();
+
+		this._map = new GameMap(this._hero, this._stats.endless_mode);
 
 		this._is_running = true;
 	}
@@ -210,7 +214,10 @@ public class Game
 	public void MoveHero(Direction direction) throws Exception
 	{
 		switch (this._map.MoveHero(direction)) {
-			case EXIT:					
+			case EXIT:
+				if (!this._map.CanExit(this._stats.endless_mode))
+					break;
+
 				if (this._hero.GetLevel() > 2)
 				{
 					Villain boss = this._map.GetBoss();
@@ -220,7 +227,7 @@ public class Game
 				if (this._is_running)
 				{
 					this._stats.rooms_exited++;
-					this._map = new GameMap(this._hero);
+					this._map = new GameMap(this._hero, this._stats.endless_mode);
 					this._view.MapChanged();
 				}
 				break;
@@ -251,13 +258,15 @@ public class Game
 			this._view.DisplayVillainDied(villain);
 			this._view.GetUserInput();
 
-			if (is_boss && villain.GetLevel() == 50)
+			if (is_boss && villain.GetLevel() == 50 && !this._stats.endless_mode)
 			{
 				this._is_running = false;
 				this._stats.has_won = true;
 				this._stats.win_date = LocalDateTime.now();
 				this._save_manager.AddToPantheon(this._hero, this._stats);
-				this._save_manager.DeleteHero(this._hero);
+				this._save_manager.Save();
+				this._view.DisplayWin();
+				this._view.GetUserInput();
 				return;
 			}
 

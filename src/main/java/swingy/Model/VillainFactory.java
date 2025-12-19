@@ -381,9 +381,11 @@ public final class VillainFactory
 		_boss_templates.add(new VillainTemplate("Eclipsion, The World-Ender", 50, 50, 4.6, base_stats, growth_stats));
 	}
 
-	private static List<VillainTemplate> GetPool(int level)
+	private static List<VillainTemplate> GetPool(int level, boolean endless)
 	{
-		
+		if (endless)
+			return _villain_templates;
+
 		List<VillainTemplate> pool = new ArrayList<>();
 
 		for (VillainTemplate template : _villain_templates)
@@ -395,8 +397,11 @@ public final class VillainFactory
 		return pool;
 	}
 
-	private static List<VillainTemplate> GetBossesPool(int level)
+	private static List<VillainTemplate> GetBossesPool(int level, boolean endless)
 	{
+		if (endless)
+			return _boss_templates;
+
 		List<VillainTemplate> pool = new ArrayList<>();
 
 		for (VillainTemplate template : _boss_templates)
@@ -449,12 +454,15 @@ public final class VillainFactory
         return villainLevel;
 	}
 
-	public static Villain GenerateVillain(Hero hero, int villain_count)
+	public static Villain GenerateVillain(Hero hero, int villain_count, boolean endless)
 	{
 		Init();
 
-		int level = Math.min(GenerateVillainLevel(hero.GetLevel(), villain_count), MAX_LEVEL);
-		List<VillainTemplate> pool = GetPool(level);
+		int level = GenerateVillainLevel(hero.GetLevel(), villain_count);
+		if (!endless)
+			level = Math.min(level, MAX_LEVEL);
+
+		List<VillainTemplate> pool = GetPool(level, endless);
 
 		VillainTemplate template = pool.get(rand.nextInt(pool.size()));
 
@@ -472,7 +480,7 @@ public final class VillainFactory
 		return new Villain(template.GetName(), level, template.GetExpMultiplier(), stats);
 	}
 
-	public static int GenerateBossLevel(int hero_level)
+	public static int GenerateBossLevel(int hero_level, boolean endless)
 	{
         // Base boss offset plus mild scaling by hero level:
         // example: hero 6 -> +3.1, hero 25 -> +5.5
@@ -484,13 +492,17 @@ public final class VillainFactory
         if (offset > MAX_OFFSET_CAP) offset = MAX_OFFSET_CAP;
 
         int bossLevel = (int)Math.round(hero_level + offset);
-        return Math.min(Math.max(MIN_LEVEL, bossLevel), MAX_LEVEL);
+
+		if (!endless)
+			bossLevel = Math.min(bossLevel, MAX_LEVEL);
+
+        return bossLevel;
 	}
 
-	public static Villain GenerateBoss(Hero hero)
+	public static Villain GenerateBoss(Hero hero, boolean endless)
 	{
-		int level = GenerateBossLevel(hero.GetLevel());
-		List<VillainTemplate> pool = GetBossesPool(level);
+		int level = GenerateBossLevel(hero.GetLevel(), endless);
+		List<VillainTemplate> pool = GetBossesPool(level, endless);
 
 		VillainTemplate template = pool.get(rand.nextInt(pool.size()));
 

@@ -34,6 +34,7 @@ import swingy.View.Gui.Panels.MapPanel;
 import swingy.View.Gui.Panels.PantheonHeroPanel;
 import swingy.View.Gui.Panels.PantheonPanel;
 import swingy.View.Gui.Panels.StartPanel;
+import swingy.View.Gui.Panels.WinPanel;
 import swingy.View.Gui.Panels.YouDiedPanel;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Entity;
@@ -751,5 +752,16 @@ public class SwingView extends View
 		}
 
 		return selected_slot[0];
+	}
+
+	public void DisplayWin()
+	{
+		this._panel = new WinPanel();
+
+		this._frame.setContentPane(this._panel);
+		this._frame.revalidate();
+		this._frame.setVisible(true);
+		this._frame.repaint();
+		this._panel.requestFocusInWindow();       // IMPORTANT
 	}
 }

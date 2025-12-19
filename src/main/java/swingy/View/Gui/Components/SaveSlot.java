@@ -3,6 +3,8 @@ package swingy.View.Gui.Components;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import swingy.View.Gui.SwingView;
+
 public class SaveSlot extends PanelComponent
 {
 	public static final int		BORDER_RADIUS = 10;
@@ -14,8 +16,10 @@ public class SaveSlot extends PanelComponent
 	private int		_slot;
 	private String	_content;
 	private int		_font_size;
+	private boolean	_has_win;
+	private boolean _endless;
 
-	public SaveSlot(int slot, String content, int origin_x, int origin_y, int width, int height, int font_size)
+	public SaveSlot(int slot, String content, boolean has_win, boolean endless, int origin_x, int origin_y, int width, int height, int font_size)
 	{
 		super(origin_x, origin_y, width, height);
 		this._interactive = true;
@@ -23,6 +27,8 @@ public class SaveSlot extends PanelComponent
 		this._slot = slot;
 		this._content = content;
 		this._font_size = font_size;
+		this._has_win = has_win;
+		this._endless = endless;
 	}
 
 	@Override
@@ -63,10 +69,26 @@ public class SaveSlot extends PanelComponent
 		g.setColor(bg_color);
 		g.fillRoundRect(this._top_left_x, this._top_left_y, this.GetWidth(), this.GetHeight(), BORDER_RADIUS, BORDER_RADIUS);
 
-		int height = TextArea.CalculateHeight(this._font_size);
-		int width = TextArea.CalculateWidth(this._content, this._font_size);
-		int y = this._top_left_y + (this.GetHeight() - height) / 2;
-		int x = this._top_left_x + 10;
+		int x = this._top_left_x;
+		int y;
+		int height;
+		int width;
+
+		if (this._endless)
+		{
+			g.drawImage(SwingView.GetSprite("endless"), this._top_left_x, this._top_left_y, this.GetHeight(), this.GetHeight(), null);
+			x += this.GetHeight();
+		}
+		else if (this._has_win)
+		{
+			g.drawImage(SwingView.GetSprite("crown"), this._top_left_x, this._top_left_y, this.GetHeight(), this.GetHeight(), null);
+			x += this.GetHeight();
+		}
+
+		height = TextArea.CalculateHeight(this._font_size);
+		width = TextArea.CalculateWidth(this._content, this._font_size);
+		y = this._top_left_y + (this.GetHeight() - height) / 2;
+		x += 10;
 
 		TextArea text_area = new TextArea(x, y, width, height, this._font_size);
 		text_area.AddChunk(this._content, fg_color);

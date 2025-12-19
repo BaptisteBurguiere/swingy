@@ -924,4 +924,12 @@ public class ConsoleView extends View
 	{
 		return 0;
 	}
+
+	public void DisplayWin()
+	{
+		Clear();
+
+		System.out.println("After beating the World Ender, you managed to escape the dungeon");
+		System.out.println("Your name will be written in history books");
+	}
 }

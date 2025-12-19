@@ -49,7 +49,7 @@ public class GameMap
 	public int			GetHeroX() {return this._hero_x;}
 	public int			GetHeroY() {return this._hero_y;}
 
-	public GameMap(Hero hero)
+	public GameMap(Hero hero, boolean endless)
 	{
 		this._size = Math.min((hero.GetLevel() - 1) * 5 + 10 - (hero.GetLevel() % 2), MAX_MAP_SIZE);
 		this._grid = new Element[this._size][this._size];
@@ -67,8 +67,8 @@ public class GameMap
         this._grid[this._hero_y][this._hero_x] = Element.HERO;
 
         // Add villains
-        placeVillains(hero);
-		this._boss = VillainFactory.GenerateBoss(hero);
+        placeVillains(hero, endless);
+		this._boss = VillainFactory.GenerateBoss(hero, endless);
 	}
 
 	private void carveMaze(int x, int y) {
@@ -88,7 +88,7 @@ public class GameMap
         }
     }
 
-    private void placeVillains(Hero hero) {
+    private void placeVillains(Hero hero, boolean endless) {
         int villainCount = (this._size * this._size) / 20; // adjust density
         int placed = 0;
 
@@ -98,7 +98,7 @@ public class GameMap
 
             if (this._grid[x][y] == Element.EMPTY && this._grid[x][y] != Element.HERO) {
                 this._grid[x][y] = Element.VILLAIN;
-				this._villains_grid[x][y] = VillainFactory.GenerateVillain(hero, villainCount);
+				this._villains_grid[x][y] = VillainFactory.GenerateVillain(hero, villainCount, endless);
                 placed++;
             }
         }
@@ -201,5 +201,28 @@ public class GameMap
 	public Villain GetBoss()
 	{
 		return this._boss;
+	}
+
+	public boolean CanExit(boolean endless)
+	{
+		if (endless && !this.IsRoomEmpty())
+			return false;
+
+		int villainCount = (this._size * this._size) / 20;
+		int current = 0;
+		for (int i = 0; i < this._size; i++)
+		{
+			for (int j = 0; j < this._size; j++)
+			{
+				if (this._grid[i][j] == Element.VILLAIN)
+				{
+					current++;
+					if (current > villainCount / 2)
+						return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 }
