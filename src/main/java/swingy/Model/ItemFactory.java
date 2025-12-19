@@ -24,7 +24,7 @@ public final class ItemFactory
 	private static final double LUCK_RARITY_SHIFT = 0.0005;
 	private static final double BOSS_EPIC_RARITY_SHIFT = 0.10;
 	private static final double BOSS_LEGENDARY_RARITY_SHIFT = 0.05;
-	private static final double LEVEL_LOG_MULTIPLIER = 0.15;
+	private static final double LEVEL_LOG_MULTIPLIER = 0.055;
 
 
 	public static Item GenerateItem(Hero hero, Villain villain, boolean is_boss)
@@ -71,7 +71,7 @@ public final class ItemFactory
 
 	private static double ScaleStat(double stat, int villain_level)
 	{
-		return stat * (1.0 + Math.log(villain_level + 1) * (LEVEL_LOG_MULTIPLIER * Math.log(villain_level + 1)));
+		return stat * (1.0 + Math.log(villain_level) * (LEVEL_LOG_MULTIPLIER * Math.log(villain_level)));
 	}
 
 	private static final double COMMON_MIN_ATTACK = 5;
