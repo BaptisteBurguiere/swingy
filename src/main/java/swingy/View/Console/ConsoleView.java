@@ -17,6 +17,7 @@ import swingy.Model.Villain;
 import swingy.View.View;
 import swingy.Model.Entity;
 import swingy.Model.GameMap;
+import swingy.Model.GameStats;
 
 public class ConsoleView extends View
 {
@@ -915,6 +916,11 @@ public class ConsoleView extends View
 	}
 
 	public int DisplayPantheon(PantheonFile pantheon)
+	{
+		return 0;
+	}
+
+	public int DisplayPantheonHero(Hero hero, GameStats stats)
 	{
 		return 0;
 	}

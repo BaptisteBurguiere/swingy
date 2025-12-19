@@ -42,7 +42,7 @@ public class PantheonPanel extends BasePanel
 					{
 						int click_res = component.Click(e.getX(), e.getY());
 						
-						if (click_res != -1 && _click_listener != null)
+						if (_click_listener != null)
 							_click_listener.accept(click_res);
 
 						return;
@@ -53,7 +53,7 @@ public class PantheonPanel extends BasePanel
 				{
 					int click_res = _previous.Click(e.getX(), e.getY());
 					
-					if (click_res != -1 && _click_listener != null)
+					if (_click_listener != null)
 						_click_listener.accept(click_res);
 
 					return;
@@ -63,7 +63,7 @@ public class PantheonPanel extends BasePanel
 				{
 					int click_res = _next.Click(e.getX(), e.getY());
 					
-					if (click_res != -1 && _click_listener != null)
+					if (_click_listener != null)
 						_click_listener.accept(click_res);
 
 					return;
@@ -147,7 +147,7 @@ public class PantheonPanel extends BasePanel
 
 
 
-		int width = (int)((double)SwingView.GetWidth() * 0.7);
+		int width = (int)((double)SwingView.GetWidth() * 0.85);
 		int height = SwingView.GetHeight() / (PAGE_SIZE + 2);
 		int margin_top = height / (PAGE_SIZE + 2);
 		int x = (SwingView.GetWidth() - width) / 2;
@@ -206,7 +206,7 @@ public class PantheonPanel extends BasePanel
 
 		this._previous.Show();
 
-		if (this._current_page * PAGE_SIZE + PAGE_SIZE <= this._pantheon.heroes.size())
+		if (this._current_page * PAGE_SIZE + PAGE_SIZE > this._pantheon.heroes.size())
 			this._next.Hide();
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -229,6 +229,8 @@ public class PantheonPanel extends BasePanel
 			}
 			else
 				this._slots[i].Hide();
+
+			this.repaint();
 		}
 	}
 
@@ -261,6 +263,8 @@ public class PantheonPanel extends BasePanel
 			}
 			else
 				this._slots[i].Hide();
+
+			this.repaint();
 		}
 	}
 

@@ -31,12 +31,14 @@ import swingy.View.Gui.Panels.ChooseNamePanel;
 import swingy.View.Gui.Panels.ChooseSavePanel;
 import swingy.View.Gui.Panels.CombatPanel;
 import swingy.View.Gui.Panels.MapPanel;
+import swingy.View.Gui.Panels.PantheonHeroPanel;
 import swingy.View.Gui.Panels.PantheonPanel;
 import swingy.View.Gui.Panels.StartPanel;
 import swingy.View.Gui.Panels.YouDiedPanel;
 import swingy.Model.CombatTurnResult;
 import swingy.Model.Entity;
 import swingy.Model.GameMap;
+import swingy.Model.GameStats;
 import swingy.Model.Hero;
 import swingy.Model.Item;
 import swingy.Model.PantheonFile;
@@ -679,7 +681,7 @@ public class SwingView extends View
 		this._latch = new CountDownLatch(1);
 		final int[] slot = { -1 };
 
-		this._panel.SetKeyListener(action -> {
+		this._panel.SetClickListener(action -> {
 			slot[0] = action;
 			this._latch.countDown();
 		});
@@ -708,7 +710,7 @@ public class SwingView extends View
 				// Reset latch for next key
 				this._latch = new CountDownLatch(1);
 
-				this._panel.SetKeyListener(action -> {
+				this._panel.SetClickListener(action -> {
 					slot[0] = action;
 					this._latch.countDown();
 				});
@@ -717,5 +719,37 @@ public class SwingView extends View
 				Thread.currentThread().interrupt();
 			}
 		}
+	}
+
+	public int DisplayPantheonHero(Hero hero, GameStats stats)
+	{
+		this._panel = new PantheonHeroPanel(hero, stats);
+
+		this._latch = new CountDownLatch(1);
+
+    	final int[] selected_slot = { -1 };
+
+		this._panel.SetClickListener(action ->
+		{
+			selected_slot[0] = action;
+			this._latch.countDown();   // RELEASE wait
+		});
+
+		SwingUtilities.invokeLater(() ->
+		{
+			this._frame.setContentPane(this._panel);
+			this._frame.revalidate();
+			this._frame.setVisible(true);
+			this._frame.repaint();
+			this._panel.requestFocusInWindow();       // IMPORTANT
+		});
+
+		try {
+			this._latch.await(); // BLOCK until clicked
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+
+		return selected_slot[0];
 	}
 }

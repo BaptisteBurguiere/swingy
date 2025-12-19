@@ -10,6 +10,7 @@ import swingy.Model.SaveFile;
 import swingy.Model.Villain;
 import swingy.Model.Entity;
 import swingy.Model.GameMap;
+import swingy.Model.GameStats;
 
 public abstract class View
 {
@@ -52,4 +53,5 @@ public abstract class View
 	public abstract void MapChanged();
 	public abstract int DisplayStart();
 	public abstract int DisplayPantheon(PantheonFile pantheon);
+	public abstract int DisplayPantheonHero(Hero hero, GameStats stats);
 }

@@ -74,8 +74,8 @@ public class PantheonSlot extends PanelComponent
 		height = TextArea.CalculateHeight(font_size);
 		y = this._top_left_y + (this.GetHeight() - height) / 2;
 
-		// text_area.SetHeight(height);
-		// text_area.SetOriginY(y);
+		text_area.SetHeight(height);
+		text_area.SetOriginY(y);
 
 		text_area.Draw(g);
 	}

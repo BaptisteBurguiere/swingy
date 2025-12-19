@@ -64,14 +64,16 @@ public class PanelComponent
 
 	public void SetOriginX(int origin_x)
 	{
-		this._bottom_right_x = this._top_left_x - (origin_x - this._top_left_x);
+		int width = this.GetWidth();
 		this._top_left_x = origin_x;
+		this._bottom_right_x = origin_x + width;
 	}
 
 	public void SetOriginY(int origin_y)
 	{
-		this._bottom_right_y = this._top_left_y - (origin_y - this._top_left_y);
+		int height = this.GetHeight();
 		this._top_left_y = origin_y;
+		this._bottom_right_y = origin_y + height;
 	}
 
 	public void SetSize(int width, int height)

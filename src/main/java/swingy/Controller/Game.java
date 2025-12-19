@@ -6,6 +6,7 @@ import swingy.Model.GameStats;
 import swingy.Model.Hero;
 import swingy.Model.HeroFactory;
 import swingy.Model.ItemFactory;
+import swingy.Model.PantheonFile;
 import swingy.Model.Villain;
 import swingy.Model.Entity;
 import swingy.View.View;
@@ -367,14 +368,36 @@ public class Game
 	{
 		int action = this._view.DisplayStart();
 
-		switch (action) {
+		switch (action)
+		{
 			case 0:
 				this.ChooseSave();
 				this.Start();
 				break;
 
 			case 1:
-				this._view.DisplayPantheon(this._save_manager.GetPantheonFile());
+				boolean start_endless = false;
+				while (!start_endless)
+				{
+					PantheonFile pantheon = this._save_manager.GetPantheonFile();
+					int slot = this._view.DisplayPantheon(pantheon);
+					Hero hero = pantheon.heroes.get(slot);
+					GameStats stats = pantheon.stats.get(slot);
+					
+					action = this._view.DisplayPantheonHero(hero, stats);
+					switch (action)
+					{
+						case 1:
+							break;
+
+						case 2:
+							start_endless = true;
+							break;
+					
+						default:
+							break;
+					}
+				}
 				break;
 		
 			default:
