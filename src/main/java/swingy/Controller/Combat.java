@@ -143,26 +143,26 @@ public class Combat
 
 	private double CalculateDamage(Entity attacker, Entity defender, CombatTurnResult result, boolean defense_stance)
 	{
-    double attack = attacker.GetStatistic(StatisticTemplate.Type.ATTACK).GetValue();
-    double defense = defender.GetStatistic(StatisticTemplate.Type.DEFENSE).GetValue();
-    double luck = attacker.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
+		double attack = attacker.GetStatistic(StatisticTemplate.Type.ATTACK).GetValue();
+		double defense = defender.GetStatistic(StatisticTemplate.Type.DEFENSE).GetValue();
+		double luck = attacker.GetStatistic(StatisticTemplate.Type.LUCK).GetValue();
 
-    if (defense_stance)
-        defense *= DEFENSE_STANCE_MULTIPLIER;
+		if (defense_stance)
+			defense *= DEFENSE_STANCE_MULTIPLIER;
 
-	double damage = attack - (defense * DEFENSE_SCALING);
+		double damage = attack - (defense * DEFENSE_SCALING);
 
-    double spread_roll = Math.min(1., Math.random() * (1 + luck * LUCK_DAMAGE_SPREAD));
-    damage *= 1. + (((DAMAGE_SPREAD * 2) * spread_roll) - DAMAGE_SPREAD);
+		double spread_roll = Math.min(1., Math.random() * (1 + luck * LUCK_DAMAGE_SPREAD));
+		damage *= 1. + (((DAMAGE_SPREAD * 2) * spread_roll) - DAMAGE_SPREAD);
 
-    if (IsCritical(attacker))
-    {
-        result.critical = true;
-        double crit_damage = attacker.GetStatistic(StatisticTemplate.Type.CRIT_DAMAGE).GetValue();
-        damage *= crit_damage;
-    }
+		if (IsCritical(attacker))
+		{
+			result.critical = true;
+			double crit_damage = attacker.GetStatistic(StatisticTemplate.Type.CRIT_DAMAGE).GetValue();
+			damage *= crit_damage;
+		}
 
-    return Math.max(damage, 1);
+		return Math.max(damage, 1);
 	}
 
 	private double CalculateParryDamage(Entity attacker, Entity defender)

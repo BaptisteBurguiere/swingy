@@ -1,6 +1,7 @@
 package swingy.Model;
 
-public class CombatResult {
+public class CombatResult
+{
 	public boolean	flee;
 	public boolean	hero_win;
 	public int		exp;

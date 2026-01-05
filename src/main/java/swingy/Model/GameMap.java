@@ -1,7 +1,6 @@
 package swingy.Model;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 
 public class GameMap
@@ -60,9 +59,6 @@ public class GameMap
         for (int i = 0; i < this._size; i++)
             Arrays.fill(this._grid[i], Element.EMPTY);
 
-        // Carve maze
-        //carveMaze(this._size/2, this._size/2);
-
         // Place hero
         this._grid[this._hero_y][this._hero_x] = Element.HERO;
 
@@ -70,23 +66,6 @@ public class GameMap
         placeVillains(hero, endless);
 		this._boss = VillainFactory.GenerateBoss(hero, endless);
 	}
-
-	private void carveMaze(int x, int y) {
-        this._grid[x][y] = Element.EMPTY;
-
-        // Directions (up, down, left, right)
-        int[][] dirs = { {2,0}, {-2,0}, {0,2}, {0,-2} };
-        Collections.shuffle(Arrays.asList(dirs), rand);
-
-        for (int[] d : dirs) {
-            int nx = x + d[0], ny = y + d[1];
-            if (nx > 0 && ny > 0 && nx < this._size-1 && ny < this._size-1 && this._grid[nx][ny] == Element.WALL) {
-                // Carve path between
-                this._grid[x + d[0]/2][y + d[1]/2] = Element.EMPTY;
-                carveMaze(nx, ny);
-            }
-        }
-    }
 
     private void placeVillains(Hero hero, boolean endless) {
         int villainCount = (this._size * this._size) / 20; // adjust density
